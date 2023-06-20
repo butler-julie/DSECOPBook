@@ -1,0 +1,1336 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Neural Networks, Plumbing and Colours &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'DSECOP/Learning_the_Schrodinger_Equation/00_NN_Basics';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Table of Contents
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploratory Data Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/README.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/01_dataset_cleaning.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/02_preprocessing_techniques.html">Preprocessing Techniques for Machine Learning</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDSECOP/Learning_the_Schrodinger_Equation/00_NN_Basics.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/DSECOP/Learning_the_Schrodinger_Equation/00_NN_Basics.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Neural Networks, Plumbing and Colours</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#so-what-is-machine-learning">So what is machine learning?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rgb-colours">RGB Colours</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks">Neural Networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs-and-outputs">Inputs and outputs:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-network">Neural Network:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#predictions-and-ground-truth">Predictions and ground truth:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loss-function">Loss function:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#backpropagation">Backpropagation:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#training-testing-and-overfitting">Training, testing and overfitting</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#network-1-rgb-to-rgb">Network 1: RGB to RGB</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#colours-part-2-cmyk">Colours part 2: CMYK</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-2-rgb-to-cmyk">Network 2: RGB to CMYK</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-twist">Plot twist</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-challenge-cmyk-to-rgb-network">Optional Challenge: CMYK to RGB Network</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p><a href="https://colab.research.google.com/github/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/00_NN_Basics.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="neural-networks-plumbing-and-colours">
+<h1>Neural Networks, Plumbing and Colours<a class="headerlink" href="#neural-networks-plumbing-and-colours" title="Permalink to this headline">#</a></h1>
+<p>Notebook for DSECOP Module 1</p>
+<p>Author: Karan Shah</p>
+<p>In this notebook, we learn about the basics of neural networks and train our network to convert colours.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get res dir and helper files</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">google.colab</span>
+    <span class="n">IN_COLAB</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">IN_COLAB</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">if</span> <span class="n">IN_COLAB</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Colab detected. (Re)Loading helper files&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;rm -rf res&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;rm -f res.tar.gz&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;wget https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res.tar.gz?raw=true&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;mv res.tar.gz?raw=true res.tar.gz&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;tar -xzf res.tar.gz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span><span class="p">,</span> <span class="n">utils</span>
+
+<span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">interact</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;./res&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ml_helper</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: It seems the ml_helper file is missing. If you are running this in google colab, please run the first cell block again. (Begins with comment: </span><span class="se">\&quot;</span><span class="s2">Get res dir and helper files</span><span class="se">\&#39;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="n">torch</span><span class="o">.</span><span class="n">set_default_tensor_type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">DoubleTensor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">copy</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="so-what-is-machine-learning">
+<h2>So what is machine learning?<a class="headerlink" href="#so-what-is-machine-learning" title="Permalink to this headline">#</a></h2>
+<p>Machine learning is a field of computer scince that deals with creating programs that can learn from experience tasks that are not explicitly hardcoded in them. For example, we can create a model that can learn to differentiate between a picture of a cat and a dog without explicit definition of what a cat or a dog is, just by repeteadly looking at pictures which have a correct label on them.</p>
+<blockquote>
+<div><p>Machine learning is the study of computer algorithms that allow computer programs to automatically improve through experience.</p>
+</div></blockquote>
+<p>In this notebook, we will focus on a specific class of ML known as Deep Learning. Deep learning involves the use of models called neural networks. A neural network is loosely inspired by biological neurons in our brains.</p>
+<p>But first, let’s take a brief detour into the world of digital colours:</p>
+<section id="rgb-colours">
+<h3>RGB Colours<a class="headerlink" href="#rgb-colours" title="Permalink to this headline">#</a></h3>
+<p>Let’s understand how computers represent colours. Each pixel on your screen is made of 3 sub-pixels: Red, Green and Blue. By changing the intensities of these sub-pixels, we can generate different colours. This way of representing coulours is called “additive”. This is different from the colours that we use while painting, which is “subtractive”. When dealing with paints and printing, with subtractive colours, the absence of any colour is white on a sheet of paper. When dealing with digital screens and light, with additive colours, the absence of any colour is black on a display.</p>
+<p><img alt="res/fig/rgb-additive-subtractive-colors.jpeg" src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/rgb-additive-subtractive-colors.jpeg?raw=1" /></p>
+<p>Let’s play with the RGB colour scheme:
+For each colour sub-pixel, the intensity is represented as an integer value between 0 to 255. For convenience, we will represent that as a continuous value between 0.0 to 1.0.</p>
+<p>Each colour is represented as a list of subpixels.
+[r,g,b] where r is the value of Red subpixel, g is the value of Green subpixel and b is the value of Blue subpixel.</p>
+<p>Throughout this notebook, you can call the <code class="docutils literal notranslate"><span class="pre">viz_colour</span></code> function to display the r,g,b values and the resultant colours. The colour patch shows the r,g,b values in the first three squares and the resultant colour in the last square.
+For example, this is how you would represent pure red colour:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># represent colour as [r,g,b], call the function viz_colour to show the colour.</span>
+<span class="n">red</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">red</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: fill the values and display blue and green colours</span>
+<span class="n">blue</span> <span class="o">=</span> <span class="p">[,,]</span> <span class="c1">#fill here</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">blue</span><span class="p">)</span>
+
+<span class="n">green</span> <span class="o">=</span> <span class="p">[,,]</span> <span class="c1">#fill here</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">green</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can change the rgb values to create new colours. Refer to figure 1. to see how colours can be mixed. For example, cyan can be made by setting b and g on and turning r off.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># represent colour as [r,g,b], call the function viz_colour to show the colour.</span>
+<span class="n">cyan</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">cyan</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: refer to figure 1 and fill the values and display yellow and pink colours</span>
+<span class="n">yellow</span> <span class="o">=</span> <span class="p">[,,]</span> <span class="c1">#fill here</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">yellow</span><span class="p">)</span>
+
+<span class="n">pink</span> <span class="o">=</span> <span class="p">[,,]</span> <span class="c1">#fill here</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">pink</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The values of r,g,b can be any number between 0.0 and 1.0 and it represents the intensity of that sub-pixel. For example, compare bright red and dull red</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">red</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">red</span><span class="p">)</span>
+
+<span class="n">dull_red</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">dull_red</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: fill the values and display grey colour</span>
+<span class="n">grey</span> <span class="o">=</span> <span class="p">[,,]</span> <span class="c1">#fill here</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">grey</span><span class="p">)</span>
+
+<span class="c1">#black and white for comparison, don&#39;t change this </span>
+<span class="n">black</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">black</span><span class="p">)</span>
+
+<span class="n">white</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">white</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>You now know how computers represent and display colours! You can play with these sliders and create even more colours:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@interact</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span><span class="n">g</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">),</span><span class="n">b</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">interactive_viz_colour</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">]</span>
+    <span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="neural-networks">
+<h3>Neural Networks<a class="headerlink" href="#neural-networks" title="Permalink to this headline">#</a></h3>
+<p>We will construct our own neural network bit by bit. Let’s begin with an analogy. Imagine we have water with different colours, and we want to add them together to make new colours. We do that by setting up a system of pipes but we do not know how to arrange these pipes. We will invent a robot plumber called PlumberBot who will keep trying different combinations of pipes.</p>
+<p>Lets start with the components of a deep learning pipeline:</p>
+<ol class="arabic simple">
+<li><p>Set the pipes for the input and the output.</p></li>
+<li><p>Connect the input and output pipes randomly. At this point, the colours will mix incorrectly and we will get wrong results.</p></li>
+<li><p>Compare the colours from the output pipes and the true value that we want.</p></li>
+<li><p>Based on the difference of these colours, adjust the thickness of the pipes by a tiny bit.</p></li>
+<li><p>Repeat steps 3 and 4 till the difference between the predicted colours and the true colours is as low as we want.</p></li>
+<li><p>Now the machine learning pipeline is trained. We can use it to mix the colours very quickly.</p></li>
+</ol>
+<p>Let’s look at the parts of this pipeline in detail:</p>
+<section id="inputs-and-outputs">
+<h4>Inputs and outputs:<a class="headerlink" href="#inputs-and-outputs" title="Permalink to this headline">#</a></h4>
+<p>The inputs and outputs represent our quantities of interest. In this notebook, we will represent the input with <span class="math notranslate nohighlight">\(x\)</span> and the output with <span class="math notranslate nohighlight">\(y\)</span>. <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> are vectors.</p>
+<p>The relationship between <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> is
+$<span class="math notranslate nohighlight">\( y = f(x) \)</span><span class="math notranslate nohighlight">\(
+where \)</span>f<span class="math notranslate nohighlight">\( is a function acting on \)</span>x<span class="math notranslate nohighlight">\(. We might not know the function \)</span>f<span class="math notranslate nohighlight">\( explicitly, but given enough pairs of corresponding inputs and outputs, the neural network can approximate \)</span>f$.</p>
+<p>The dataset is the collection of all (<span class="math notranslate nohighlight">\(x\)</span>,<span class="math notranslate nohighlight">\(y\)</span>) pairs. We represent the <span class="math notranslate nohighlight">\(i\)</span>th element of the dataset with the subscript <span class="math notranslate nohighlight">\(i\)</span>. This means
+$<span class="math notranslate nohighlight">\( y_i = f(x_i) \)</span>$</p>
+<p>Examples:
+For a network doing handwriting recognition, <span class="math notranslate nohighlight">\(x\)</span> can be an image of written text and <span class="math notranslate nohighlight">\(y\)</span> can be the text encoded in digital form.</p>
+<p>For a network doing text to speech, <span class="math notranslate nohighlight">\(x\)</span> can be a sentence in text form and <span class="math notranslate nohighlight">\(y\)</span> can be an audio file.</p>
+<p>For a network identifying animals, <span class="math notranslate nohighlight">\(x\)</span> can be an image of an animal and <span class="math notranslate nohighlight">\(y\)</span> the name of animal in text form.</p>
+<p>(In all cases, things such as images, audio, text etc are represented as numbers in computers, so <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> are still vectors)</p>
+</section>
+<section id="neural-network">
+<h4>Neural Network:<a class="headerlink" href="#neural-network" title="Permalink to this headline">#</a></h4>
+<p>The neural network is the network of pipes connecting the input to the output. In most cases, we do not know the arrangement of the pipes beforehand. The colours flow through the input pipes, mix in various ways inside the network and flow out through output pipes.</p>
+<p>The smallest element of a neural network is called a Perceptron. The perceptron takes in an input vector, applies some mathematical operations to it and produces the output.</p>
+<p>Mathematically, this is defined as
+$<span class="math notranslate nohighlight">\( y = wx + b \)</span><span class="math notranslate nohighlight">\(
+\)</span>w<span class="math notranslate nohighlight">\( consists of weights and \)</span>b<span class="math notranslate nohighlight">\( is known as bias. 
+Here \)</span>w<span class="math notranslate nohighlight">\( is a vector too. For example, for \)</span>w = [w_1, w_2, w_3]<span class="math notranslate nohighlight">\(, 
+\)</span><span class="math notranslate nohighlight">\( y = w_1 * x_1 + w_2 * x_2 + w_3 * x_3 \)</span>$
+<img alt="res/fig/perceptron.png" src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/perceptron.png?raw=1" /></p>
+<p>We can think of <span class="math notranslate nohighlight">\(w\)</span> as the thickness of pipes in our analogy. By changing the values of <span class="math notranslate nohighlight">\(w\)</span>, we control the flow of different colours from the input.</p>
+<p>Neural networks are made by combining the perceptrons and stacking them into layers, such that the output of the previous perceptron is the input of the next one.</p>
+</section>
+<section id="predictions-and-ground-truth">
+<h4>Predictions and ground truth:<a class="headerlink" href="#predictions-and-ground-truth" title="Permalink to this headline">#</a></h4>
+<p>The prediction is simply the output of the neural network. In this notebook, we will use notation where <span class="math notranslate nohighlight">\(^\)</span> denotes the true value. The neural network can be represented by <span class="math notranslate nohighlight">\(NN\)</span>. The output predicted value is represented by <span class="math notranslate nohighlight">\(y\)</span> and the true known value <span class="math notranslate nohighlight">\(
+hat{y}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[ \hat{y_i} = NN(x_i) \]</div>
+</section>
+<section id="loss-function">
+<h4>Loss function:<a class="headerlink" href="#loss-function" title="Permalink to this headline">#</a></h4>
+<p>Our goal is to make the output of the pipes as close as possible to the true value of the colours that are formed by mixing the input. The loss function represents the difference between the predicted <span class="math notranslate nohighlight">\(y\)</span> and true <span class="math notranslate nohighlight">\(\hat{y}\)</span>. Ideally, the goal is to get <span class="math notranslate nohighlight">\(y = \hat{y}\)</span>. One common way of measuring this is the mean squared error. For a single vector of size <span class="math notranslate nohighlight">\(m\)</span>, it is defined as:
+$<span class="math notranslate nohighlight">\( L_i = \sum_{j=1}^{m} (\hat{v_j} - v_j)^2 \)</span><span class="math notranslate nohighlight">\(, where \)</span>v_j<span class="math notranslate nohighlight">\( are elements of \)</span>y<span class="math notranslate nohighlight">\( and \)</span>\hat{v_j}<span class="math notranslate nohighlight">\( are elements of \)</span>\hat{y}$.</p>
+<p>Let’s implement this in code</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: Implement mse_loss for colours</span>
+<span class="c1"># Hint: For two numbers a and b, the mse_loss is of the form</span>
+<span class="c1"># loss = (a - b) ** 2</span>
+<span class="c1"># However, you are not dealing with single numbers but vectors of 3 numbers (like a = [0.3,0.1,0.5])</span>
+<span class="c1"># You can ith element of the vector a by using index a[i-1].</span>
+<span class="c1"># eg a[0] will return first element, a[1] will return second element and so on.</span>
+
+<span class="k">def</span> <span class="nf">mse_loss_nb</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">y_hat</span><span class="p">):</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="c1"># fill here</span>
+    <span class="k">return</span> <span class="n">loss</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">y_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">mse_loss_nb</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">y_hat</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The loss is </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">y_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.43</span><span class="p">,</span><span class="mf">0.1</span><span class="p">])</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">mse_loss_nb</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">y_hat</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The loss is </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="backpropagation">
+<h4>Backpropagation:<a class="headerlink" href="#backpropagation" title="Permalink to this headline">#</a></h4>
+<p>How do we figure out the correct arrangement of pipes to get the desired output <span class="math notranslate nohighlight">\(y\)</span> close to <span class="math notranslate nohighlight">\(\hat{y}\)</span>? We instruct our robot plumber to minimize the value of <span class="math notranslate nohighlight">\(L\)</span>. It changes the thickness of network pipes a little bit, passes the input through the network and checks the value of <span class="math notranslate nohighlight">\(L\)</span> for that case. Then it changes the thickness of the pipes again trying to lower the value of <span class="math notranslate nohighlight">\(L\)</span>. This procedure of changing weights is called backpropagation.</p>
+<p>Mathematically, this is calulated by the rate of change of <span class="math notranslate nohighlight">\(L\)</span> with respect to <span class="math notranslate nohighlight">\(w\)</span>. The derivative calculates the rate of change of <span class="math notranslate nohighlight">\(L\)</span> with respect to <span class="math notranslate nohighlight">\(w\)</span>, ie how much does <span class="math notranslate nohighlight">\(L\)</span> change when we change <span class="math notranslate nohighlight">\(w\)</span> by a small amount. You will learn more about this in your Calculus classes.
+$<span class="math notranslate nohighlight">\( \Delta w_i = - \frac{\partial L}{\partial w_i} \)</span><span class="math notranslate nohighlight">\(
+and then updating the \)</span>w_i<span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\( w_i = w_i + \Delta w_i \)</span>$</p>
+<p><span class="math notranslate nohighlight">\(\Delta w_i\)</span> is a (tiny) quantity that measures how <span class="math notranslate nohighlight">\(L\)</span> changes when we change <span class="math notranslate nohighlight">\(w_i\)</span>.</p>
+<p>By repeating this procedure for a large number of times, the <span class="math notranslate nohighlight">\(L\)</span> is minimized to a value close to 0, ie our predictions match the true values we need.</p>
+</section>
+<section id="training-testing-and-overfitting">
+<h4>Training, testing and overfitting<a class="headerlink" href="#training-testing-and-overfitting" title="Permalink to this headline">#</a></h4>
+<p>While working with neural networks, we split our dataset into training and test datasets. The training dataset is used to train the neural network for our task. Once trained, the pipelines are fixed and then we use the test dataset to measure how the network performs.</p>
+<p>This is important because we don’t want our network to just memorize the specific data points in our dataset. Remember when you were learning multiplication in school? You could memorize the multiplication tables in words, like “three times four equals twelve” and “seven times nine equals sixty three”. However, when you are taking a maths test and you face a multiplication problem you haven’t memorized, like “12*10=?”, then you wouldn’t be able to solve it. If you understood how multiplication works, then you could just calculate “12*10=120”.</p>
+<p>We want the neural network to understand the task, not just memorize. We can measure this by giving it a test after it has done studying (training). If the neural network has memorized too much, it will not score well on the test. This is called “overfitting”.</p>
+<p>Luckily, we have our PlumberBot who can change the pipes very quickly! Let’s give our PlumberBot it’s first task.</p>
+<p><img alt="res/fig/rp-1.png" src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/rp-1.png?raw=1" /></p>
+</section>
+</section>
+<section id="network-1-rgb-to-rgb">
+<h3>Network 1: RGB to RGB<a class="headerlink" href="#network-1-rgb-to-rgb" title="Permalink to this headline">#</a></h3>
+<p>The current exercise is trivial, the colors in the output of the pipes should be the same as the colours in the input of the pipes. There are three input pipes: red, green and blue, and there are three ouput pipes that will eject the same colours.</p>
+<p>Remember that when PlumberBot first sets up the pipes, the whole network is in a random order. That means there will be problems like the paint from red input pipe going to pipes in the green and blue outputs and so on. Our goal is to make PlumberBot figure out the correct arrangement of pipes without telling it the solution.</p>
+<p>While this is a simple exercise, it will illustrate important concepts about how neural networks work.</p>
+<p>First let’s create the data set. We will create a training set of 1000 random colours. Fill in the next block:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: Create 1000 colours. Each colour has 3 elements (r,g,b).</span>
+<span class="c1"># Example: To create a training set with size 500 and 4 elements each, you can use:</span>
+<span class="c1"># n_size = 500</span>
+<span class="c1"># n_elements = 4</span>
+<span class="c1"># training_set = np.random.rand(n_size, n_elements)</span>
+<span class="n">n_size</span> <span class="o">=</span> <span class="c1">#fill here</span>
+<span class="n">n_elements</span> <span class="o">=</span> <span class="c1">#fill here</span>
+<span class="n">training_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_size</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now our training set consists of 1000 colours consisting of 3 elements (r,g,b) each. Some data points of the training set are:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">training_set</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>What is the size of this dataset? You can use the np.shape function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: Print size of training set</span>
+<span class="c1"># Hint: To get the size of an array a, use a.shape</span>
+<span class="c1"># Get size of array &quot;training_set&quot;</span>
+<span class="n">training_set_size</span> <span class="o">=</span> <span class="c1">#fill here</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">training_set_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s vizualize the first 3 elements of the training set. These will change everytime you run this notebook</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">training_set</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can explore the whole training set with this widget. Move the slider to see different colour data points.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@interact</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">interactive_trainset_viz</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">training_set</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s set up the general structure of the neural network. We will create only one layer of pipes, joining each input pipe to each output pipe. This means that we created 3 perceptrons, each with 3 inputs (input r,g,b) and 1 output (r or g or b).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PipeNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="c1"># (3,3) means 3 inputs, 3 outputs</span>
+
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="n">net</span> <span class="o">=</span> <span class="n">PipeNet</span><span class="p">()</span>
+<span class="n">untrained_net</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>After running this, PlumberBot has set up random pipes between the input and the output. This means that the paints won’t be mixed correctly. Let’s try running our network now.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_rgb</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_rgb</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_rgb</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: Fill in col with a colour of your choice, in the form of [r,g,b]. </span>
+<span class="c1"># Then, use the neural network to generate the output for that colour.</span>
+<span class="c1"># Hint: You can pass the input colour as an argument to the net.</span>
+<span class="c1"># Like this: pred = net(colour)</span>
+<span class="n">your_col</span> <span class="o">=</span> <span class="p">[,,]</span> <span class="c1">#Fill this</span>
+<span class="n">your_col</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+
+<span class="n">pred_col</span> <span class="o">=</span>  <span class="n">net</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span><span class="c1"># Fill thus</span>
+<span class="n">pred_col</span> <span class="o">=</span> <span class="n">pred_col</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">viz_colour_predicted_rgb</span><span class="p">(</span><span class="n">your_col</span><span class="p">,</span><span class="n">pred_col</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see with the untrained network, the pipes are not connected properly. The output colours are very different from the input colours. Some of the output colours even have negative values, which does not make sense.</p>
+<p>Can we measure how different they are? Yes! Let’s use the <code class="docutils literal notranslate"><span class="pre">mse_loss</span></code> function you implemented before:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: Calculate the difference between the colour you provided and the neural network prediction.</span>
+<span class="c1"># Hint: You can use your mse_loss function.</span>
+<span class="c1"># mse_loss(a,b) gives the difference between a and b</span>
+
+<span class="n">your_loss</span> <span class="o">=</span> <span class="n">mse_loss_nb</span><span class="p">(</span><span class="n">your_col</span><span class="p">,</span> <span class="n">pred_col</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loss is </span><span class="si">{</span><span class="n">your_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For the input colours to be equal to the output colours, the loss has to be 0.</p>
+<p>Let us now ask PlumberBot to train the pipe network.</p>
+<p>First we set up the dataset to be in a form that PlumberBot can use:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainset</span> <span class="o">=</span> <span class="n">ColourDataset</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">training_set</span><span class="p">,</span> <span class="n">output_data</span><span class="o">=</span><span class="n">training_set</span><span class="p">)</span>
+
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">trainloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                                          <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we instruct PlumberBot on how to measure the difference between input and output. <code class="docutils literal notranslate"><span class="pre">nn.MSELoss()</span></code> does the same thing as the <code class="docutils literal notranslate"><span class="pre">mse_loss</span></code> function you wrote.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">optimizer</span></code> gives the PlumberBot additional information on how to change the pipes using backpropagation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now instruct PlumberBot to train the pipe network. PlumberBot will put input data into pipes, look at the outputs, measure the difference and adjust pipes. It will do it 5 times with all the colours we have in our dataset.</p>
+<p>After each time it goes through the dataset, we will print the loss and look at how the output for your colour looks at that point.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>  
+
+    <span class="n">running_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trainloader</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+
+        <span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="c1"># print statistics</span>
+        <span class="n">running_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">999</span><span class="p">:</span>    
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1"> Pass through data] loss: </span><span class="si">{</span><span class="n">running_loss</span><span class="o">/</span><span class="mi">1000</span> <span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">running_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+            
+            <span class="n">pred_col</span> <span class="o">=</span>  <span class="n">net</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+            <span class="n">pred_col</span> <span class="o">=</span> <span class="n">pred_col</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+            <span class="n">viz_colour_predicted_rgb</span><span class="p">(</span><span class="n">your_col</span><span class="p">,</span><span class="n">pred_col</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Finished Training&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, as training progresses, the output starts looking more and more similar to your input colour. What is the loss for your colour now?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">your_col</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+
+<span class="n">pred_col</span> <span class="o">=</span>  <span class="n">untrained_net</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+<span class="n">pred_col</span> <span class="o">=</span> <span class="n">pred_col</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">your_loss</span> <span class="o">=</span> <span class="n">mse_loss_nb</span><span class="p">(</span><span class="n">your_col</span><span class="p">,</span> <span class="n">pred_col</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loss for untrained network is </span><span class="si">{</span><span class="n">your_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">pred_col</span> <span class="o">=</span>  <span class="n">net</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+<span class="n">pred_col</span> <span class="o">=</span> <span class="n">pred_col</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">your_loss</span> <span class="o">=</span> <span class="n">mse_loss_nb</span><span class="p">(</span><span class="n">your_col</span><span class="p">,</span> <span class="n">pred_col</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loss for the trained network is </span><span class="si">{</span><span class="n">your_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>PlumberBot has done a good job! The loss before training was high, after training, it has become so close to zero. There’s almost no difference between the colours.</p>
+<p>Let’s look at the other sample colours as well:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_rgb</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_rgb</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_rgb</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Congrats on training your first neural network! Now you understand the basics of how neural networks work. Our first task was not very useful, simply passing the same colours from input to output. Let us make a network for something more useful. But before that, we will take a brief detour to colour land again.</p>
+</section>
+<section id="colours-part-2-cmyk">
+<h3>Colours part 2: CMYK<a class="headerlink" href="#colours-part-2-cmyk" title="Permalink to this headline">#</a></h3>
+<p>Now that you know how computers display colours on a screen, let us see how printers print colour on paper. As we discussed in Colours Part 1, the absence of any colour (0 values) is white, the colour of the paper.</p>
+<p>Printers use Cyan, Magenta, Yellow and Black ink. This representation is known as CMYK.</p>
+<p><img alt="res/fig/cmyk-additive-subtractive-colors.jpeg" src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/cmyk-additive-subtractive-colors.jpeg?raw=1" /></p>
+<p>You can play around with CMYK colours in this widget. It will also display the corresponding RGB representation. We have set k to 0 to show the relationship between cmy and rgb better.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@interact</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span><span class="n">m</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">),</span><span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">),</span><span class="n">k</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">interactive_viz_colour</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CMYK:&quot;</span><span class="p">)</span>
+    <span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">viz_colour_cmyk</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RGB:&quot;</span><span class="p">)</span>
+    <span class="n">rgb</span> <span class="o">=</span> <span class="n">cmyk_to_rgb</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+    <span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">rgb</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice the behaviour of both the colour schemes when you set all c,m,y to 0 and all c,m,y to 1, while keeping k at 0. When c,m,y are 0, the colour produced is white and r,g,b are “on” while c,m,y are “off”. When c,m,y are 1, the colour produced is black and r,g,b are “off” and c,m,y are “on”.</p>
+<p>Let us look at the relationship between the two colour schemes.</p>
+<p>For converting RGB to CMYK:</p>
+<p>Assuming all our values are between 0 and 1.0, the relationship is:
+$<span class="math notranslate nohighlight">\( k = 1 - max(r,g,b) \)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\( c = (1 - r - k)/ (1 - k) \)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\( m = (1 - g - k)/ (1 - k) \)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\( y = (1 - b - k)/ (1 - k) \)</span>$</p>
+<p>and for converting CMYK to RGB:</p>
+<div class="math notranslate nohighlight">
+\[ r = 1 - (c + k) \]</div>
+<div class="math notranslate nohighlight">
+\[ g = 1 - (m + k) \]</div>
+<div class="math notranslate nohighlight">
+\[ b = 1 - (y + k) \]</div>
+<p>Let’s implement this in code:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: Convert rgb to cmyk</span>
+<span class="k">def</span> <span class="nf">rgb_to_cmyk_nb</span><span class="p">(</span><span class="n">rgb_col</span><span class="p">):</span>
+    <span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">rgb_col</span>
+    
+    <span class="c1">### Your code here. You can use max() function to get max of numbers. Eg max(a,b,c) gives max of a,b,c</span>
+    <span class="n">k</span> <span class="o">=</span> 
+    <span class="n">c</span> <span class="o">=</span> 
+    <span class="n">m</span> <span class="o">=</span> 
+    <span class="n">y</span> <span class="o">=</span> 
+    <span class="c1">###</span>
+    
+    <span class="n">cmyk_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">cmyk_col</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And let’s test it with a sample colour</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rgb_col</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">]</span>
+<span class="n">cmyk_col</span> <span class="o">=</span> <span class="n">rgb_to_cmyk_nb</span><span class="p">(</span><span class="n">rgb_col</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CMYK:&quot;</span><span class="p">)</span>
+<span class="n">col</span><span class="o">=</span> <span class="n">cmyk_col</span>
+<span class="n">viz_colour_cmyk</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RGB:&quot;</span><span class="p">)</span>
+<span class="n">rgb</span> <span class="o">=</span> <span class="n">rgb_col</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">rgb</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: Convert cmyk to rgb</span>
+<span class="k">def</span> <span class="nf">cmyk_to_rgb</span><span class="p">(</span><span class="n">cmyk_col</span><span class="p">):</span>
+    <span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">k</span> <span class="o">=</span> <span class="n">cmyk_col</span>
+    
+    <span class="c1">### Your code here</span>
+    <span class="n">r</span> <span class="o">=</span> 
+    <span class="n">g</span> <span class="o">=</span> 
+    <span class="n">b</span> <span class="o">=</span> 
+    <span class="c1">###</span>
+    
+    <span class="n">rgb_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">rgb_col</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And let’s test it with a sample colour</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cmyk_col</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="n">rgb_col</span> <span class="o">=</span> <span class="n">cmyk_to_rgb</span><span class="p">(</span><span class="n">cmyk_col</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CMYK:&quot;</span><span class="p">)</span>
+<span class="n">col</span><span class="o">=</span> <span class="n">cmyk_col</span>
+<span class="n">viz_colour_cmyk</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RGB:&quot;</span><span class="p">)</span>
+<span class="n">rgb</span> <span class="o">=</span> <span class="n">rgb_col</span>
+<span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">rgb</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Feel free to change the sample colours in the code boxes above and look at how both schemes are converted.</p>
+</section>
+</section>
+<section id="network-2-rgb-to-cmyk">
+<h2>Network 2: RGB to CMYK<a class="headerlink" href="#network-2-rgb-to-cmyk" title="Permalink to this headline">#</a></h2>
+<p>Let us call PlumberBot again.</p>
+<p><img alt="res/fig/rp-2.png" src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/rp-2.png?raw=1" /></p>
+<p>This time, we want to input r,g,b paints in our pipeline and get c,m,y,k values back. Let’s create the dataset as before</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_size</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">rgb_training_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_size</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">cmyk_training_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">rgb_to_cmyk</span><span class="p">,</span> <span class="n">rgb_training_set</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The slider below shows the pairs of rgb and cmyk:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@interact</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">interactive_trainset_viz</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">viz_colour_rgb</span><span class="p">(</span><span class="n">rgb_training_set</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+    <span class="n">viz_colour_cmyk</span><span class="p">(</span><span class="n">cmyk_training_set</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+<p>Look at the data set size. Notice the rgb has 3 elements each and cmyk has 4 elements each.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The size of rgb dataset is </span><span class="si">{</span><span class="n">rgb_training_set</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The size of cmyk dataset is </span><span class="si">{</span><span class="n">cmyk_training_set</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We need to change our network to handle 3 input pipes and 4 output pipes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PipeNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        
+        <span class="c1">## Exercise: Add the input and output sizes here</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(,)</span> <span class="c1">#fill in numbers here</span>
+        <span class="c1"># In the previous case, for 3 input and 3 outputs,</span>
+        <span class="c1"># we used self.fc1 = nn.Linear(3,3), </span>
+        <span class="c1"># where first number is input size and second number is output size</span>
+
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="n">net</span> <span class="o">=</span> <span class="n">PipeNet</span><span class="p">()</span>
+<span class="n">untrained_net</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Lets look at some sample predictions from the untrained net:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_cmyk</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_cmyk</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_cmyk</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: Fill in col with a colour of your choice, in the form of [r,g,b]. </span>
+<span class="c1"># Then, use the neural network to generate the output for that colour.</span>
+<span class="c1"># Hint: You can pass the input colour as an argument to the net.</span>
+<span class="c1"># Like this: pred = net(colour)</span>
+<span class="n">your_col</span> <span class="o">=</span> <span class="p">[,,]</span> <span class="c1">#Fill this</span>
+<span class="n">your_col</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+<span class="n">true_col</span> <span class="o">=</span> <span class="n">rgb_to_cmyk</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+
+<span class="n">pred_col</span> <span class="o">=</span>  <span class="n">net</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span><span class="c1"># Fill thus</span>
+<span class="n">pred_col</span> <span class="o">=</span> <span class="n">pred_col</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">viz_colour_predicted_cmyk</span><span class="p">(</span><span class="n">your_col</span><span class="p">,</span><span class="n">pred_col</span><span class="p">)</span>
+
+<span class="n">your_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">true_col</span> <span class="o">-</span> <span class="n">pred_col</span><span class="p">)</span> <span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loss is </span><span class="si">{</span><span class="n">your_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, the untrained network gives wrong predictions with a high loss.</p>
+<p>We need to ask PlumberBot to train the network, similar to the procedure in the previous problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainset</span> <span class="o">=</span> <span class="n">ColourDataset</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="n">rgb_training_set</span><span class="p">,</span> <span class="n">output_data</span><span class="o">=</span><span class="n">cmyk_training_set</span><span class="p">)</span>
+
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">trainloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                                          <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>  <span class="c1"># loop over the dataset multiple times</span>
+
+    <span class="n">running_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trainloader</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="c1"># print statistics</span>
+        <span class="n">running_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">999</span> <span class="ow">and</span> <span class="n">epoch</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>    
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1"> Pass through data] loss: </span><span class="si">{</span><span class="n">running_loss</span><span class="o">/</span><span class="mi">1000</span> <span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">running_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+            
+            <span class="n">pred_col</span> <span class="o">=</span>  <span class="n">net</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+            <span class="n">pred_col</span> <span class="o">=</span> <span class="n">pred_col</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+            <span class="n">viz_colour_predicted_cmyk</span><span class="p">(</span><span class="n">your_col</span><span class="p">,</span><span class="n">pred_col</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Finished Training&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s look at the prediction for the input rgb colour:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">your_col</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+
+<span class="n">pred_col</span> <span class="o">=</span>  <span class="n">untrained_net</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+<span class="n">pred_col</span> <span class="o">=</span> <span class="n">pred_col</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">your_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">true_col</span> <span class="o">-</span> <span class="n">pred_col</span><span class="p">)</span> <span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loss for untrained network is </span><span class="si">{</span><span class="n">your_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">pred_col</span> <span class="o">=</span>  <span class="n">net</span><span class="p">(</span><span class="n">your_col</span><span class="p">)</span>
+<span class="n">pred_col</span> <span class="o">=</span> <span class="n">pred_col</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">your_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">true_col</span> <span class="o">-</span> <span class="n">pred_col</span><span class="p">)</span> <span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loss for the trained network is </span><span class="si">{</span><span class="n">your_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The loss is much closer to 0 now. Our sample colours look much better now too:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_cmyk</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_cmyk</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">viz_colour_predicted_cmyk</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span><span class="n">pred</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Good job again PlumberBot!
+We have learnt how to create simple neural networks, and the basics of how they work.</p>
+<section id="plot-twist">
+<h3>Plot twist<a class="headerlink" href="#plot-twist" title="Permalink to this headline">#</a></h3>
+<p>Did you know that the images of PlumberBot was created using a neural network?</p>
+<p>That model is called Dall E mini, and it can generate images from any text you provide it.</p>
+<p>Here are some more examples of “Robot plumber fixing neural networks”:</p>
+<p><img alt="res/fig/rp-3.png" src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/rp-3.png?raw=1" />
+<img alt="res/fig/rp-3.png" src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/rp-4.png?raw=1" /></p>
+<p>You can generate your own images here: <a class="reference external" href="https://huggingface.co/spaces/dalle-mini/dalle-mini">https://huggingface.co/spaces/dalle-mini/dalle-mini</a>
+(Hint: If it shows an error, close the error and click on run again till it works. It will take a minute or two to generate images)</p>
+</section>
+</section>
+<section id="optional-challenge-cmyk-to-rgb-network">
+<h2>Optional Challenge: CMYK to RGB Network<a class="headerlink" href="#optional-challenge-cmyk-to-rgb-network" title="Permalink to this headline">#</a></h2>
+<p>Can you create a network to convert CMYK values to RGB values? Feel free to copy any code from above.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./DSECOP/Learning_the_Schrodinger_Equation"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#so-what-is-machine-learning">So what is machine learning?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rgb-colours">RGB Colours</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks">Neural Networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs-and-outputs">Inputs and outputs:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-network">Neural Network:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#predictions-and-ground-truth">Predictions and ground truth:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loss-function">Loss function:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#backpropagation">Backpropagation:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#training-testing-and-overfitting">Training, testing and overfitting</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#network-1-rgb-to-rgb">Network 1: RGB to RGB</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#colours-part-2-cmyk">Colours part 2: CMYK</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-2-rgb-to-cmyk">Network 2: RGB to CMYK</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-twist">Plot twist</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-challenge-cmyk-to-rgb-network">Optional Challenge: CMYK to RGB Network</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

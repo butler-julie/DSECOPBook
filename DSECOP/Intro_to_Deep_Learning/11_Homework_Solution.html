@@ -1,0 +1,631 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture XI: Homework Solution &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'DSECOP/Intro_to_Deep_Learning/11_Homework_Solution';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Table of Contents
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploratory Data Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/README.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/01_dataset_cleaning.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/02_preprocessing_techniques.html">Preprocessing Techniques for Machine Learning</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDSECOP/Intro_to_Deep_Learning/11_Homework_Solution.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/DSECOP/Intro_to_Deep_Learning/11_Homework_Solution.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture XI: Homework Solution</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-i">Lecture I:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-ii">Lecture II:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-iii">Lecture III:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-iv">Lecture IV:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-v">Lecture V:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-vi">Lecture VI:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-vii">Lecture VII:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-viii">Lecture VIII:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-ix">Lecture IX:</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p><a href="https://colab.research.google.com/github/GDS-Education-Community-of-Practice/DSECOP/blob/main/Intro_to_Deep_Learning/11_Homework_Solution.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="lecture-xi-homework-solution">
+<h1>Lecture XI: Homework Solution<a class="headerlink" href="#lecture-xi-homework-solution" title="Permalink to this headline">#</a></h1>
+<section id="lecture-i">
+<h2>Lecture I:<a class="headerlink" href="#lecture-i" title="Permalink to this headline">#</a></h2>
+<p>Perceptron is a neural network with a single neuron. For more information of history of neural network see <a class="reference external" href="https://cs.stanford.edu/people/eroberts/courses/soco/projects/neural-networks/index.html">https://cs.stanford.edu/people/eroberts/courses/soco/projects/neural-networks/index.html</a></p>
+</section>
+<section id="lecture-ii">
+<h2>Lecture II:<a class="headerlink" href="#lecture-ii" title="Permalink to this headline">#</a></h2>
+<p>rank (<span class="math notranslate nohighlight">\(X\)</span>) <span class="math notranslate nohighlight">\( = (n, m)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(X^{i}\)</span>) <span class="math notranslate nohighlight">\( = (n, 1)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(\omega\)</span>) <span class="math notranslate nohighlight">\( = (n, 1)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(b\)</span>) <span class="math notranslate nohighlight">\( = (1, 1)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(z\)</span>) <span class="math notranslate nohighlight">\( = (1, m)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(a\)</span>) <span class="math notranslate nohighlight">\( = (1, m)\)</span></p>
+</section>
+<section id="lecture-iii">
+<h2>Lecture III:<a class="headerlink" href="#lecture-iii" title="Permalink to this headline">#</a></h2>
+<p>No, the cost function doesn’t need to be convex. Most of the cost functions used in the neural network are not convex. But it is not necessary because we want to find <em>a minimum</em> of the cost function; it could be a <em>global</em> or a <em>local</em> minimum.  In the case of the convex-cost function, the minimum that you find is guaranteed to be a global minimum.</p>
+</section>
+<section id="lecture-iv">
+<h2>Lecture IV:<a class="headerlink" href="#lecture-iv" title="Permalink to this headline">#</a></h2>
+<p>\begin{equation}
+da := \frac{dL}{da} = - \frac{y^{i}}{a} + \frac{1- y^{i}}{1 - a}
+\end{equation}</p>
+<p>\begin{equation}
+dz := \frac{dL}{dz} = \frac{dL}{da} * \frac{da}{dz} = [- \frac{y^{i}}{a} + \frac{1- y^{i}}{1 - 1}][a (1 -a )]= a - y^{i}
+\end{equation}</p>
+<p>\begin{equation}
+d\omega_1 := \frac{dL}{d\omega_1} = \frac{dL}{da} * \frac{da}{dz}* \frac{dz}{d\omega_1} = (a - y^{i}) x_1^{i}
+\end{equation}</p>
+<p>\begin{equation}
+d\omega_2 := \frac{dL}{d\omega_2} = \frac{dL}{da} * \frac{da}{dz}* \frac{dz}{d\omega_2} = (a - y^{i}) x_2^{i}
+\end{equation}</p>
+<p>\begin{equation}
+db := \frac{dL}{db} = \frac{dL}{da} * \frac{da}{dz}* \frac{dz}{db} = (a - y^{i})
+\end{equation}</p>
+</section>
+<section id="lecture-v">
+<h2>Lecture V:<a class="headerlink" href="#lecture-v" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  
+    <span class="k">return</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)))</span> 
+
+
+<span class="k">def</span> <span class="nf">gradient_decent_one_node_one_layer</span><span class="p">(</span><span class="n">X_t</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">n_iteration</span><span class="p">,</span> <span class="n">learnig_rate</span><span class="p">):</span>
+    
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">learning_rate</span>                  
+    
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iteration</span><span class="p">):</span>
+        
+        <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">db</span> <span class="o">=</span> <span class="mi">0</span> 
+        <span class="n">d_omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> 
+        
+                                         
+        <span class="n">n</span> <span class="o">=</span> <span class="n">X_t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+          
+        
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>        
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+                                 
+        
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">omega</span> <span class="p">,</span> <span class="n">X_t</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
+        <span class="n">dZ</span> <span class="o">=</span> <span class="n">A</span> <span class="o">-</span> <span class="n">Y</span>
+        
+        <span class="n">J</span> <span class="o">=</span> <span class="o">-</span>  <span class="n">Y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">A</span><span class="p">)</span> 
+        <span class="n">cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">m</span>
+        <span class="n">d_omega</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dZ</span><span class="p">,</span> <span class="n">X_t</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dZ</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">m</span>
+        
+        <span class="n">omega</span> <span class="o">-=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">d_omega</span>
+        <span class="n">b</span> <span class="o">-=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">db</span>
+        
+    
+    <span class="k">return</span><span class="p">(</span><span class="n">omega</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>    
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="lecture-vi">
+<h2>Lecture VI:<a class="headerlink" href="#lecture-vi" title="Permalink to this headline">#</a></h2>
+<p>rank (<span class="math notranslate nohighlight">\(\omega^{[l]}_j\)</span>) <span class="math notranslate nohighlight">\(= (1, n_{l-1})\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(b^{[l]}_j\)</span>) <span class="math notranslate nohighlight">\(= (1, 1)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(z^{[l]}_j\)</span>) <span class="math notranslate nohighlight">\(= (1, 1)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(a^{[l]}_j\)</span>) <span class="math notranslate nohighlight">\(= (1, 1)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(\omega^{[l]}\)</span>) <span class="math notranslate nohighlight">\(= (n_{l}, n_{l-1})\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(b^{[l]}\)</span>) <span class="math notranslate nohighlight">\(= (n_{l}, 1)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(Z^{[l]}\)</span>) <span class="math notranslate nohighlight">\(= (n_{l}, 1)\)</span></p>
+<p>rank (<span class="math notranslate nohighlight">\(A^{[l]}\)</span>) <span class="math notranslate nohighlight">\(= (n_{l}, 1)\)</span></p>
+</section>
+<section id="lecture-vii">
+<h2>Lecture VII:<a class="headerlink" href="#lecture-vii" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>learning rate (<span class="math notranslate nohighlight">\(\alpha\)</span>)</p></li>
+<li><p>number of iterations</p></li>
+<li><p>activation function</p></li>
+<li><p>number of hidden layers</p></li>
+<li><p>number of nodes in each hidden layer</p></li>
+</ol>
+</section>
+<section id="lecture-viii">
+<h2>Lecture VIII:<a class="headerlink" href="#lecture-viii" title="Permalink to this headline">#</a></h2>
+<p>Another way to regularize the cost function is to use both <strong>‘<span class="math notranslate nohighlight">\(L_1\)</span>-Regularization’</strong> and <strong>‘<span class="math notranslate nohighlight">\(L_2\)</span>-Regularization’</strong> simultaneously. This method is called <strong>Elastic net</strong>. The extra term in cost function in this method is</p>
+<p>\begin{equation}
+\frac{\lambda_1}{2m} |\omega|^2 + \frac{\lambda_2}{2m} |\omega|
+\end{equation}</p>
+</section>
+<section id="lecture-ix">
+<h2>Lecture IX:<a class="headerlink" href="#lecture-ix" title="Permalink to this headline">#</a></h2>
+<p>An example of a linear activation function is <span class="math notranslate nohighlight">\(A(Z) = Z\)</span>, which effectively means there is no activation function! So, in this case, we have</p>
+<p>\begin{equation}
+A^{[l = 1]} = Z^{[l = 1]} = \omega^{[l = 1]}X_0 + b^{[l = 1]}
+\end{equation}
+\begin{equation}
+A^{[l = 2]} = Z^{[l = 2]} = \omega^{[l = 2]}[\omega^{[l = 1]}X_0 + b^{[l = 1]}] + b^{[l = 2]}
+\end{equation}</p>
+<p>and so on. Therefore, for the last layer, we can write,</p>
+<p>\begin{equation}
+A^{[L]} = Z^{[L]} = \omega^{[L]}\omega^{[L-1]}\omega^{[L-2]}…\omega^{[1]}X_0 + F(b^{[l]}, \omega^{[l]})
+\end{equation}</p>
+<p>Technically, we can define a <em>new</em> <span class="math notranslate nohighlight">\(\omega\)</span> and a <em>new</em> <span class="math notranslate nohighlight">\(b\)</span> as</p>
+<p>\begin{equation}
+\omega_{new} = \omega^{[L]}\omega^{[L-1]}\omega^{[L-2]}…\omega^{[1]}
+\end{equation}
+\begin{equation}
+b_{new} = F(b^{[l]}, \omega^{[l]})
+\end{equation}</p>
+<p>Using these new parameters, we can rewrite the output as</p>
+<p>\begin{equation}
+A^{[L]} = Z^{[L]} = \omega_{new}X_0 + b_{new}
+\end{equation}</p>
+<p>Hence, effectively it is like a neural network with just one hidden layer.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./DSECOP/Intro_to_Deep_Learning"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-i">Lecture I:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-ii">Lecture II:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-iii">Lecture III:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-iv">Lecture IV:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-v">Lecture V:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-vi">Lecture VI:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-vii">Lecture VII:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-viii">Lecture VIII:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-ix">Lecture IX:</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

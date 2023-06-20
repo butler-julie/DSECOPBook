@@ -1,0 +1,820 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Part 2: Graph Laplacian and Spectral Embedding &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'DSECOP/Spectral_Clustering/02_Graph_Laplacian';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Table of Contents
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploratory Data Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/README.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/01_dataset_cleaning.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/02_preprocessing_techniques.html">Preprocessing Techniques for Machine Learning</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDSECOP/Spectral_Clustering/02_Graph_Laplacian.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/DSECOP/Spectral_Clustering/02_Graph_Laplacian.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Part 2: Graph Laplacian and Spectral Embedding</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-matrix-form-of-equation-of-motion">The Matrix Form of Equation of Motion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-embedding">Spectral Embedding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homework">Homework</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1">Problem 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2">Problem 2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Solution:</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p><a href="https://colab.research.google.com/github/GDS-Education-Community-of-Practice/DSECOP/blob/main/Spectral_Clustering/02_Graph_Laplacian.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="part-2-graph-laplacian-and-spectral-embedding">
+<h1>Part 2: Graph Laplacian and Spectral Embedding<a class="headerlink" href="#part-2-graph-laplacian-and-spectral-embedding" title="Permalink to this headline">#</a></h1>
+<section id="the-matrix-form-of-equation-of-motion">
+<h2>The Matrix Form of Equation of Motion<a class="headerlink" href="#the-matrix-form-of-equation-of-motion" title="Permalink to this headline">#</a></h2>
+<p>In the previous situation, where we have three equal-mass particles connected pairwisely by the spring, we have the equation of motion:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp;m\frac{d^2 x_1}{dt^2} = - (k_{12} + k_{13})x_1 + k_{12} x_2 + k_{13} x_3 \\
+&amp;m\frac{d^2 x_2}{dt^2} = - (k_{21} + k_{23})x_2 + k_{21} x_1 + k_{23} x_3 \\
+&amp;m\frac{d^2 x_3}{dt^2} = - (k_{31} + k_{32})x_3 + k_{31} x_1 + k_{32} x_2\\
+\end{aligned}
+\end{split}\]</div>
+<p>If we put the coordinates <span class="math notranslate nohighlight">\(x_1, x_2, x_3\)</span> into a vector <span class="math notranslate nohighlight">\(\mathbf{x} = (x_1,x_2,x_3)^T\)</span>, we could write that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\frac{d^2 }{dt^2} \mathbf{x} &amp;= \begin{pmatrix} 
+- (k_{12} + k_{13}) &amp; k_{12} &amp; k_{13} \\
+k_{21} &amp;  - (k_{21} + k_{23}) &amp; k_{23} \\
+k_{31} &amp; k_{32} &amp; - (k_{31}+k_{32})
+\end{pmatrix} \mathbf{x} \\
+&amp;= \begin{pmatrix} k_{11}- (k_{11}+ k_{12} + k_{13}) &amp; k_{12} &amp; k_{13} \\
+k_{21} &amp;  k_{22}- (k_{21} + k_{22}+ k_{23}) &amp; k_{23} \\
+k_{31} &amp; k_{32} &amp; k_{33}- (k_{31}+k_{32}+k_{33})
+\end{pmatrix} \mathbf{x}
+\end{aligned}
+\end{split}\]</div>
+<p>where in the diagonal terms, we add a term and subtract it off. If we define the matrix <span class="math notranslate nohighlight">\(K\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+K = 
+\begin{pmatrix}
+k_{11} &amp; k_{12} &amp; k_{13} \\
+k_{21} &amp; k_{22} &amp; k_{23} \\
+k_{31} &amp; k_{32} &amp; k_{33}
+\end{pmatrix}
+\end{split}\]</div>
+<p>and we define the <span class="math notranslate nohighlight">\(D\)</span> matrix as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+D = 
+\begin{pmatrix}
+k_{11} + k_{12} + k_{13} &amp; 0 &amp; 0 \\
+0 &amp; k_{21} + k_{22} + k_{23} &amp; 0 \\
+0 &amp; 0 &amp; k_{31} + k_{32} + k_{33}
+\end{pmatrix}
+\end{split}\]</div>
+<p>We could then define <span class="math notranslate nohighlight">\(L = D-K\)</span> as the <strong>graph Laplacian</strong> defined by <span class="math notranslate nohighlight">\(K\)</span>. As a result, the differential equation becomes</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{d^2}{dt^2}\mathbf{x} = - L \mathbf{x}
+\]</div>
+<p>In the classical mechanics, we would solve the coupled differential equations by using the ansatz <span class="math notranslate nohighlight">\(\mathbf{x} = A\exp{i\omega t} \)</span> and the differential equation becomes eigen value equation as</p>
+<div class="math notranslate nohighlight">
+\[
+\omega^2 A = L A.
+\]</div>
+<p>The eigen vector solution <span class="math notranslate nohighlight">\(A\)</span> is called the normal mode of the system. If we prepare <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> in the normal modes, the solution would be <span class="math notranslate nohighlight">\(\mathbf{x} = A \text{Re}(e^{i\omega t}) = A \cos (\omega t) \)</span> and <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> will vanish at <span class="math notranslate nohighlight">\(t = \frac{\pi}{2\omega}\)</span>. At those times, there are no potential energy and the kinetic energy is proportional to <span class="math notranslate nohighlight">\(\omega^2\)</span> and as a result, if <span class="math notranslate nohighlight">\(\omega^2\)</span> is larger, the energy is larger.</p>
+<p>Since we already know from the previous section that larger energy will try to break the bonding that bonds the particles, we would like to use the lower energy modes to tell us which pairs have strong bonding and which pairs do not.</p>
+<p>However from the physical point view, if all particles moving in the same direction with not relative motion, there will be no oscillation and this costs no energy (infinitesmal speed will give infinitesmal kinetic energy). This mode has eigenvalue <span class="math notranslate nohighlight">\(0\)</span> and eigenvector <span class="math notranslate nohighlight">\((1,1,1)^T\)</span>. This is of no interest since we want to use oscillation to clustering particles. We would normally neglect this mode and we will start from the second lowest energy mode.</p>
+</section>
+<section id="example">
+<h2>Example:<a class="headerlink" href="#example" title="Permalink to this headline">#</a></h2>
+<p>We would like to extract the lower energy normal mode of the graph laplacian of the three body example. We first construct a function of calculating the Graph Lalacian of a given spring constant matrix <span class="math notranslate nohighlight">\(K\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">GraphLaplacian</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">D</span><span class="o">-</span><span class="n">K</span>
+    <span class="k">return</span> <span class="n">L</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+<p>Recall that the system in the previous section has <span class="math notranslate nohighlight">\(k_{12} = 10\)</span>, <span class="math notranslate nohighlight">\(k_{23} = k_{13} = 1\)</span>. We could try to get the eigenvector of the system.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">GetNormalMode</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">first_few</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">GraphLaplacian</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+    <span class="n">eigval</span><span class="p">,</span> <span class="n">eigvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">eigval</span><span class="p">)</span>
+    <span class="n">chosen</span> <span class="o">=</span> <span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="o">+</span><span class="n">first_few</span><span class="p">]</span> <span class="c1"># neglect the 0 eigen value</span>
+    
+    <span class="k">return</span> <span class="n">eigvec</span><span class="p">[:,</span> <span class="n">chosen</span><span class="p">],</span> <span class="n">eigval</span><span class="p">[</span><span class="n">chosen</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">k2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">k2</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k2</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># k12</span>
+<span class="n">k2</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># k23</span>
+<span class="n">k2</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># k13</span>
+
+<span class="n">normal_modes</span><span class="p">,</span> <span class="n">freqs</span> <span class="o">=</span> <span class="n">GetNormalMode</span><span class="p">(</span><span class="n">k2</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">freqs</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">normal_modes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[ 3. 21.]
+[[ 4.08248290e-01 -7.07106781e-01]
+ [-8.16496581e-01 -4.97368796e-18]
+ [ 4.08248290e-01  7.07106781e-01]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the above code, we neglected the zero eigenvalue and keep the following eigenvalues. The two modes are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+x(t) = \begin{pmatrix} 0.41 \\ -0.82 \\ 0.41 \end{pmatrix} \cos( \sqrt{3} t) \quad \text{ and } \quad 
+x(t) = \begin{pmatrix} -0.71 \\ 0.0 \\ 0.71 \end{pmatrix} \cos (\sqrt{21} t)
+\end{split}\]</div>
+<p>Thus, we have low energy in the system, we cannot have strong effects from the second mode and most effects are from the first mode. In the first mode, particel 1 and particle 3 are close to each other. In order to see it clearly, we would plot the normal modes. Let <span class="math notranslate nohighlight">\(v = (v_1,v_2,v_3)\)</span> be the eigen mode of the system. Then <span class="math notranslate nohighlight">\(v_1\)</span> will be the location of particle 1 at <span class="math notranslate nohighlight">\(t = 0\)</span> and <span class="math notranslate nohighlight">\(v_2\)</span> will be the  location of particle <span class="math notranslate nohighlight">\(2\)</span> are <span class="math notranslate nohighlight">\(t=0\)</span>. We could use two eigen modes to plot a scatter plot. We let the locations for first mode to be <span class="math notranslate nohighlight">\(x\)</span> axis coordinate and the locations for the second mode to be <span class="math notranslate nohighlight">\(y\)</span> axis coordinate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ScatterNormalMode</span><span class="p">(</span><span class="n">normal_modes</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">normal_modes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">normal_modes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">normal_modes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="mi">3</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;normal mode 1&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;normal mode 2&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ax</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ScatterNormalMode</span><span class="p">(</span><span class="n">normal_modes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot: xlabel=&#39;normal mode 1&#39;, ylabel=&#39;normal mode 2&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../_images/f06e86c72c3edb0fff1ee225eb6ac5897db62cbe322b5a8844abcdecf46d659c.png" src="../../_images/f06e86c72c3edb0fff1ee225eb6ac5897db62cbe322b5a8844abcdecf46d659c.png" />
+</div>
+</div>
+<p>It is clear that the particle <span class="math notranslate nohighlight">\(1\)</span> and particle <span class="math notranslate nohighlight">\(3\)</span> have equal <span class="math notranslate nohighlight">\(x\)</span> coordinates and the three particles are equally divided in the <span class="math notranslate nohighlight">\(y\)</span> axis.</p>
+</section>
+<section id="spectral-embedding">
+<h2>Spectral Embedding<a class="headerlink" href="#spectral-embedding" title="Permalink to this headline">#</a></h2>
+<p>In the previous discussion, we only focus on a three particle system. However we could generalize the idea to system with any number of particles. Given the similarity matrix (spring constant matrix) <span class="math notranslate nohighlight">\(K\)</span>, we have the following procedures of clustering them:</p>
+<ol class="arabic simple">
+<li><p>Calculate the graph Laplacian of <span class="math notranslate nohighlight">\(K\)</span></p></li>
+<li><p>Get the first few eigen vectors of <span class="math notranslate nohighlight">\(L\)</span> ordered increasingly of the eigenvalues: <span class="math notranslate nohighlight">\(v^{(1)}, v^{(2)}, \dots, v^{(d)} \)</span>.</p></li>
+<li><p>Give coordinate <span class="math notranslate nohighlight">\((v^{(1)}_i, v^{(2)}_i, \dots, v^{(d)}_i)\)</span> for particle <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+</ol>
+<p>Thus, from the above procedure we put the particles or data points into a new coordinate system with the property that pairs with higher value of <span class="math notranslate nohighlight">\(K_{ij}\)</span> (more similarity) are put closer.  This procedure is called <strong>Spectral Embedding</strong> since we used the spectrum (eigenvalues and eigen vectors) to embed the data points. The dimension of the embedding is labeled as <span class="math notranslate nohighlight">\(d\)</span>, which is the number of eigen vectors we want.</p>
+<p>We give an example with <span class="math notranslate nohighlight">\(10\)</span> particles: We let particle <span class="math notranslate nohighlight">\(1 \sim 3\)</span> are of same cluster with high values of similarity and <span class="math notranslate nohighlight">\(4\sim 8\)</span> are of strong similiarity and <span class="math notranslate nohighlight">\(9\sim 10\)</span> are of same similarity. We want the clusterwise similarity to be small and we set them to zero.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="c1"># first cluster</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+        <span class="n">K</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+<span class="c1"># second cluster</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+        <span class="n">K</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+        
+<span class="c1"># second cluster</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+        <span class="n">K</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">matshow</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>  
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x11f00fac0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/67c7987834bf6d5c6912cffd6131f2d4f1bf6c372f0769f5f1796fb8578ae7dc.png" src="../../_images/67c7987834bf6d5c6912cffd6131f2d4f1bf6c372f0769f5f1796fb8578ae7dc.png" />
+</div>
+</div>
+<p>We plot the matrix <span class="math notranslate nohighlight">\(K\)</span> by its entry value. It is clear that the similarity matrix are block diagonal. The cross-block terms in the matrix are zeros. This is what we want to design. We want to see how the spectral embedding would work</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">normal_modes</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">GetNormalMode</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">first_few</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ScatterNormalMode</span><span class="p">(</span><span class="n">normal_modes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot: xlabel=&#39;normal mode 1&#39;, ylabel=&#39;normal mode 2&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../_images/5c6e0603111ae401144d3e24de254dabadc6ecc8e37d870a7de5c8d58a43bba1.png" src="../../_images/5c6e0603111ae401144d3e24de254dabadc6ecc8e37d870a7de5c8d58a43bba1.png" />
+</div>
+</div>
+<p>We see from the plot that the particles are clustered correctly by their similarity measures and particles from the same cluster are put to the same location in the embedding. However, in real application, we cannot have such clean data, we usually will have noise contaminated similarity measure. We could test the robustness of the spectral embedding methods by adding some random noise into the matrix:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">2100</span><span class="p">)</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">K</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">normal_modes</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">GetNormalMode</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">first_few</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ScatterNormalMode</span><span class="p">(</span><span class="n">normal_modes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/juliehartley/Library/Python/3.9/lib/python/site-packages/matplotlib/collections.py:193: ComplexWarning: Casting complex values to real discards the imaginary part
+  offsets = np.asanyarray(offsets, float)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot: xlabel=&#39;normal mode 1&#39;, ylabel=&#39;normal mode 2&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../_images/ea3ff8e41e91c1b201d2fc2c8b3ff5c16bb3e060945e0366b491afeb2f13eccb.png" src="../../_images/ea3ff8e41e91c1b201d2fc2c8b3ff5c16bb3e060945e0366b491afeb2f13eccb.png" />
+</div>
+</div>
+<p>In the plot, the particles from the same cluster are not at exactly the same spot any more. The noise perturbed the clustering method a little bit and the particles from the same cluster are still close to each other in the plot.</p>
+<p>The visualization is clear in the above plot. However, if we have many particles like thousands and we want to do higher dimensional embedding like <span class="math notranslate nohighlight">\(4\)</span> dimensional, we cannot do the above plot again. This simply because we cannot draw a <span class="math notranslate nohighlight">\(4\)</span>-D picture. Thus, we should use a more precise way to see whether the points are put into the correct locations.
+We could calculate the pairwise distance among the particles in the embedding space and plot the pairwise distance value versus the similarity measure <span class="math notranslate nohighlight">\(K\)</span>. This method does not depend on the dimension of embedding since Euclidean distance can be calculated in any dimension.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pairwise_distance</span><span class="p">(</span><span class="n">coords</span><span class="p">):</span>
+    <span class="c1"># coords shape (num_particles, dimension)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:]</span> <span class="o">-</span> <span class="n">coords</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,:])</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">compareEmbedK</span><span class="p">(</span><span class="n">modes</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">distM</span> <span class="o">=</span> <span class="n">pairwise_distance</span><span class="p">(</span><span class="n">normal_modes</span><span class="p">)</span>
+    <span class="n">dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">sims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dists</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">dists</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="n">distM</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">sims</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">sims</span><span class="p">,</span> <span class="n">dists</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;pairwise distance&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;pairwise similarity&quot;</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">compareEmbedK</span><span class="p">(</span><span class="n">normal_modes</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/lb/pn_8vrmj1bg_8n9f9pg_8_vc0000gn/T/ipykernel_61706/77559523.py:12: ComplexWarning: Casting complex values to real discards the imaginary part
+  dists[count] = distM[i,j]
+</pre></div>
+</div>
+<img alt="../../_images/5aca70ad2abba9a24637f6eb5d2d8bd9d0534de0d8b933f74b42864c4aee4e3c.png" src="../../_images/5aca70ad2abba9a24637f6eb5d2d8bd9d0534de0d8b933f74b42864c4aee4e3c.png" />
+</div>
+</div>
+<p>From the plot, it is seen that for similarity larger than <span class="math notranslate nohighlight">\(7\)</span>, the pairwise distance are below <span class="math notranslate nohighlight">\(0.2\)</span> while the pairwise distance are greater than <span class="math notranslate nohighlight">\(0.5\)</span> for similarity value smaller than <span class="math notranslate nohighlight">\(6\)</span>. This is exactly what we claimed for the embedding algorithm: similar points are closer to each other in the embedding space.</p>
+</section>
+<section id="homework">
+<h2>Homework<a class="headerlink" href="#homework" title="Permalink to this headline">#</a></h2>
+<section id="problem-1">
+<h3>Problem 1<a class="headerlink" href="#problem-1" title="Permalink to this headline">#</a></h3>
+<p>Show that the lowest eigenvalue of <span class="math notranslate nohighlight">\(K_{ij}\)</span> is zero and thus just prove that <span class="math notranslate nohighlight">\(K_{ij}\)</span> is positive semi-definite.</p>
+</section>
+<section id="solution">
+<h3>Solution:<a class="headerlink" href="#solution" title="Permalink to this headline">#</a></h3>
+<p>For any vector <span class="math notranslate nohighlight">\(v\)</span>, we can just need to show <span class="math notranslate nohighlight">\(vLv \geq 0\)</span>. Specifically,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+vLv &amp;= \sum_{ij} (D_{ij} - K_{ij}) v_i v_j \\
+&amp;= \sum_{ij} D_{ij}v_i v_j - \sum_{ij} K_{ij} v_i v_j\\
+&amp;= \sum_{ij} (D_{ii} \delta_{ij} ) v_i v_j - \sum_{ij} K_{ij} v_i v_j \\
+&amp;= \sum_{i} v_i v_i D_{ii} - \sum_{ij} K_{ij} v_i v_j
+\end{aligned}
+\end{split}\]</div>
+<p>We could use the definition that <span class="math notranslate nohighlight">\(D_{ii} = \sum_j K_{ij} \)</span> and we get</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+vLv &amp;= \sum_{i} v_i v_i \sum_j K_{ij} - \sum_{ij} K_{ij} v_i v_j \\
+&amp;= \sum_{ij}K_{ij} v_i (v_i-v_j) \\
+&amp;= \frac{1}{2}\sum_{ij}K_{ij} v_i (v_i-v_j) + \frac{1}{2}\sum_{ij}K_{ij} v_i (v_i-v_j) \\
+&amp;= \frac{1}{2}\sum_{ij}K_{ij} v_i (v_i-v_j) + \frac{1}{2}\sum_{ij}K_{ji} v_j (v_j-v_i) \\
+&amp;= \frac{1}{2}\sum_{ij}K_{ij} v_i (v_i-v_j) - \frac{1}{2}\sum_{ij}K_{ji} v_j (v_i-v_j) \\
+&amp;= \frac{1}{2}\sum_{ij}K_{ij} (v_i-v_j)^2
+\end{aligned}
+\end{split}\]</div>
+<p>Since <span class="math notranslate nohighlight">\(K_{ij} \geq 0\)</span> and <span class="math notranslate nohighlight">\((v_i-v_j)^2 \geq 0\)</span>, we conclude that <span class="math notranslate nohighlight">\(vLv\geq 0\)</span> and thus it is positive semi-definite.</p>
+</section>
+<section id="problem-2">
+<h3>Problem 2<a class="headerlink" href="#problem-2" title="Permalink to this headline">#</a></h3>
+<p>Try to use three dimensional embedding for the <span class="math notranslate nohighlight">\(K\)</span> given in the above example. Then plot the pairwise distance versus the similarity. Do you find any irregular points? Is the embedding still useful in that case?</p>
+</section>
+<section id="id1">
+<h3>Solution:<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<p>We first plot the pariwise distance in the embedding space. We see an anomaly point with similarity larger than <span class="math notranslate nohighlight">\(7\)</span> but the distance is larger than <span class="math notranslate nohighlight">\(1.0\)</span>. This may be caused by the fact that third eigenvector has larger energy which could breaks the bonding between strongly bonded particles.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">normal_modes</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">GetNormalMode</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">first_few</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">compareEmbedK</span><span class="p">(</span><span class="n">normal_modes</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/lb/pn_8vrmj1bg_8n9f9pg_8_vc0000gn/T/ipykernel_61706/77559523.py:12: ComplexWarning: Casting complex values to real discards the imaginary part
+  dists[count] = distM[i,j]
+</pre></div>
+</div>
+<img alt="../../_images/72841111f545aebe8635ab8cd0d0e461f6e2a5417f7824730a7901b732324393.png" src="../../_images/72841111f545aebe8635ab8cd0d0e461f6e2a5417f7824730a7901b732324393.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./DSECOP/Spectral_Clustering"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-matrix-form-of-equation-of-motion">The Matrix Form of Equation of Motion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-embedding">Spectral Embedding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homework">Homework</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1">Problem 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2">Problem 2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Solution:</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

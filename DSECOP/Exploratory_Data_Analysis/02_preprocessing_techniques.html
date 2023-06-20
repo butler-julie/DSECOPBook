@@ -1,0 +1,1007 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Preprocessing Techniques for Machine Learning &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'DSECOP/Exploratory_Data_Analysis/02_preprocessing_techniques';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Exploratory Data Analysis" href="01_dataset_cleaning.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Table of Contents
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploratory Data Analysis</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_dataset_cleaning.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Preprocessing Techniques for Machine Learning</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDSECOP/Exploratory_Data_Analysis/02_preprocessing_techniques.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/DSECOP/Exploratory_Data_Analysis/02_preprocessing_techniques.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Preprocessing Techniques for Machine Learning</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-magic-of-neural-networks-activation-functions">The magic of neural networks: activation functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-can-we-get-out-input-data-close-to-0">How can we get out input data close to 0?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-a-preprocessing-scheme">Choosing a preprocessing scheme</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minmax-scaling">Minmax scaling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-might-you-want-to-use-minmax-scaling">When might you want to use minmax scaling?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#built-in-functions-for-minmax-scaling">Built-in functions for minmax scaling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-scaling">Standard Scaling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-might-you-want-to-use-standard-scaling">When might you want to use standard scaling?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-scaling">Robust scaling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-might-you-want-to-use-robust-scaling">When might you want to use robust scaling?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-quantile-transformation">The quantile transformation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantiles-to-divide-datasets">Quantiles to divide datasets</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-quantile-function-for-probabilities">The quantile function for probabilities.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-quantile-function-to-preprocess-data">Using the quantile function to preprocess data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-might-you-want-to-use-quantile-preprocessing">When might you want to use quantile preprocessing?</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># To run this notebook on Google Colab, uncomment the following section of code.</span>
+<span class="c1">#from google.colab import drive </span>
+<span class="c1">#drive.mount(&quot;/content/drive/&quot;)</span>
+
+<span class="c1">#import os</span>
+<span class="c1">#os.chdir(&quot;/content/drive/My Drive/DSECOP/Exploratory_Data_Analysis/&quot;)</span>
+<span class="c1">#!pwd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="preprocessing-techniques-for-machine-learning">
+<h1>Preprocessing Techniques for Machine Learning<a class="headerlink" href="#preprocessing-techniques-for-machine-learning" title="Permalink to this headline">#</a></h1>
+<p>In this notebook, we will cover some common preprocessing techniques that can be applied to data before running a machine learning analysis.</p>
+<p><strong>Note</strong>: <em>If you’re not familiar with the concept of neural networks, you might want to check out the <a class="reference external" href="https://github.com/GDS-Education-Community-of-Practice/DSECOP/tree/main/Intro_to_Deep_Learning">Introduction to Deep Learning</a> DSECOP module before doing this module!</em></p>
+<section id="the-magic-of-neural-networks-activation-functions">
+<h2>The magic of neural networks: activation functions<a class="headerlink" href="#the-magic-of-neural-networks-activation-functions" title="Permalink to this headline">#</a></h2>
+<p>Let’s consider an individual neuron in a dense neural network.</p>
+<p><a href="https://www.freecodecamp.org/news/deep-learning-neural-networks-explained-in-plain-english/">
+<img src="https://drive.google.com/uc?export=view&id=15rBDNq0-AeuOsqnJaGpfqNnOTR6WhxLn" alt="drawing" width="600"/>
+</a></p>
+<p>The neurons takes in a set of inputs <span class="math notranslate nohighlight">\(x_i\)</span>, which might be the input data or the output from another neuron. These inputs are multiplied by <em>weights</em> <span class="math notranslate nohighlight">\(w_i\)</span> associated to that neuron. The sum-product <span class="math notranslate nohighlight">\(\sum_i w_i x_i\)</span> is then added to a <em>bias</em> <span class="math notranslate nohighlight">\(b\)</span>, which is also associated to that neuron. Up to this point, the action of the neuron on the inputs is purely a <em>linear</em> function.</p>
+<p>The real power of neural networks comes from the inclusion of <em>activation functions</em>. By sending the linear output of the neuron (<span class="math notranslate nohighlight">\(\sum_i w_i x_i + b\)</span>) through a <em>nonlinear</em> activation function, the expressivity and complexity of a neural network skyrockets. This nonlinearly allows us to use fewer layers of neurons, and fewer neurons overall.</p>
+<p>Some activation functions are illustrated below.</p>
+<p><a href="https://www.v7labs.com/blog/neural-networks-activation-functions">
+<img src="https://drive.google.com/uc?export=view&id=1wColODYw0efN8kUUcTiVTVh9bcyMARt-" alt="drawing" width="600"/>
+</a></p>
+<p>Looking at some of these functions in more detail: the top left plot shows the “ReLU” activation function. Any neuron input that is negative is mapped to 0 by ReLU, and any input that is positive is mapped to itself. In this way, ReLU is able to “deactivate” negative neural inputs.</p>
+<p>Looking at some of the activation functions, you might notice that the functions are most interesting when the horizontal axis values are close to zero. In practice, this means that to maximize our usage of the nonlinear powers of activation functions, we want to ensure that the linear inputs to the activation functions are close to 0. This is achieved in two ways:</p>
+<p>(1) Ensure that all of the weights <span class="math notranslate nohighlight">\(w_i\)</span> and biases <span class="math notranslate nohighlight">\(b\)</span> are initialized close to zero. This is done automatically by most machine learning packages, so it’s not something that the typical user will have to worry about.</p>
+<p>(2) Ensure that the input data is close to 0. This step must be manually carried out by the user, and it is known as <em>preprocessing</em> data.</p>
+</section>
+<hr class="docutils" />
+<section id="how-can-we-get-out-input-data-close-to-0">
+<h2>How can we get out input data close to 0?<a class="headerlink" href="#how-can-we-get-out-input-data-close-to-0" title="Permalink to this headline">#</a></h2>
+<p><em>Preprocessing</em> refers to the process of transforming input data so that it is small, or close to 0. This stage needs to be done only once before beginning data analysis, but it is essential: attempting to train a neural network on data that hasn’t been preprocessed can fail dramatically!</p>
+<p>As an example: imagine that you want to train a neural network to <a class="reference external" href="https://github.com/GDS-Education-Community-of-Practice/DSECOP/tree/main/Solving_Differential_Equations_with_NNs">learn the equations of motion</a> that govern a ball falling off a cliff. You have set of input data that contains:</p>
+<ul class="simple">
+<li><p>a list of times that you took measurements at, ranging from 0 to 20 seconds.</p></li>
+<li><p>a list of the heights of the ball at each time you took a measurement, ranging from 0 to 20 meters.</p></li>
+</ul>
+<p>If you were to use these time - height measurements as inputs to a neural network without any preprocessing, the outputs of the neurons would larger than the “active” region of the activation functions. So you’d want to first preprocess your data to get it somewhere in the range of -1 to 1.</p>
+</section>
+<hr class="docutils" />
+<section id="choosing-a-preprocessing-scheme">
+<h2>Choosing a preprocessing scheme<a class="headerlink" href="#choosing-a-preprocessing-scheme" title="Permalink to this headline">#</a></h2>
+<p>Selecting a data preprocessing scheme is both an art and a science: given a dataset, there’s no a priori answer for which scheme will be best-suited. (However, by spending lots of time coding and training neural networks, you’ll probably be able to get an intuition for what schemes are <em>not</em> well-suited to your data!)</p>
+<p>It’s best to know a few different types of preprocessing algorithms, as well as their pros and cons. In practice, you might need to try 2-3 types of preprocessing schemes to find the one that produces the best-performing network.</p>
+<p>For the rest of the notebook, we’ll take a look at the most commonly used preprocessing schemes in greater detail.</p>
+</section>
+<hr class="docutils" />
+<section id="minmax-scaling">
+<h2>Minmax scaling<a class="headerlink" href="#minmax-scaling" title="Permalink to this headline">#</a></h2>
+<p>Minmax scaling is a <em>linear</em> preprocessing technique. The goal is to reshift and rescale data such that it lies fully within a specified interval (typically [0, 1] or [-1, 1]).</p>
+<p>To formalize this transformation: say we have an unprocessed dataset of <span class="math notranslate nohighlight">\(N\)</span> points, <span class="math notranslate nohighlight">\(x_{i}\)</span> for <span class="math notranslate nohighlight">\(i = 1, 2, ... N\)</span>. We want to generate a preprocessed dataset <span class="math notranslate nohighlight">\(y_i\)</span> that lies fully within the bounded internal <span class="math notranslate nohighlight">\([a, b]\)</span>. For this linear technique, this means that we want to find a transformation of the form</p>
+<div class="math notranslate nohighlight">
+\[ y_i = mx_i + c.\]</div>
+<p>The original dataset has a minimum <span class="math notranslate nohighlight">\(x_\mathrm{min}\)</span> and a maximum <span class="math notranslate nohighlight">\(x_\mathrm{max}\)</span>. To find the linear transformation, we need to solve the simultaneous equations</p>
+<div class="math notranslate nohighlight">
+\[b = m x_\mathrm{max} + c\]</div>
+<div class="math notranslate nohighlight">
+\[a = m x_\mathrm{min} + c\]</div>
+<p>for <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(c\)</span>.</p>
+<p>Then the transformed data <span class="math notranslate nohighlight">\(y_i\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[ y_i = \frac{b-a}{x_\mathrm{max} - x_\mathrm{min}} (x_i - \frac{x_\mathrm{max} + x_\mathrm{min}}{2}) + \frac{b + a}{2}.\]</div>
+<p><strong>Activity:</strong> On a separate sheet of paper, derive this equation for the transformed data <span class="math notranslate nohighlight">\(y_i\)</span>.</p>
+<section id="when-might-you-want-to-use-minmax-scaling">
+<h3>When might you want to use minmax scaling?<a class="headerlink" href="#when-might-you-want-to-use-minmax-scaling" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Because minmax scaling maps data to a finite interval, it’s useful when the <strong>input data is also bounded</strong>. As an example, most images store the colors for each pixel as an integer between 0 and 255, so they would be well-suited to minmax scaling</p></li>
+<li><p>In some cases, the <strong>mean of a dataset is not a useful quantity</strong>. For example, the <a class="reference external" href="https://en.wikipedia.org/wiki/MNIST_database">MNIST dataset</a>  of handwriten numbers is roughly binary: pixels are either black or white. For this dataset, the endpoints of the pixel range are more useful to know that the mean pixel value of each image, so a mean-based preprocessor (such as standard scaling) might be less useful.</p></li>
+</ul>
+ <p>
+<img src="https://drive.google.com/uc?export=view&id=18nHrZgdxZhAS8KVc4OhmLbfUbGMzmM7f" alt="drawing" width="300"/>
+</a></p><p><strong>Activity</strong>: Write a function to minmax scale a 1-dimensional array of data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">min_max_scale</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+
+  <span class="n">mean_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)])</span>
+  <span class="n">mean_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span>
+
+  <span class="k">return</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">mean_x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">+</span> <span class="n">mean_target</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let’s see how this function changes some data.</p>
+<p><strong>Activity</strong>: Apply your function to the three datasets given below (<code class="docutils literal notranslate"><span class="pre">normal_data</span></code>, <code class="docutils literal notranslate"><span class="pre">binary_data</span></code>, and <code class="docutils literal notranslate"><span class="pre">outliers_data</span></code>) to minmax scale each set to the interval [-3, -3]. Using the helper plotting code, create a histogram of the data before and after applying the minmax scaling function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#@title Helper plotting code</span>
+
+<span class="n">num_data_points</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">num_outliers</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">normal_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_data_points</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">binary_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">num_data_points</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">num_data_points</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">))))</span>
+<span class="n">outliers_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_data_points</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_outliers</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
+
+<span class="k">def</span> <span class="nf">plot_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">preprocessed_data</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+
+  <span class="n">bins_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="mi">40</span><span class="p">)</span>
+  <span class="n">bins_preproc_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">preprocessed_data</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">preprocessed_data</span><span class="p">),</span> <span class="mi">40</span><span class="p">)</span>
+
+  <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">bins_data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Raw data&quot;</span><span class="p">,</span> <span class="n">histtype</span> <span class="o">=</span> <span class="s2">&quot;step&quot;</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">preprocessed_data</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">bins_preproc_data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Processed data&quot;</span><span class="p">,</span> <span class="n">histtype</span> <span class="o">=</span> <span class="s2">&quot;step&quot;</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">bins_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bins_preproc_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="o">-</span> <span class="mf">.5</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">bins_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">bins_preproc_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span> <span class="o">+</span> <span class="mf">.5</span><span class="p">))</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> distributed data&quot;</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">normal_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">normal_data</span><span class="p">,</span> <span class="n">min_max_scale</span><span class="p">(</span><span class="n">normal_data</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+
+<span class="n">plot_data</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">min_max_scale</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="s2">&quot;Binary&quot;</span><span class="p">)</span>
+
+<span class="n">plot_data</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">,</span> <span class="n">min_max_scale</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="s2">&quot;Normal w/ outliers&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(10000, 1)
+</pre></div>
+</div>
+<img alt="../../_images/8aec813147d9a70ef994dec40f554c89e111ecfa7c8ab97088e10f302e73c937.png" src="../../_images/8aec813147d9a70ef994dec40f554c89e111ecfa7c8ab97088e10f302e73c937.png" />
+<img alt="../../_images/57cb65499b8abbdd39e70814b45fa84d77f8b9e55bf6cfe84d6dfe16d9a1347d.png" src="../../_images/57cb65499b8abbdd39e70814b45fa84d77f8b9e55bf6cfe84d6dfe16d9a1347d.png" />
+<img alt="../../_images/528eeb501fbf9ba2c69d4984f63a9a22b329d10b7aeff4d06fb3d92a172ca133.png" src="../../_images/528eeb501fbf9ba2c69d4984f63a9a22b329d10b7aeff4d06fb3d92a172ca133.png" />
+</div>
+</div>
+</section>
+<section id="built-in-functions-for-minmax-scaling">
+<h3>Built-in functions for minmax scaling<a class="headerlink" href="#built-in-functions-for-minmax-scaling" title="Permalink to this headline">#</a></h3>
+<p>In practice, it is better to use built-in functions to preprocess data. Such functions have been optimized to be fast and robust, which is a necessity when working with large datasets.</p>
+<p>The vast majority of code you will see makes use the <a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.preprocessing"><code class="docutils literal notranslate"><span class="pre">sklearn.preprocessing</span></code></a> module. When using <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>, preprocessing takes three steps:</p>
+<p>(1) <em>Define</em> the preprocessor, <code class="docutils literal notranslate"><span class="pre">preprocessor</span> <span class="pre">=</span> <span class="pre">sklearn.preprocessing.Preprocessor_Type</span></code></p>
+<p>(2) <em>Fit</em> the preprocessor to the dataset that you’re using, <code class="docutils literal notranslate"><span class="pre">preprocessor.fit(data)</span></code></p>
+<p>(3) <em>Transform</em> the data using your fit preprocessor, <code class="docutils literal notranslate"><span class="pre">preprocessed_data</span> <span class="pre">=</span> <span class="pre">preprocessor.transform(data)</span></code>.</p>
+<p><strong>Activity</strong>: Use
+<code class="docutils literal notranslate"><span class="pre">sklearn.preprocessing.MinMaxScaler</span></code> to preprocess the three given datasets. You might find the corresonding <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html#sklearn.preprocessing.MinMaxScaler"><code class="docutils literal notranslate"><span class="pre">MinMaxScaler</span></code> page</a> helpful.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">normal_data</span><span class="p">)</span>
+<span class="n">sk_normal_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">normal_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">normal_data</span><span class="p">,</span> <span class="n">sk_normal_data</span><span class="p">,</span> <span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">binary_data</span><span class="p">)</span>
+<span class="n">sk_bin_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">binary_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">sk_bin_data</span><span class="p">,</span> <span class="s2">&quot;Binary&quot;</span><span class="p">)</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">)</span>
+<span class="n">sk_out_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">,</span> <span class="n">sk_out_data</span><span class="p">,</span> <span class="s2">&quot;Normal w/ outliers&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/b01b931ca0ab721206290eb75638a32cbbb2b1428574398165cf45be3407b195.png" src="../../_images/b01b931ca0ab721206290eb75638a32cbbb2b1428574398165cf45be3407b195.png" />
+<img alt="../../_images/af9805eaee0ae28ced0df1ea3e9d65f77dd4ae6bb9d62f59f71e20c0802cf7f6.png" src="../../_images/af9805eaee0ae28ced0df1ea3e9d65f77dd4ae6bb9d62f59f71e20c0802cf7f6.png" />
+<img alt="../../_images/c0d8d3dae0e848114a7b0c498c327e981fc990b5dd99fbf4eea5e4ed068f8e6a.png" src="../../_images/c0d8d3dae0e848114a7b0c498c327e981fc990b5dd99fbf4eea5e4ed068f8e6a.png" />
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="standard-scaling">
+<h2>Standard Scaling<a class="headerlink" href="#standard-scaling" title="Permalink to this headline">#</a></h2>
+<p>Standard Scaling is another linear preprocessing technique. For this technique, the goal is to transform the data so that it has zero mean and unit standard deviation.</p>
+<p>Going back to our data sample <span class="math notranslate nohighlight">\(x_i\)</span>: we can calculate the sample mean <span class="math notranslate nohighlight">\(\mu = \frac{1}{N}\sum_{i = 1}^N x_i\)</span> and sample standard deviation <span class="math notranslate nohighlight">\(\sigma = \frac{1}{N}\sum_{i = 1}^N (x_i - \mu)^2\)</span>. Then the transformed data <span class="math notranslate nohighlight">\(y_i\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[ y_i = \frac{x_i - \mu}{\sigma}.\]</div>
+<section id="when-might-you-want-to-use-standard-scaling">
+<h3>When might you want to use standard scaling?<a class="headerlink" href="#when-might-you-want-to-use-standard-scaling" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>When a dataset is <strong>roughly clustered about a mean value</strong>, it can make sense to express the data in terms of its distance from that mean. Standard scaling is especially good for data that is <strong>symmetric about this mean</strong>.</p></li>
+<li><p>If a dataset is <strong>not tightly bounded</strong>, standard scaling might provide a more intuitive transformation than minmax scaling.</p></li>
+</ul>
+<p><strong>Activity</strong>: Write a function to standard scale a 1-dimensional array of data. Apply your function to the three datasets given. Using the helper plotting code, create histograms of the data before and after applying the standard scaling function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">standard_scale</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+
+  <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+  <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">std</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_data</span><span class="p">(</span><span class="n">normal_data</span><span class="p">,</span> <span class="n">standard_scale</span><span class="p">(</span><span class="n">normal_data</span><span class="p">),</span> <span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+
+<span class="n">plot_data</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">standard_scale</span><span class="p">(</span><span class="n">binary_data</span><span class="p">),</span> <span class="s2">&quot;Binary&quot;</span><span class="p">)</span>
+
+<span class="n">plot_data</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">,</span> <span class="n">standard_scale</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">),</span> <span class="s2">&quot;Normal w/ outliers&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/a25a7c706860b55fc27943bac12acd18827065378b125d4937ce4ac15a4942e3.png" src="../../_images/a25a7c706860b55fc27943bac12acd18827065378b125d4937ce4ac15a4942e3.png" />
+<img alt="../../_images/03834aec7dc06ab4130c0613ed95bf2b61a3eebbf8ab23307f587351fde2a597.png" src="../../_images/03834aec7dc06ab4130c0613ed95bf2b61a3eebbf8ab23307f587351fde2a597.png" />
+<img alt="../../_images/a113a93d64351f534b864038e56f6dbc9ec327f9dcd8d8a9283db8bfb9f3dfae.png" src="../../_images/a113a93d64351f534b864038e56f6dbc9ec327f9dcd8d8a9283db8bfb9f3dfae.png" />
+</div>
+</div>
+<p><strong>Activity</strong>: Use
+<code class="docutils literal notranslate"><span class="pre">sklearn.preprocessing.StandardScaler</span></code> to preprocess the three given datasets. You might find the corresonding <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html#sklearn.preprocessing.StandardScaler"><code class="docutils literal notranslate"><span class="pre">StandardScaler</span></code> page</a> helpful.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">normal_data</span><span class="p">)</span>
+<span class="n">sk_normal_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">normal_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">normal_data</span><span class="p">,</span> <span class="n">sk_normal_data</span><span class="p">,</span> <span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">binary_data</span><span class="p">)</span>
+<span class="n">sk_bin_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">binary_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">sk_bin_data</span><span class="p">,</span> <span class="s2">&quot;Binary&quot;</span><span class="p">)</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">)</span>
+<span class="n">sk_out_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">,</span> <span class="n">sk_out_data</span><span class="p">,</span> <span class="s2">&quot;Normal w/ outliers&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/a25a7c706860b55fc27943bac12acd18827065378b125d4937ce4ac15a4942e3.png" src="../../_images/a25a7c706860b55fc27943bac12acd18827065378b125d4937ce4ac15a4942e3.png" />
+<img alt="../../_images/03834aec7dc06ab4130c0613ed95bf2b61a3eebbf8ab23307f587351fde2a597.png" src="../../_images/03834aec7dc06ab4130c0613ed95bf2b61a3eebbf8ab23307f587351fde2a597.png" />
+<img alt="../../_images/a113a93d64351f534b864038e56f6dbc9ec327f9dcd8d8a9283db8bfb9f3dfae.png" src="../../_images/a113a93d64351f534b864038e56f6dbc9ec327f9dcd8d8a9283db8bfb9f3dfae.png" />
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="robust-scaling">
+<h2>Robust scaling<a class="headerlink" href="#robust-scaling" title="Permalink to this headline">#</a></h2>
+<p>Robust scaling is yet another linear preprocessing technique. It’s very similar to standard scaling, but it can be more useful when the dataset contains outliers that influence the mean in undesireable ways.</p>
+<p>Going back to our data sample <span class="math notranslate nohighlight">\(x_i\)</span>, we define the transformation as:</p>
+<div class="math notranslate nohighlight">
+\[ y_i = \frac{x_i - \mathrm{median}(x)}{q_3 - q_1}.\]</div>
+<p>This looks very similar to the one for standard scaling, but we’ve replaced the mean <span class="math notranslate nohighlight">\(\mu\)</span> of the dataset with the median, and the standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span> with the difference between the 3rd and 1st quartiles, <span class="math notranslate nohighlight">\(q_3\)</span> and <span class="math notranslate nohighlight">\(q_1\)</span>. (Recall that the first quartiles is defined to be <em>greater</em> than exactly 25% of the data, and the third quartiles is defined to be <em>less</em> than exactly 25% of the data.)</p>
+<p><a href="https://www.scribbr.com/statistics/quartiles-quantiles/">
+<img src="https://drive.google.com/uc?export=view&id=1IZ_hOYWwOGueiM_VlG3-CJqapi36f55t" alt="drawing" width="500"/>
+</a></p>
+<p>“Robust” has a technical definition here: it refers to the preprocessing being less influenced by outliers.</p>
+<section id="when-might-you-want-to-use-robust-scaling">
+<h3>When might you want to use robust scaling?<a class="headerlink" href="#when-might-you-want-to-use-robust-scaling" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>As stated earlier, when a <strong>dataset contains a large number of outliers</strong>, these outliers can bias the mean and the standard deviation. In this case, we’d want to use a preprocessing method that is based on quantities that don’t change significantly due to the outleirs. In this way, attention is focused on the data points that are <em>not</em> outliers.</p></li>
+</ul>
+<p><a href="https://scikit-learn.org/0.18/auto_examples/preprocessing/plot_robust_scaling.html#sphx-glr-auto-examples-preprocessing-plot-robust-scaling-py">
+<img src="https://drive.google.com/uc?export=view&id=1sB4WM7kwNzx1sD5p_GQTmEgRB7oDV5ul" alt="drawing" width="500"/>
+</a></p>
+<p><strong>Activity</strong>: Write a function to robust scale a 1-dimensional array of data. Apply your function to the three datasets given. Using the helper plotting code, create histograms of the data before and after applying the robust scaling function.</p>
+<p>Do <em>not</em> use built-in functions to calculate the median or the quartiles.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">robust_scale</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+
+  <span class="n">sorted_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+
+  <span class="c1"># get median</span>
+  <span class="n">med_index</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">med_index</span><span class="p">)</span> <span class="o">==</span> <span class="n">med_index</span><span class="p">:</span>
+    <span class="n">median</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sorted_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">med_index</span><span class="p">)]</span> <span class="o">+</span> <span class="n">sorted_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">med_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+  <span class="k">else</span><span class="p">:</span> 
+    <span class="n">median</span> <span class="o">=</span> <span class="n">sorted_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">med_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+  <span class="c1"># get first quantile</span>
+  <span class="n">first_index</span> <span class="o">=</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">first_index</span><span class="p">)</span> <span class="o">==</span> <span class="n">first_index</span><span class="p">:</span>
+    <span class="n">first_quantile</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sorted_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">first_index</span><span class="p">)]</span> <span class="o">+</span> <span class="n">sorted_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">first_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+  <span class="k">else</span><span class="p">:</span> 
+    <span class="n">first_quantile</span> <span class="o">=</span> <span class="n">sorted_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">first_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+  <span class="c1"># get third_quantile</span>
+  <span class="n">third_index</span> <span class="o">=</span> <span class="mf">0.75</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">third_index</span><span class="p">)</span> <span class="o">==</span> <span class="n">third_index</span><span class="p">:</span>
+    <span class="n">third_quantile</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sorted_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">third_index</span><span class="p">)]</span> <span class="o">+</span> <span class="n">sorted_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">third_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+  <span class="k">else</span><span class="p">:</span> 
+    <span class="n">third_quantile</span> <span class="o">=</span> <span class="n">sorted_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">third_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+  <span class="k">return</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">median</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">third_quantile</span> <span class="o">-</span> <span class="n">first_quantile</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_data</span><span class="p">(</span><span class="n">normal_data</span><span class="p">,</span> <span class="n">robust_scale</span><span class="p">(</span><span class="n">normal_data</span><span class="p">),</span> <span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+
+<span class="n">plot_data</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">robust_scale</span><span class="p">(</span><span class="n">binary_data</span><span class="p">),</span> <span class="s2">&quot;Binary&quot;</span><span class="p">)</span>
+
+<span class="n">plot_data</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">,</span> <span class="n">robust_scale</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">),</span> <span class="s2">&quot;Normal w/ outliers&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ec7c3645dd33c6cbd3c40e8934bce2fe9bd2c0a038398c555571f0bfa9b30ccc.png" src="../../_images/ec7c3645dd33c6cbd3c40e8934bce2fe9bd2c0a038398c555571f0bfa9b30ccc.png" />
+<img alt="../../_images/a62fbab119c02cf3ee1887dc8a8d4115139f41486cf4225b9bdbbab3173fb678.png" src="../../_images/a62fbab119c02cf3ee1887dc8a8d4115139f41486cf4225b9bdbbab3173fb678.png" />
+<img alt="../../_images/de1755e1ed794450beb342b63c252a59fad928cb329f69baa63474af64c8afbb.png" src="../../_images/de1755e1ed794450beb342b63c252a59fad928cb329f69baa63474af64c8afbb.png" />
+</div>
+</div>
+<p><strong>Activity</strong>: Use
+<code class="docutils literal notranslate"><span class="pre">sklearn.preprocessing.RobustScaler</span></code> to preprocess the three given datasets. You might find the corresonding <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.RobustScaler.html#sklearn.preprocessing.RobustScaler"><code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code> page</a> helpful.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">RobustScaler</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">RobustScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">normal_data</span><span class="p">)</span>
+<span class="n">sk_normal_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">normal_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">normal_data</span><span class="p">,</span> <span class="n">sk_normal_data</span><span class="p">,</span> <span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">RobustScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">binary_data</span><span class="p">)</span>
+<span class="n">sk_bin_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">binary_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">sk_bin_data</span><span class="p">,</span> <span class="s2">&quot;Binary&quot;</span><span class="p">)</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">RobustScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">)</span>
+<span class="n">sk_out_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">,</span> <span class="n">sk_out_data</span><span class="p">,</span> <span class="s2">&quot;Normal w/ outliers&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ec7c3645dd33c6cbd3c40e8934bce2fe9bd2c0a038398c555571f0bfa9b30ccc.png" src="../../_images/ec7c3645dd33c6cbd3c40e8934bce2fe9bd2c0a038398c555571f0bfa9b30ccc.png" />
+<img alt="../../_images/c27ec37ef574fe70e70f2fd2b95b99a7369a164f9832781f5430dbbac557313c.png" src="../../_images/c27ec37ef574fe70e70f2fd2b95b99a7369a164f9832781f5430dbbac557313c.png" />
+<img alt="../../_images/de1755e1ed794450beb342b63c252a59fad928cb329f69baa63474af64c8afbb.png" src="../../_images/de1755e1ed794450beb342b63c252a59fad928cb329f69baa63474af64c8afbb.png" />
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="the-quantile-transformation">
+<h2>The quantile transformation<a class="headerlink" href="#the-quantile-transformation" title="Permalink to this headline">#</a></h2>
+<p>The quantile transformation is a <em>nonlinear</em> preprocessing technique. It’s based on the <em>quantile</em> function for probability distributions. However, let’s first refresh ourselves on <em>quantles</em>.</p>
+<section id="quantiles-to-divide-datasets">
+<h3>Quantiles to divide datasets<a class="headerlink" href="#quantiles-to-divide-datasets" title="Permalink to this headline">#</a></h3>
+<p>Quantiles are points that divide a dataset into equal proportions. When we split a dataset into <span class="math notranslate nohighlight">\(k\)</span> <em>quantiles</em>, this means that we’re defining adjacent, continuous regions of the dataset that each contain <span class="math notranslate nohighlight">\(\frac{100}{k}\)</span>% of the data. If we consider a 1-dimensional dataset that takes values on the real line, then quantiles allow us to define points on the line <span class="math notranslate nohighlight">\(q_i\)</span> that partition the dataset into <span class="math notranslate nohighlight">\(k\)</span> equal parts.</p>
+<p>You may be familiar with the <em>quartiles</em>, which divide a dataset into four equal chunks. The first quartile, <span class="math notranslate nohighlight">\(q_1\)</span>, is the point below which 25% of the data lies. The third quartile, <span class="math notranslate nohighlight">\(q_3\)</span>, is the point below which 75% of the data lies, or the point above which 25% of the data lies. The second quartile has a more familiar name: the <em>median</em>!.</p>
+<p>Quantiles represent a generalization of quartiles. Some of the more common quantiles have <span class="math notranslate nohighlight">\(q\)</span> = 10 (<em>deciles</em>) and <span class="math notranslate nohighlight">\(q = 100\)</span> (<em>percentiles</em>).</p>
+</section>
+<section id="the-quantile-function-for-probabilities">
+<h3>The quantile function for probabilities.<a class="headerlink" href="#the-quantile-function-for-probabilities" title="Permalink to this headline">#</a></h3>
+<p>Let’s slightly reframe this quantile picture. Consider a dataset division into <span class="math notranslate nohighlight">\(k\)</span> quantile chunks, with quantiles <span class="math notranslate nohighlight">\(q_1\)</span>, …, <span class="math notranslate nohighlight">\(q_{k-1}\)</span>. The <span class="math notranslate nohighlight">\(q_i\)</span> quantile represents the value below which (<span class="math notranslate nohighlight">\(\frac{100}{k} \times i\)</span>)% of the data lies. In other words, the probability that a given data point is less than the value <span class="math notranslate nohighlight">\(q_i\)</span> is $<span class="math notranslate nohighlight">\(P(x &lt; q_i) = \frac{i}{k}.\)</span>$</p>
+<p>But this probability has another name – it’s the <em>cumulative distribution function</em> (CDF), <span class="math notranslate nohighlight">\(F(q_i)\)</span>, of the dataset.</p>
+<p>We define the <em>quantile function</em> <span class="math notranslate nohighlight">\(Q\)</span> as the inverse of the CDF, <span class="math notranslate nohighlight">\(Q(p) = F^{-1}(p)\)</span>. This function is a mapping from the interval [0, 1] to the range of the dataset. So if we wanted to know the point below which 42% of our data was, we would simply need to calculate <span class="math notranslate nohighlight">\(Q(0.42)\)</span>.</p>
+</section>
+<section id="using-the-quantile-function-to-preprocess-data">
+<h3>Using the quantile function to preprocess data<a class="headerlink" href="#using-the-quantile-function-to-preprocess-data" title="Permalink to this headline">#</a></h3>
+<p>To use the quantile function as a preprocessing mechanism, it is necessary to know the CDF <span class="math notranslate nohighlight">\(F(x)\)</span> of the data distribution. This is rarely known analytically, so it must be estimated numerically (as a result, it’s quite a difficult talk to code the quantile transformation by hand!).</p>
+<p>Next, we make use of the <a class="reference external" href="https://matthewfeickert.github.io/Statistics-Notes/notebooks/Introductory/probability-integral-transform.html">Probability Integral Transformation</a>. This is a theorem that states that if we have a dataset with points <span class="math notranslate nohighlight">\(x_i\)</span>, then the variables <span class="math notranslate nohighlight">\(u_i = F(x_i)\)</span> are uniformly distributed (where <span class="math notranslate nohighlight">\(F\)</span> is the CDF of the dataset). So by applying the dataset’s CDF to the dataset itself, we can map our dataset to a set of uniformly distributed variables.</p>
+<p>Variations of the quantile preprocessor exist that take the resulting uniform distribution and map it to others (most commonly the normal distribution).</p>
+</section>
+<section id="when-might-you-want-to-use-quantile-preprocessing">
+<h3>When might you want to use quantile preprocessing?<a class="headerlink" href="#when-might-you-want-to-use-quantile-preprocessing" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Like with the robust scaler, the quantile distribution is <strong>more resistant to outliers</strong>.</p></li>
+<li><p>A large number of <strong>machine learning tools work best on data that is normally distributed</strong>. The quantile transformation allows us to tranform <em>any</em> distribution to a normal one.</p></li>
+</ul>
+<p><strong>Activity</strong>: Write a function to quantile preprocess a <em>normally distributed</em> dataset. Let the mean and standard deviation be arbitrary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+
+<span class="k">def</span> <span class="nf">toy_quantile</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+
+  <span class="c1"># calculate the mean and standard deviation of the dataset</span>
+  <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+  <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="n">processed_data</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="c1"># define the cdf</span>
+  <span class="k">def</span> <span class="nf">cdf_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="n">mean</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">std</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">data_point</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="n">processed_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cdf_func</span><span class="p">(</span><span class="n">data_point</span><span class="p">))</span>
+
+  <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Activity: Apply your function to the three datasets given. Using the helper plotting code, create a histogram of the data before and after applying the minmax scaling function.</p>
+<p><em>Note:</em> Your quantile should <em>fail</em> for the datasets that are not normally distributed, because it used the cdf of a normal distribution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_data</span><span class="p">(</span><span class="n">normal_data</span><span class="p">,</span> <span class="n">toy_quantile</span><span class="p">(</span><span class="n">normal_data</span><span class="p">),</span> <span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+
+<span class="n">plot_data</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">toy_quantile</span><span class="p">(</span><span class="n">binary_data</span><span class="p">),</span> <span class="s2">&quot;Binary&quot;</span><span class="p">)</span>
+
+<span class="n">plot_data</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">,</span> <span class="n">toy_quantile</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">),</span> <span class="s2">&quot;Normal w/ outliers&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/4a7c6031620f6c8e11ff9042d58d86e1770459f49a2eca51fa22196037257b8e.png" src="../../_images/4a7c6031620f6c8e11ff9042d58d86e1770459f49a2eca51fa22196037257b8e.png" />
+<img alt="../../_images/90e3fbd3f1d3e91cd6141a002a4d72db9e7ed448e58b76ee80cb2fed3f502121.png" src="../../_images/90e3fbd3f1d3e91cd6141a002a4d72db9e7ed448e58b76ee80cb2fed3f502121.png" />
+<img alt="../../_images/8f2c3f402098d722deda85c7375e2c1a5d3bc8aa5885f09b5873391b6c323796.png" src="../../_images/8f2c3f402098d722deda85c7375e2c1a5d3bc8aa5885f09b5873391b6c323796.png" />
+</div>
+</div>
+<p><strong>Activity</strong>: Use
+<code class="docutils literal notranslate"><span class="pre">sklearn.preprocessing.QuantileTransformer</span></code> to preprocess the three given datasets. You can play around with <code class="docutils literal notranslate"><span class="pre">n_quantiles</span></code>, which is a gauge for the degree of precision <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> uses to estimate the CDF. (The default value is 1000.) You might find the corresonding <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.QuantileTransformer.html#sklearn.preprocessing.QuantileTransformer"><code class="docutils literal notranslate"><span class="pre">QuantileTransformer</span></code> page</a> helpful.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">QuantileTransformer</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">QuantileTransformer</span><span class="p">(</span><span class="n">n_quantiles</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">normal_data</span><span class="p">)</span>
+<span class="n">sk_normal_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">normal_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">normal_data</span><span class="p">,</span> <span class="n">sk_normal_data</span><span class="p">,</span> <span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">QuantileTransformer</span><span class="p">(</span><span class="n">n_quantiles</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">binary_data</span><span class="p">)</span>
+<span class="n">sk_bin_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">binary_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">binary_data</span><span class="p">,</span> <span class="n">sk_bin_data</span><span class="p">,</span> <span class="s2">&quot;Binary&quot;</span><span class="p">)</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">QuantileTransformer</span><span class="p">(</span><span class="n">n_quantiles</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">)</span>
+<span class="n">sk_out_data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">)</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">outliers_data</span><span class="p">,</span> <span class="n">sk_out_data</span><span class="p">,</span> <span class="s2">&quot;Normal w/ outliers&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/796e18c6bff0cff0f512817858a7124e851d6d37098942e777b5e4fccbe511f8.png" src="../../_images/796e18c6bff0cff0f512817858a7124e851d6d37098942e777b5e4fccbe511f8.png" />
+<img alt="../../_images/c208a92cb8239bf35db7ac2d99f1ddd7e28420d606c6875a04a77978381aa59c.png" src="../../_images/c208a92cb8239bf35db7ac2d99f1ddd7e28420d606c6875a04a77978381aa59c.png" />
+<img alt="../../_images/688f961ce9227a2a42967373fb6b187fb24d06a0833ea7cf5db53d416237b17d.png" src="../../_images/688f961ce9227a2a42967373fb6b187fb24d06a0833ea7cf5db53d416237b17d.png" />
+</div>
+</div>
+<p><em>End of notebook 02</em></p>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">s</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">s</span>
+
+<span class="ne">NameError</span>: name &#39;s&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./DSECOP/Exploratory_Data_Analysis"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_dataset_cleaning.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Exploratory Data Analysis</p>
+      </div>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-magic-of-neural-networks-activation-functions">The magic of neural networks: activation functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-can-we-get-out-input-data-close-to-0">How can we get out input data close to 0?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-a-preprocessing-scheme">Choosing a preprocessing scheme</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minmax-scaling">Minmax scaling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-might-you-want-to-use-minmax-scaling">When might you want to use minmax scaling?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#built-in-functions-for-minmax-scaling">Built-in functions for minmax scaling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-scaling">Standard Scaling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-might-you-want-to-use-standard-scaling">When might you want to use standard scaling?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-scaling">Robust scaling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-might-you-want-to-use-robust-scaling">When might you want to use robust scaling?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-quantile-transformation">The quantile transformation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantiles-to-divide-datasets">Quantiles to divide datasets</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-quantile-function-for-probabilities">The quantile function for probabilities.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-quantile-function-to-preprocess-data">Using the quantile function to preprocess data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-might-you-want-to-use-quantile-preprocessing">When might you want to use quantile preprocessing?</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

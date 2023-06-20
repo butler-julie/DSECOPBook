@@ -1,0 +1,1316 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>An Introduction to the Machine Learning Workflow with Linear Regression &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'DSECOP/Machine_Learning_Workflow/0_1_machine_learning_workflow';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Table of Contents
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploratory Data Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/README.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/01_dataset_cleaning.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/02_preprocessing_techniques.html">Preprocessing Techniques for Machine Learning</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDSECOP/Machine_Learning_Workflow/0_1_machine_learning_workflow.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/DSECOP/Machine_Learning_Workflow/0_1_machine_learning_workflow.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>An Introduction to the Machine Learning Workflow with Linear Regression</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-machine-learning">What is Machine Learning?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-a-simple-machine-learning-algorithm">Linear Regression: A Simple Machine Learning Algorithm</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-regression-algorithm">The Linear Regression Algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-loss-function">Linear Regression Loss Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uses-of-linear-regression">Uses of Linear Regression</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-machine-learning-workflow">The Machine Learning Workflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applying-the-machine-learning-workflow-to-linear-regression">Applying the Machine Learning Workflow to Linear Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important">IMPORTANT!</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-and-formatting-data-with-pandas">Importing and Formatting Data with Pandas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-and-test-data-sets-with-scikit-learn">Training and Test Data Sets with Scikit-Learn</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-with-scikit-learn">Linear Regression with Scikit-Learn</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluating-model-performance-with-numpy-and-matplotlib">Evaluating Model Performance with NumPy and Matplotlib</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#improve-the-model-s-performance-design-matrices">Improve the Model’s Performance: Design Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluating-the-model-weights">Evaluating the Model Weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#practice-what-you-have-learned">Practice What You Have Learned</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-problem-creating-a-linear-regression-algorithm-from-scratch">Bonus Problem: Creating a Linear Regression Algorithm from Scratch</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="an-introduction-to-the-machine-learning-workflow-with-linear-regression">
+<h1>An Introduction to the Machine Learning Workflow with Linear Regression<a class="headerlink" href="#an-introduction-to-the-machine-learning-workflow-with-linear-regression" title="Permalink to this headline">#</a></h1>
+<p>Author: Julie Butler</p>
+<p>Date Created: October 4, 2022</p>
+<p>Last Modified: November 7, 2022</p>
+<p>Notebook 1/5 of the DSECOP Module: An Introduction to the Machine Learning Workflow with Linear Regression.  See the entire module <span class="xref myst">here</span>.</p>
+<section id="what-is-machine-learning">
+<h2>What is Machine Learning?<a class="headerlink" href="#what-is-machine-learning" title="Permalink to this headline">#</a></h2>
+<p>Machine learning is the field that occurs when artificial intelligence is applied to data science; it is using computer algorithms that learn to draw knowledge from data sets.  To use another definition, machine learning is a set of algorithms which learn to perform a task by considering examples of what is to be done, but without being given explicit instructions.  Machine learning algortihms learn what to do by finding patterns in the data that are correlated to the problem to be solved.</p>
+<p>Machine learning algorithms can be split up in two ways, either based on the type of problem or the type of data set.  The first way to classify machine learning algorithms is based on the problem type.  If we are trying to classify data into a set number of categories, then the machine learning algorithm is performing <em>classification</em>.  If instead we are training the algorithm on a data set where the output could be any number then these machine learning algorithms are performing <em>regression</em>.</p>
+<p>The other way to classify machine learning algorithms is by the type of data.  If the data set has both an x and a y component, then a <em>supervised</em> machine learning algorithm will learn how to connnect each y value with its corresponding x value.  We call data sets that have x and y components <em>labelled</em> data.  If instead we were only given the y component of a data set, i.e. <em>unlabelled</em> data, then <em>unsupervised</em> machine learning algorithms attempt to determine patterns without knowing the x components.  There is a third category of machine learning algorithms called <em>reinforcement</em> learning which is popular in fields such as robotics.</p>
+<p>There are many great resources on machine learning, but a few for further investigation are listed below.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/"><em>Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow, 2nd Edition</em></a> by Aurélien Géron</p></li>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/user_guide.html">Scikit-Learn’s User Guide</a></p></li>
+<li><p><a class="reference external" href="https://machinelearningmastery.com">Machine Learning Mastery</a> by Jason Brownlee</p></li>
+<li><p><a class="reference external" href="https://wiki.pathmind.com">A.I. Wiki</a></p></li>
+</ul>
+</section>
+<section id="linear-regression-a-simple-machine-learning-algorithm">
+<h2>Linear Regression: A Simple Machine Learning Algorithm<a class="headerlink" href="#linear-regression-a-simple-machine-learning-algorithm" title="Permalink to this headline">#</a></h2>
+<p>Linear regression is one of the most basic machine learning algorithms, but it still contains all of the basic ingredients present in more complicated machine learning algorithms such as neural networks. Because of this many machine learning courses and books start off with a study of linear regression.</p>
+<p>Linear regression also has a few other benefits such as analytical expressions for its weights (described in a few cells) and it has a direct link to statistics as many statistics classes also cover linear regression.  Many machine learning packages, such as Scikit-Learn, provide easy to use implementations of linear regression but it is also not difficult to implement linear regression from scratch (the bonus problem of this notebook).</p>
+<p>However, due to the algorithms simplicity, many machine learning practicioners overlook it in favor of more complicated (and popular) machine learning algorithms.  However, we will see that linear regression can be a very powerful too, especially with a few modifications.</p>
+<section id="the-linear-regression-algorithm">
+<h3>The Linear Regression Algorithm<a class="headerlink" href="#the-linear-regression-algorithm" title="Permalink to this headline">#</a></h3>
+<p>Given a data set (<strong>X</strong>, <strong>y</strong>), the linear regression algorithm makes the simple assumption that the data set it is trying to model, y, can be approximated by multiplying the input/dependent data, X, by a set of weights, <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<br>
+<div class="math notranslate nohighlight">
+\[\hat{y}_{Linear} = X\theta,\]</div>
+<br>
+<p>where <span class="math notranslate nohighlight">\(\hat{y}\)</span> is the output of the linear regression algorithm (<span class="math notranslate nohighlight">\(\hat{y}\)</span> is typically used to denote a machine learning prediction, regardless of the algorithm).  X can either be a vector or a matrix depending on how many features are needed and <span class="math notranslate nohighlight">\(\theta\)</span> is either a scalar (if X is a vector) or a vector (if X is a matrix).</p>
+<p>The machine learning part of linear regression comes when the value of <span class="math notranslate nohighlight">\(\theta\)</span> is found such that the predicted data points (<span class="math notranslate nohighlight">\(\hat{y}\)</span>) are as close as possible to the known data points (y).</p>
+</section>
+<section id="linear-regression-loss-function">
+<h3>Linear Regression Loss Function<a class="headerlink" href="#linear-regression-loss-function" title="Permalink to this headline">#</a></h3>
+<p>In machine learning, a loss function measures the error in the algorithm’s prediction from the true data. The loss function for the linear regressison algorithm is the mean-squared error function (y = y<span class="math notranslate nohighlight">\(_{True}\)</span> and <span class="math notranslate nohighlight">\(\hat{y}\)</span> = <span class="math notranslate nohighlight">\(\hat{y}_{Linear}\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[J(\theta) = \frac{1}{n}\sum_{i=0}^{n-1} (\hat{y}_i - y_i)^2\]</div>
+<p>The goal of the linear regression algorithm is to find values of <span class="math notranslate nohighlight">\(\theta\)</span> which minimize the loss function (meaning that the predicted and true results will be as soon as possible).
+We can find the best values of <span class="math notranslate nohighlight">\(\theta\)</span> using a simple optimization:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial J(\theta}{\partial \theta} = 0.\]</div>
+<p>If we rewrite the loss function in terms of matrices and vectors:</p>
+<div class="math notranslate nohighlight">
+\[J(\theta) = \frac{1}{n}[(y-X\theta)(y-X\theta)],\]</div>
+<p>then we can solve the optimization probelm for <span class="math notranslate nohighlight">\(\theta\)</span>, yielding:</p>
+<div class="math notranslate nohighlight">
+\[\theta = (X^TX)^{-1}X^Ty.\]</div>
+</section>
+<section id="uses-of-linear-regression">
+<h3>Uses of Linear Regression<a class="headerlink" href="#uses-of-linear-regression" title="Permalink to this headline">#</a></h3>
+<p>Though linear regression is considered a simple machine learning model, we will see by the end of this notebook that some minor modifications can greatly extend the range of problems linear regression can be applied to.</p>
+</section>
+</section>
+<section id="the-machine-learning-workflow">
+<h2>The Machine Learning Workflow<a class="headerlink" href="#the-machine-learning-workflow" title="Permalink to this headline">#</a></h2>
+<p>Though every machine learning problem will use a different algorithm and data set, the analysis shares the same five steps:</p>
+<ol class="arabic simple">
+<li><p>Importing your data set and formatting it</p></li>
+<li><p>Splitting the data into a training set and a test set</p></li>
+<li><p>Training your machine learning model with the training set</p></li>
+<li><p>Evaluate the trained model’s performance with the test set</p></li>
+<li><p>(Optional) Make improvements to your model to increase its performance</p></li>
+</ol>
+<p>For the remainder of this notebook we will see how these steps can be combined with linear regression to create a machine learning workflow that can be transferred to much more complicated problems.</p>
+</section>
+<section id="applying-the-machine-learning-workflow-to-linear-regression">
+<h2>Applying the Machine Learning Workflow to Linear Regression<a class="headerlink" href="#applying-the-machine-learning-workflow-to-linear-regression" title="Permalink to this headline">#</a></h2>
+<p>Before we begin we need to import the various libraries and packages that will be needed.  These include NumPy, Matplotlib, Pandas, and Scikit-Learn.  If you are using Google Colab to run these notebooks all of these package are already installed.  If you are using Jupyter notebooks on your own computer, check to make sure you have these packages installed before running this cell.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##############################</span>
+<span class="c1">##          IMPORTS         ##</span>
+<span class="c1">##############################</span>
+<span class="c1"># Needed for arrays and mathematical functions</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># For plotting</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1"># For importing and formatting data sets</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="c1"># For the machine learning section, their functions will be </span>
+<span class="c1"># explained later in the notebook</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, if you are running this notebook on Google Colab we need to set things up so that the data files on your Drive can be accessed.  If you are running this notebook using Jupyter notebooks, skip running this cell.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># GOOGLE DRIVE SET UP</span>
+<span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+<span class="c1"># Mount my Google Drive</span>
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/gdrive&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># GOOGLE DRIVE SET UP</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Mount my Google Drive</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/gdrive&#39;</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;google&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Directory to retrieve data files from (###CHANGE THIS###)</span>
+<span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/Teaching/DSECOP/Module 2: Workflow/&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we need set a file path so the notebook knows where to save and read data from.  This will be the file path where the notebooks from this module are stored.</p>
+<section id="important">
+<h3>IMPORTANT!<a class="headerlink" href="#important" title="Permalink to this headline">#</a></h3>
+<p><strong>PROBLEM 1:</strong> Change the below line of code to reflect where you have this files for this module stored on your Google Drive or on your computer.  It is important that you start from the very top folder and work your way down the the folder where these files are stored.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Directory to retrieve data files from (###CHANGE THIS###)</span>
+<span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/Teaching/DSECOP/Module 2: Workflow/&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s generate data from a polynomial but with random noise added.  We do this to simulate a more realistic data set as in experiments there are often factors which influence the data and add noise that cannot be eliminated.</p>
+<p>The noise is added to the data set by adding a random integer between -10 and 10 to each y value of the data set.  Since the average value of the y data set before the noise is added is 94.8 and the maximum y value is 328.62, adding this noise does not change the shape of the data set drastically.  Later in the notebook you will explore how varying the amount of noise effects the machine learning model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a range of x values and the corresponding y values</span>
+<span class="c1"># for a polynomial data set</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mi">5</span>
+
+<span class="c1"># Add noise to the data set by adding a random integer to each</span>
+<span class="c1"># y value. The random integers will be between -10 and 10.</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">noise</span><span class="p">,</span><span class="n">noise</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s plot the data set to see how it looks.  Note we add labels to the x and y axes.  In the sciences it is important to always label the axes with the name of the data and units in applicable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the data set and label the x and y axes</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;y&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/d5bdfb24314e5fc98aae816ab8484ea8c00f900b38b87f718bb83e1fe9f7dffa.png" src="../../_images/d5bdfb24314e5fc98aae816ab8484ea8c00f900b38b87f718bb83e1fe9f7dffa.png" />
+</div>
+</div>
+<p>Finally, we format the data into columns of an array and save it as a comma separated file (.csv) with headings for each column.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make an NumPy array where each row corresponds to one (x,y) point in the data set</span>
+<span class="n">data_notebook_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Save the data set as a .csv file, add header labels to the two columns</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_notebook_1</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">data_dir</span><span class="o">+</span><span class="s2">&quot;data_notebook_1.csv&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">],</span>\
+                                     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="importing-and-formatting-data-with-pandas">
+<h3>Importing and Formatting Data with Pandas<a class="headerlink" href="#importing-and-formatting-data-with-pandas" title="Permalink to this headline">#</a></h3>
+<p>For many machine learning problems you will be working with a data set that has been gathered or generated previously and has been stored in a file.  A common way to import saved data into a Python program is using a library called Pandas.  When you import data from a file using Pandas it enters the program in a structure called a Pandas dataframe.  Dataframes have many nice feature for displaying and accessing data.</p>
+<p>Let’s use the Pandas function <code class="docutils literal notranslate"><span class="pre">read_csv</span></code> to import the data set we created above as a data frame.  Then let’s print the first few lines of the dataframe as a table to make sure everything has imported correctly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import the data set using Pandas.  The data set will now be formatted as a Pandas</span>
+<span class="c1"># dataframe</span>
+<span class="n">data_set</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span><span class="o">+</span><span class="s2">&quot;data_notebook_1.csv&quot;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Print the first few rows of the dataframe</span>
+<span class="n">data_set</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+  <div id="df-8a960427-43e5-4ee3-89d3-2babace52804">
+    <div class="colab-df-container">
+      <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x</th>
+      <th>y</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-10.0</td>
+      <td>263.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-9.9</td>
+      <td>249.43</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-9.8</td>
+      <td>249.92</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-9.7</td>
+      <td>245.47</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-9.6</td>
+      <td>236.08</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-8a960427-43e5-4ee3-89d3-2babace52804')"
+              title="Convert this dataframe to an interactive table."
+              style="display:none;">
+        
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M0 0h24v24H0V0z" fill="none"/>
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
+  </svg>
+      </button>
+      
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-8a960427-43e5-4ee3-89d3-2babace52804 button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-8a960427-43e5-4ee3-89d3-2babace52804');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div>
+  </div></div>
+</div>
+<p>Using a Pandas dataframe makes it very easy to access the individual columns. A Pandas dataframe works like a Python dictionary, with the names of each column being the keys of the dictionary.  The entry for each key is the column of data the label corresponds to.  For example, we can access the data in the first column, x, using the following code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the column of the dataframe that corresponds to the column label &#39;x&#39;</span>
+<span class="n">data_set</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0     -10.0
+1      -9.9
+2      -9.8
+3      -9.7
+4      -9.6
+       ... 
+195     9.5
+196     9.6
+197     9.7
+198     9.8
+199     9.9
+Name: x, Length: 200, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is also possible to extract individual data points from a column using array indexing.  The first data point in the x data set can be accessed using the below code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract the first point in the x data set</span>
+<span class="n">data_set</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-10.0
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>PROBLEM 2:</strong> In the below code cell, print the y column of the data set.  On the next line print the 10th element of the y data set (remember that array indexing starts from 0).</p>
+<p>Though Pandas dataframes are convinient for displaying data, many machine learning packges require the data set to be split into two separate NumPy arrays, one for the x component of the data set and one for the y component of the data set.  Luckily, there is a NumPy function called <code class="docutils literal notranslate"><span class="pre">asarray</span></code> which will convert the columns of the dataframe into NumPy arrays.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert the columns of the Pandas dataframe to NumPy arrays to more</span>
+<span class="c1"># easily manipulate the data</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data_set</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data_set</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="training-and-test-data-sets-with-scikit-learn">
+<h3>Training and Test Data Sets with Scikit-Learn<a class="headerlink" href="#training-and-test-data-sets-with-scikit-learn" title="Permalink to this headline">#</a></h3>
+<p>The most common way to perform a training/test split is to use the function form the Scikit-Learn library called <code class="docutils literal notranslate"><span class="pre">training_test_split</span></code>.  In general this function takes three arguments: the x component of the dat set, the y component of the data set, and a number between 0.0 and 1.0 called <code class="docutils literal notranslate"><span class="pre">test_size</span></code>.  This number dictates the fraction of the data set which is to be used as the test set.  In this case, 20% of the overall data set will be devoted to the test set.  The <code class="docutils literal notranslate"><span class="pre">training_test_split</span></code> randomly splits the data between the training and test sets.</p>
+<p>The function returns 4 data sets as NumPy arrays, in order: the x component of the training set, the x component of the test set, the y component of the training set, and the y component of the test set.</p>
+<p>Below we will use <code class="docutils literal notranslate"><span class="pre">train_test_split</span></code> to create our training and test data sets.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the Scikit-Learn package, split the data set into a training set and a</span>
+<span class="c1"># test set</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s graph the training and test data sets on the same graph to see if the training data set seems like it will be a good representation of the test data set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the training data and the test data on the same plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;y&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/af8ec80418605affb9147198325634665f55f312d40cccda211ae54ecf7db58a.png" src="../../_images/af8ec80418605affb9147198325634665f55f312d40cccda211ae54ecf7db58a.png" />
+</div>
+</div>
+<p><strong>PROBLEM 3:</strong> Does the test data set appear to be a good representation of the total data set?  Do you notice a difference if you run the <code class="docutils literal notranslate"><span class="pre">train_test_split</span></code> cell and the graphing cell again? Explain your answer in the text cell below.</p>
+</section>
+<section id="linear-regression-with-scikit-learn">
+<h3>Linear Regression with Scikit-Learn<a class="headerlink" href="#linear-regression-with-scikit-learn" title="Permalink to this headline">#</a></h3>
+<p>First, we must reshape the x components of the training and test data sets.  Machine learning algorithms that are provided by Scikit-Learn (and other machine learning libraries like Keras) require the data to have specific shapes.  For an x data set which only has one dimension (i.e. one x value for each y value), it will need to reshaped like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reshape the x components of the data sets to meet Scikit-Learn&#39;s</span>
+<span class="c1"># specifications</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The next is to define the linear regression algorithm using Scikit-Learn’s package and then train the linear regression algorithm with the training data.  Scikit-Learn makes it very easy, only requiring two lines of code.  Here we have set the argument <code class="docutils literal notranslate"><span class="pre">fit_intercept</span></code> to False when defining the linear regression algorithm.  This will be explained later in the notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the linear regression algorithm and train it using the training data</span>
+<span class="n">LiR</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">(</span><span class="n">fit_intercept</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">LiR</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LinearRegression(fit_intercept=False)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we will used the train linear regression model to predict the y values that correspond to the x values in the test data set.  We will store the results in the NumPy array <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> to be compared to <code class="docutils literal notranslate"><span class="pre">y_test</span></code> in the next section.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Used the trained algorithm to predict what y values correspond to the x component of</span>
+<span class="c1"># the test data set</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">LiR</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluating-model-performance-with-numpy-and-matplotlib">
+<h3>Evaluating Model Performance with NumPy and Matplotlib<a class="headerlink" href="#evaluating-model-performance-with-numpy-and-matplotlib" title="Permalink to this headline">#</a></h3>
+<p>After the test data set has been evaluated using the trained model, the next step in the machine learning workflow is to evaluate its performance.  We will do this by comparing the known y data points (stored in <code class="docutils literal notranslate"><span class="pre">y_test</span></code>) to the y data points that have been predicted by the trained linear regression algorithm (stored in <code class="docutils literal notranslate"><span class="pre">y_pred</span></code>).</p>
+<p>One common measure of error used in machine learning workflows is called the mean-squared error (MSE), which can be defined in equation form as:</p>
+<div class="math notranslate nohighlight">
+\[MSE(y_{test}, \hat{y}_{pred}) = \frac{1}{N}\sum_{i=1}^N (y_{test,i} - \hat{y}_{pred,i})^2,\]</div>
+<p>where N is the number of data points, <span class="math notranslate nohighlight">\(y_{test}\)</span> are the known data points (stored in <code class="docutils literal notranslate"><span class="pre">y_test</span></code>), and <span class="math notranslate nohighlight">\(\hat{y}_{pred}\)</span> are the predicted data points (stored in <code class="docutils literal notranslate"><span class="pre">y_pred</span></code>).  Conceptually we can think if the MSE as the average error of each predicted data point, squared.</p>
+<p>In Python, we can make use of the library NumPy to create a function that calculates the MSE between two NumPy arrays.  This is shown below in the next code cell.</p>
+<p><strong>PROBLEM 4:</strong> Go through the below code cell and make sure you understand how it related to the MSE equation given above.  Create new code cells below it to examine it performance if needed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##############################</span>
+<span class="c1">##            MSE           ##</span>
+<span class="c1">##############################</span>
+<span class="k">def</span> <span class="nf">mse</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inputs:</span>
+<span class="sd">            A,B: NumPy arrays of the same length</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Unnamed: the mean-squared error between A and B</span>
+<span class="sd">        Calculates and returns the mean-squared error between the given Numpy arrays.</span>
+<span class="sd">        Note that A and B must be the same length.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">((</span><span class="n">A</span><span class="o">-</span><span class="n">B</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s print the MSE between the known data points, <code class="docutils literal notranslate"><span class="pre">y_test</span></code>, and the predicted data points, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The MSE between the test data set and the predicted data set is:&quot;</span><span class="p">,</span>\
+      <span class="n">mse</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The MSE between the test data set and the predicted data set is: 10462.633283747584
+</pre></div>
+</div>
+</div>
+</div>
+<p>The smaller the MSE is the closer the known data set matches the predicted data set.  However, if the values in the data set are quite large then even comparatively small deviations in values can results in a large MSE error.  Sometimes an easier to understand metric is the root mean-squared error (RMSE), which is simply defined as the square root of the MSE:</p>
+<div class="math notranslate nohighlight">
+\[RMSE(y_{test}, \hat{y}_{pred}) = \sqrt{\frac{1}{N}\sum_{i=1}^N (y_{test,i} - \hat{y}_{pred,i})^2}.\]</div>
+<p>Conceptually we can think of this metric as the average error each of the predicted data points has.</p>
+<p>We can print the RMSE for our machine learning algorithm simply by taking the square root of the MSE.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The RMSE between the test data set and the predicted data set is:&quot;</span><span class="p">,</span>\
+      <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mse</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The RMSE between the test data set and the predicted data set is: 102.28701424788771
+</pre></div>
+</div>
+</div>
+</div>
+<p>This RMSE score is still quite large, especially if we compare it to the average value of the y data set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The average value of the y data set is:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The average value of the y data set is: 94.13499999999917
+</pre></div>
+</div>
+</div>
+</div>
+<p>The exact error and average of the data set will change each time you run the notebook since the noise addition and train/test split are randomized, but you should see that the RMSE error is equivalent if not larger than the average value of the y data set.</p>
+<p>Finally, let’s graph the known data set and the predicted data set on the same graph to see how they compare.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the test data set and the predicted data set on the same graph</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test Data&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted Data&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;y&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/f0bd20d5e8790fb2a69a4ad2174aeb663541f7a7f168d656dc060edc5d548f50.png" src="../../_images/f0bd20d5e8790fb2a69a4ad2174aeb663541f7a7f168d656dc060edc5d548f50.png" />
+</div>
+</div>
+<p><strong>PROBLEM 5:</strong> Does the model appear to be a good match for the data set? Do the predictions from the linear regression algorithm make since? How could the model be improved?  Explain your answer in the text cell below.</p>
+</section>
+<section id="improve-the-model-s-performance-design-matrices">
+<h3>Improve the Model’s Performance: Design Matrices<a class="headerlink" href="#improve-the-model-s-performance-design-matrices" title="Permalink to this headline">#</a></h3>
+<p>If we analyze a bit closer how the linear regression algorithm works, it should be unsurprising that it failed to fit a quadaratic data set.  If we take the form of the output for an unmodified linear regression algorithm:</p>
+<div class="math notranslate nohighlight">
+\[\hat{y} =  X\theta,\]</div>
+<p>and expand it, remembering that <span class="math notranslate nohighlight">\(\hat{y}\)</span> and X are vectors and <span class="math notranslate nohighlight">\(\theta\)</span> is a number, we get:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}y =  X\theta \longrightarrow \begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3 \\
+. \\
+. \\
+. \\
+y_N
+\end{bmatrix} =  \begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+. \\
+. \\
+. \\
+x_N \\
+\end{bmatrix}\theta \longrightarrow \begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3 \\
+. \\
+. \\
+. \\
+y_N
+\end{bmatrix} =  \begin{bmatrix}
+\theta x_1 \\
+\theta x_2 \\
+\theta x_3 \\
+. \\
+. \\
+. \\
+\theta x_N \\
+\end{bmatrix}.\end{split}\]</div>
+<p>This means that without any modifications, the best model a linear regression algorithm can create is that the each output is just the corresponding input times a constant, <span class="math notranslate nohighlight">\(\theta\)</span> (<span class="math notranslate nohighlight">\(y_1 = \theta x_1, y_2 = \theta x_2, y_3 = \theta x_3, ...\)</span>).  However there is an easy way to extend the amount of problems linear regression can be applied to by using some knowledge of the data set at hand and a structure called a <em>design matrix</em>.</p>
+<p>To create a design matrix we simply add more columns of X so that when we expand <span class="math notranslate nohighlight">\(\hat{y} = \theta X\)</span>, it better matches the form we expect our data to have.  Since we created our data set we know it is a quadratic and has the form <span class="math notranslate nohighlight">\(y = ax^2 + bx + c\)</span>, therefore let us consider the following way to restructure X.  Here we will make <span class="math notranslate nohighlight">\(\theta\)</span> a vector instead of a scalar and X will be a matrix instead of a vector:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}y =  X\theta \longrightarrow \begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3 \\
+. \\
+. \\
+. \\
+y_N
+\end{bmatrix} =  \begin{bmatrix}
+x_1^2 &amp; x_1 &amp; 1\\
+x_2^ 2 &amp; x_2 &amp; 1 \\
+x_3^2 &amp; x_3 &amp; 1 \\
+. \\
+. \\
+. \\
+x_N^2 &amp; x_N &amp; 1 \\
+\end{bmatrix}\begin{bmatrix}
+\theta_1
+\theta_2
+\theta_3
+\end{bmatrix} \longrightarrow \begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3 \\
+. \\
+. \\
+. \\
+y_N
+\end{bmatrix} = \begin{bmatrix}
+\theta_1 x_1^2 &amp; \theta_2 x_1 &amp; \theta_3\\
+\theta_1 x_2^ 2 &amp; \theta_2 x_2 &amp; \theta_3 \\
+\theta_1 x_3^2 &amp; \theta_2 x_3 &amp; \theta_3 \\
+. \\
+. \\
+. \\
+\theta_1 x_N^2 &amp; \theta_2 x_N &amp; \theta_3 \\
+\end{bmatrix}.\end{split}\]</div>
+<p>Here each point in the y data set corresponds to a quaratic form of the x data set, which should match our data set.  If we did not have prior knowledge about what our data set was, we could always graph it and see if we could gleam any insights from its shape or use the <a class="reference external" href="https://en.wikipedia.org/wiki/Vandermonde_matrix">Vandermonde matrix</a>.</p>
+<p>Computationally we can construct the design matrix using the following code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an array that is the X comoponent of the data set squared and an array that is </span>
+<span class="c1"># just ones</span>
+<span class="n">X_squared</span> <span class="o">=</span> <span class="n">X</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+
+<span class="c1"># Create an array such that each row is [x**2, x, 1], for each point in the x data set</span>
+<span class="n">X_design_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">X_squared</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ones</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Print the first 10 rows of this new X data set</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_design_matrix</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[100.   -10.     1.  ]
+ [ 98.01  -9.9    1.  ]
+ [ 96.04  -9.8    1.  ]
+ [ 94.09  -9.7    1.  ]
+ [ 92.16  -9.6    1.  ]
+ [ 90.25  -9.5    1.  ]
+ [ 88.36  -9.4    1.  ]
+ [ 86.49  -9.3    1.  ]
+ [ 84.64  -9.2    1.  ]
+ [ 82.81  -9.1    1.  ]]
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>PROBLEM 6:</strong> Make sure the above code makes sense to you before moving on.  Print out different lines if you need to.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the Scikit-Learn package, split the data set into a training set and a</span>
+<span class="c1"># test set</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_design_matrix</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since this X data set is two dimensional (multiple x values per y value), there is no need to reshape the X components of the data sets before performing linear regression with Scikit-Learn.  Here we create our linear regression algorithm and train it with the training data.  We set <code class="docutils literal notranslate"><span class="pre">fit_intercept</span></code> to False because we have already included the intercept in our design matrix (the column of ones).  Let’s also go ahead and predict the points that will be in our test set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the linear regression algorithm and train it using the training data</span>
+<span class="c1"># When using a design matrix, make sure the linear regression algorithm is not </span>
+<span class="c1"># automatically fitting the intercept of the graph</span>
+<span class="n">LiR</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">(</span><span class="n">fit_intercept</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">LiR</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Used the trained algorithm to predict what y values correspond to the x component of</span>
+<span class="c1"># the test data set</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">LiR</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we need to evaluate our model’s performance using the test data set.  We will do this the same was as before, by calculating the MSE and RMSE and comparing those values to the average y values of the test data set.  We will also graph the known data points and the preducted data points on the same graph.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The MSE between the test data set and the predicted data set is:&quot;</span><span class="p">,</span>\
+      <span class="n">mse</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The MSE between the test data set and the predicted data set is: 33.89664294546273
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The RMSE between the test data set and the predicted data set is:&quot;</span><span class="p">,</span>\
+      <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mse</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The RMSE between the test data set and the predicted data set is: 5.822082354747546
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The average value of the y data set is:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The average value of the y data set is: 94.13499999999917
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the test data set and the predicted data set on the same graph</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_test</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test Data&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_test</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted Data&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;y&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/a38d66e52ea56dd6c0d1bc66ccff2b333b2a0716f6ece7cbf575c9486e85d255.png" src="../../_images/a38d66e52ea56dd6c0d1bc66ccff2b333b2a0716f6ece7cbf575c9486e85d255.png" />
+</div>
+</div>
+<p><strong>PROBLEM 7:</strong> Does this new model seem to be a better fit for the data set?  Explain your answer using a combination of the error scores and the graph.</p>
+</section>
+<section id="evaluating-the-model-weights">
+<h3>Evaluating the Model Weights<a class="headerlink" href="#evaluating-the-model-weights" title="Permalink to this headline">#</a></h3>
+<p>Another method of evaluating the performance of our model is to look at the weights, <span class="math notranslate nohighlight">\(\theta\)</span>, that were calculated when the model was trained.  We can get this easily using the name of our linear regression algorith, <code class="docutils literal notranslate"><span class="pre">LiR</span></code>, and the attribute <code class="docutils literal notranslate"><span class="pre">coef_</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the coefficients of the linear regression algorithms</span>
+<span class="n">LiR</span><span class="o">.</span><span class="n">coef_</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 3.03083984,  3.99325198, -6.43945413])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since we created the data set in this notebook, we know that before we added the noise the data set had the form <span class="math notranslate nohighlight">\(y = 3x^2 + 4x -5\)</span>.  Therefore, assuming the noise added was not too great, the weights found by the linear regression algorithm should be <span class="math notranslate nohighlight">\(a \approx 3\)</span>, <span class="math notranslate nohighlight">\(b \approx 4\)</span>, and <span class="math notranslate nohighlight">\(c \approx -5\)</span>.</p>
+<p>We can print the weights of the linear regression algorithm below, along with the actual values to see how they compare.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted Value of a:&quot;</span><span class="p">,</span> <span class="n">LiR</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;  Actual Value of a: 3&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted Value of b:&quot;</span><span class="p">,</span> <span class="n">LiR</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;  Actual Value of b: 4&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted Value of c:&quot;</span><span class="p">,</span> <span class="n">LiR</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="s2">&quot;  Actual Value of c: -5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Predicted Value of a: 3.030839835070573   Actual Value of a: 3
+Predicted Value of b: 3.993251981944426   Actual Value of b: 4
+Predicted Value of c: -6.439454131893592   Actual Value of c: -5
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>PROBLEM 8:</strong> How do the predicted values of a, b, and c compare to the actual values?  Do you think this is a good measure of the accuracy of the model?</p>
+<p><strong>PROBLEM 9:</strong> Rerun the above code cells (From the heading <em>Applying the Machine Learning Workflow to Linear Regression</em>) with various levels of noise. (Hint: you only need to change one number)  How does the level of noise effect the accuracy of the model?  Is it possible to have no error from the linear regression algorithm?  Type your observations in the text cell below.</p>
+</section>
+<section id="practice-what-you-have-learned">
+<h3>Practice What You Have Learned<a class="headerlink" href="#practice-what-you-have-learned" title="Permalink to this headline">#</a></h3>
+<p>a. In the code cell below, import the file <code class="docutils literal notranslate"><span class="pre">practice_what_you_have_learned_1.csv</span></code> as a Pandas dataframe.  Print the first few lines of the dataframe and the keys.  Hint: see <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html">this page</a> for documentation on Pandas dataframes.</p>
+<p>b. Export the columns of the dataframe as NumPy arrays, using descriptive variable names based on the names of the columns.</p>
+<p>c. Graph the data set (assuming the first column of the data set is the x-axis and the second column is the y-axis).  Add x and y labels to the axes based on the column names given in the data set.</p>
+<p>d. Based on the graph of the data, what equation could be a good model for the data?  Write your answer in the cell below.  Hint: the answer will be a polynomial.</p>
+<p>e. Create a design matrix using your answer to part d.</p>
+<p>f. Create a training data set and a test data set using the Scikit-Learn function.  Set aside 25% of the data set for the test data set.</p>
+<p>g. Create a linear regression model, fit it using the training data, and then create a variable <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> which holds the predictions for the test data set.</p>
+<p>h. Using any combination of graphs and errors, determine the accuracy of your model using the test data set.</p>
+<p>i. Do you think your machine learning model fits the data set well?  If it does not, what improvements do you think you can make to increase it performance?</p>
+</section>
+</section>
+<section id="bonus-problem-creating-a-linear-regression-algorithm-from-scratch">
+<h2>Bonus Problem: Creating a Linear Regression Algorithm from Scratch<a class="headerlink" href="#bonus-problem-creating-a-linear-regression-algorithm-from-scratch" title="Permalink to this headline">#</a></h2>
+<p>Using the equation for the optimized parameters of <span class="math notranslate nohighlight">\(\theta\)</span>, presented earlier in this notebook, create a function which performs linear regression on a given training data set and returns a prediction for a test set.  Combine your code into a function called <code class="docutils literal notranslate"><span class="pre">linear_regression</span></code>, which takes three parameters <code class="docutils literal notranslate"><span class="pre">X_train</span></code>, <code class="docutils literal notranslate"><span class="pre">y_train</span></code>, and <code class="docutils literal notranslate"><span class="pre">X_test</span></code>, and returns the predicted y data set, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code>.  Use the outline of the function given below.  Compare its performance using the “Practice What You Have Learned” data set and compare your function’s performance to the</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">linear_regression</span> <span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">):</span>
+    <span class="c1"># Your code goes here</span>
+    <span class="k">return</span> <span class="n">y_pred</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./DSECOP/Machine_Learning_Workflow"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-machine-learning">What is Machine Learning?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-a-simple-machine-learning-algorithm">Linear Regression: A Simple Machine Learning Algorithm</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-linear-regression-algorithm">The Linear Regression Algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-loss-function">Linear Regression Loss Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uses-of-linear-regression">Uses of Linear Regression</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-machine-learning-workflow">The Machine Learning Workflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applying-the-machine-learning-workflow-to-linear-regression">Applying the Machine Learning Workflow to Linear Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important">IMPORTANT!</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-and-formatting-data-with-pandas">Importing and Formatting Data with Pandas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-and-test-data-sets-with-scikit-learn">Training and Test Data Sets with Scikit-Learn</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-with-scikit-learn">Linear Regression with Scikit-Learn</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluating-model-performance-with-numpy-and-matplotlib">Evaluating Model Performance with NumPy and Matplotlib</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#improve-the-model-s-performance-design-matrices">Improve the Model’s Performance: Design Matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluating-the-model-weights">Evaluating the Model Weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#practice-what-you-have-learned">Practice What You Have Learned</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-problem-creating-a-linear-regression-algorithm-from-scratch">Bonus Problem: Creating a Linear Regression Algorithm from Scratch</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
