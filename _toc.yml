@@ -9,4 +9,21 @@ parts:
     - file: DSECOP/Exploratory_Data_Analysis/README.md
     - file: DSECOP/Exploratory_Data_Analysis/01_dataset_cleaning.ipynb
     - file: DSECOP/Exploratory_Data_Analysis/02_preprocessing_techniques.ipynb
-
+  - caption: Introduction to Deep Learning
+    chapters:
+    - file: DSECOP/Intro_to_Deep_Learning/README.md
+    - file: DSECOP/Intro_to_Deep_Learning/01_Introduction_to_Neural_Network.ipynb
+    - file: DSECOP/Intro_to_Deep_Learning/02_Logistic_Regression.ipynb
+    - file: DSECOP/Intro_to_Deep_Learning/03_Loss_and_Cost_Functions.ipynb
+    - file: DSECOP/Intro_to_Deep_Learning/04_Gradient_Descent.ipynb
+    - file: DSECOP/Intro_to_Deep_Learning/05_Gradient_Descent_over_All_Elements_in_Training_Set.ipynb
+    - file: DSECOP/Intro_to_Deep_Learning/06_Deep_Neural_Network.ipynb
+    - file: DSECOP/Intro_to_Deep_Learning/07_Parameters_vs_Hyperparameters.ipynb
+    - file: DSECOP/Intro_to_Deep_Learning/08_Tow_Major_Problems_in_Deep_Learning_Regularization_and_Vanishing_Gradient.ipynb
+    - file: DSECOP/Intro_to_Deep_Learning/09_Activation_Function.ipynb
+    - file: DSECOP/Intro_to_Deep_Learning/10_Using_Deep_Learning_to_Find_Hot_Jupiters.ipynb
+  - caption: Introduction to Random Forest
+    chapters:
+    - file: DSECOP/Intro_to_Random_Forest/README.md
+    - file: DSECOP/Intro_to_Random_Forest/0_1_random_forest.ipynb
+    - file: DSECOP/Intro_to_Random_Forest/0_2_random_forest.ipynb
