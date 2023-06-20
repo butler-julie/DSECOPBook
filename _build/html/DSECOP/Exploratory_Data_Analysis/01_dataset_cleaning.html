@@ -1,0 +1,887 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Exploratory Data Analysis &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'DSECOP/Exploratory_Data_Analysis/01_dataset_cleaning';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Preprocessing Techniques for Machine Learning" href="02_preprocessing_techniques.html" />
+    <link rel="prev" title="Exploratory Data Analysis" href="README.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Table of Contents
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploratory Data Analysis</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_preprocessing_techniques.html">Preprocessing Techniques for Machine Learning</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDSECOP/Exploratory_Data_Analysis/01_dataset_cleaning.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/DSECOP/Exploratory_Data_Analysis/01_dataset_cleaning.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Exploratory Data Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-exploratory-data-analysis">What is Exploratory Data Analysis?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-eda-useful">Why is EDA useful?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-eda-simulation-cleaning-particle-collider-data">An EDA simulation: Cleaning particle collider data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<span class="c1"># To run this notebook on Google Colab, uncomment the following section of code.</span>
+<span class="c1">#from google.colab import drive </span>
+<span class="c1">#drive.mount(&quot;/content/drive/&quot;)</span>
+<span class="c1">#import os</span>
+<span class="c1">#os.chdir(&quot;/content/drive/My Drive/DSECOP/Exploratory_Data_Analysis/&quot;)</span>
+<span class="c1">#!pwd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="exploratory-data-analysis">
+<h1>Exploratory Data Analysis<a class="headerlink" href="#exploratory-data-analysis" title="Permalink to this headline">#</a></h1>
+<p>When many people think of conducting experiments, they visualize the scientific process as a well-defined set of steps from initial question to result:</p>
+<p>-&gt; A scientist proposes a hypothesis to test</p>
+<ul class="simple">
+<li><p><em>I believe that larger objects fall faster than small objects.</em></p></li>
+</ul>
+<p>-&gt; The scientist designs an experiment to test this hypothesis</p>
+<ul class="simple">
+<li><p><em>I will throw a large and a small ball from a tower and time how long each one takes to reach the ground.</em></p></li>
+</ul>
+<p>-&gt; The scientist carries out the experiment to collect data</p>
+<ul class="simple">
+<li><p><em>A 10kg ball takes 20 seconds to reach the ground, and a 5kg ball takes 21 seconds.</em></p></li>
+</ul>
+<p>-&gt; The scientist analyzes the data</p>
+<ul class="simple">
+<li><p><em>Both of the balls take similar times to reach the ground.</em></p></li>
+</ul>
+<p>-&gt; The scientist accepts or rejects the hypothesis, or proposes a path for further study.</p>
+<ul class="simple">
+<li><p><em>20 seconds isn’t much smaller than 21 seconds, so I should repeat my experiment several times and collect more data before I come to a conclusion.</em></p></li>
+</ul>
+<p><a href="https://blogs.bu.edu/ggarber/files/2012/07/droppingballs.gif">
+<img src="https://drive.google.com/uc?export=view&id=1T-YMz4ZjuVwwtd6VnzvIvAuH0RmRrerK" alt="drawing" width="300"/>
+</a></p>
+<hr class="docutils" />
+<p>Generally speaking, this scientific process is followed (especially over longer time periods). However, many fields are based around large, multi-year or -decade experiments: researchers in particle physics might have to wait years to receive particle collision data from the LHC, and scientists working in astronomy might see wait times of a decade or more as telescopes accumulate data.</p>
+<p>In such fields, it’s very likely for individuals to only take part in a step or two for a given experiment. It’s <em>very</em> common for early-career scientists (or those in research internships) to just take part in the data analysis stage. This means that they’ll be asked to analyze data that they did not personally take.</p>
+<p>In this notebook, we’ll simulate the process of getting familiar with a new dataset. This process is called <em>Exploratory Data Analysis</em> (EDA).</p>
+<hr class="docutils" />
+<section id="what-is-exploratory-data-analysis">
+<h2>What is Exploratory Data Analysis?<a class="headerlink" href="#what-is-exploratory-data-analysis" title="Permalink to this headline">#</a></h2>
+<p>Exploratory Data Analysis (EDA) can be thought of as a “quick-and-dirty” initial investigation of a dataset.</p>
+<p><a href="https://datos.gob.es/en/documentacion/practical-introductory-guide-exploratory-data-analysis">
+<img src="https://drive.google.com/uc?export=view&id=106ZY0KKP9hsdeFGzXuk9DixrrQQ_XOmw" alt="drawing" width="600"/>
+</a></p>
+<p>EDA has three main purposes:</p>
+<ol class="arabic simple">
+<li><p>Check a dataset for obvious errors</p></li>
+<li><p>Broadly characterize a dataset (such as through calculating summary statistics)</p></li>
+<li><p>Explore features of a dataset in order to guide future, more intense analyses</p></li>
+</ol>
+<p>EDA tends to rely heavily on creating visual tools, such as histograms or scatter plots. It does <em>not</em> need to be rigorous – this means that it shouldn’t be too much effort on the part of the data analyzer, and the results of EDA should not be presented as final.</p>
+</section>
+<hr class="docutils" />
+<section id="why-is-eda-useful">
+<h2>Why is EDA useful?<a class="headerlink" href="#why-is-eda-useful" title="Permalink to this headline">#</a></h2>
+<p>When given a dataset, it might be tempting to jump right into the analysis! However, it’s iportant to run a few sanity checks on the data beforehand, as it can save a <em>lot</em> of trouble in the long run. For example, imagine encountering the following issues:</p>
+<ul class="simple">
+<li><p>You’re given a list of user-reported measurements of the length and width of a table, and you want to calculate the surface area of them. But, half of the measurements are in centimeters, and half are in inches.</p></li>
+<li><p>Your friend gives you a list of the amount of sunlight that his plant gets per day and asks you to plot it. But, the dates he gives you are in MM/DD/YY format, and you need to somehow plot them on a linear scale.</p></li>
+<li><p>Your professor gives you a list of test subjects in a trial for children’s pain reliever and asks you to calculate the mean age of the subjects. But, he accidently handed you a list of test subjects for a completely different study!</p></li>
+</ul>
+<p>Exploratory data analysis can help you diagnose these errors (and more!) before starting a more thorough, time-consuming analysis.</p>
+</section>
+<hr class="docutils" />
+<section id="an-eda-simulation-cleaning-particle-collider-data">
+<h2>An EDA simulation: Cleaning particle collider data<a class="headerlink" href="#an-eda-simulation-cleaning-particle-collider-data" title="Permalink to this headline">#</a></h2>
+<p>Let’s carry out a “case study” of sorts to explore the benefits of EDA.</p>
+<p>Imagine that you have a friend Bob with his own garage particle collider. Bob has been hard at work colliding muons, and he wants you to analyze the collisions for evidence of a new particle. (Note that Bob is a bit overenthusiastic and scatter-brained: he’s only been taking data for about a week, and you’re not sure how carefully he’s been logging his measurements.)</p>
+<p><strong>Activity:</strong> Load Bob’s data from the week (<code class="docutils literal notranslate"><span class="pre">week_data.csv</span></code>) using <code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code>. Print out the dataset – you should see that it has six columns. Also print out how many entries are in the dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;datasets/week_data.csv&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The dataset has </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> entries.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>             $E$       $p_x$       $p_y$       $p_z$  charge     timestamp
+0     540.546145  -70.542034  531.512126   67.987690     1.0  1.665351e+09
+1     690.851120  -94.190988  574.105610  372.563856     1.0  1.665351e+09
+2     404.627883   74.767988  230.437922  324.083933    -1.0  1.665351e+09
+3     582.146688  111.002974  459.645365  339.430044    -1.0  1.665351e+09
+4     742.259291  -74.017827  532.251277  511.949513    -1.0  1.665351e+09
+...          ...         ...         ...         ...     ...           ...
+7995  605.259387  -29.380620  490.154248  353.867586     0.0  1.665355e+09
+7996  423.053424  142.492954  344.131180  200.602687     1.0  1.665355e+09
+7997  767.303343   21.136952  604.886154  471.522958     0.0  1.665355e+09
+7998  874.618543 -113.936119  545.804686  673.603860     1.0  1.665355e+09
+7999  771.396138   66.224818  350.393064  683.962342     0.0  1.665355e+09
+
+[8000 rows x 6 columns]
+The dataset has 8000 entries.
+</pre></div>
+</div>
+</div>
+</div>
+<p>The easiest thing we can do to get a sense of what the dataset is like is plot a histogram of each of the six features in the dataset.</p>
+<p><strong>Activity:</strong> Get acquainted with the dataset! Make a histogram of each feature. Write down one thing that you notice about each feature / histogram.</p>
+<p><em>Tip:</em> To access the names of each column, you can use <code class="docutils literal notranslate"><span class="pre">labels</span> <span class="pre">=</span> <span class="pre">dataset.columns</span></code>, where <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is the variable that you loaded Bob’s data into.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span>
+
+<span class="n">nbins</span> <span class="o">=</span> <span class="mi">80</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span> 
+  <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Counts&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/dcc517321d3be8f7a51ea0dda60481b9312d56802eddbc1c3e279b34deb713b3.png" src="../../_images/dcc517321d3be8f7a51ea0dda60481b9312d56802eddbc1c3e279b34deb713b3.png" />
+</div>
+</div>
+<p><em>Write your answer here</em></p>
+<p>Now, if you <em>didn’t</em> notice anything off about the “timestamp” plot, take another look – you should see that a large chunk of the data is missing!</p>
+<p>This strikes you as odd, so you go back to Bob and ask him about the missing data. Bob realizes that he forgot to include the data that he took on Monday! He sends you over a new dataset, <code class="docutils literal notranslate"><span class="pre">monday_data.csv</span></code>.</p>
+<p><strong>Activity:</strong> Load Bob’s data from Monday. Print out the dataset. Then combine Monday’s data with the rest of the week’s data into a single variable. Print out the number of entries that the full dataset has.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">monday_dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;datasets/monday_data.csv&quot;</span><span class="p">)</span>
+
+<span class="n">full_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">dataset</span><span class="p">,</span> <span class="n">monday_dataset</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The full dataset has </span><span class="si">{</span><span class="n">full_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> entries.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The full dataset has 10000 entries.
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Activity:</strong> Once again, make a histogram of each feature. Write down one thing that you notice about each feature / histogram.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span> 
+  <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">full_data</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Counts&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ad759b6a973894c20072287ec3fea9948aa240a20790850718ece1e9b3053c93.png" src="../../_images/ad759b6a973894c20072287ec3fea9948aa240a20790850718ece1e9b3053c93.png" />
+</div>
+</div>
+<p><em>Write your answer here</em></p>
+<p>Hopefully, you noticed something off about the momentum data! Let’s look into this further…</p>
+<p><strong>Activity:</strong> Make a histogram of each feature. This time, plot histograms for both the first dataset that Bob gave you <em>and</em> the full dataset (with Monday’s data) on the same axes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span> 
+  <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;without Monday&quot;</span><span class="p">,</span> <span class="n">histtype</span> <span class="o">=</span> <span class="s2">&quot;step&quot;</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">full_data</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;with Monday&quot;</span><span class="p">,</span> <span class="n">histtype</span> <span class="o">=</span> <span class="s2">&quot;step&quot;</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Counts&quot;</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/0900ad337477d2150989a68626f19428860f6b0ab7d079a3d7c3b117b2a51739.png" src="../../_images/0900ad337477d2150989a68626f19428860f6b0ab7d079a3d7c3b117b2a51739.png" />
+</div>
+</div>
+<p>You notice that for Monday’s data, the energy and momentum values that Bob provided seem to be a lot smaller than they were on the other days!</p>
+<p>You ask Bob about this result (after all, why should particles contain less energy on a Monday?). Bob tells you that he was initially recording his energy and momentum data in units of GeV, on Monday he decided to spice things up and record everything in TeV.</p>
+<p><strong>Activity:</strong> Convert all of the energy and momentum data from Monday into GeV. (Hint: you’ll need to multiply them by 1000). Once again, make a histogram of each feature for the full, unit-corrected dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">monday_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">monday_dataset</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">])</span>
+<span class="n">monday_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">monday_dataset</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">])</span>
+
+
+<span class="n">corrected_full_data</span> <span class="o">=</span> <span class="n">full_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">monday_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">monday_start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">monday_end</span><span class="p">)</span>
+
+<span class="n">corrected_full_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">monday_mask</span><span class="p">,</span> <span class="s2">&quot;$E$&quot;</span><span class="p">]</span><span class="o">*=</span> <span class="mi">1000</span>
+<span class="n">corrected_full_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">monday_mask</span><span class="p">,</span> <span class="s2">&quot;$p_x$&quot;</span><span class="p">]</span><span class="o">*=</span> <span class="mi">1000</span>
+<span class="n">corrected_full_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">monday_mask</span><span class="p">,</span> <span class="s2">&quot;$p_y$&quot;</span><span class="p">]</span><span class="o">*=</span> <span class="mi">1000</span>
+<span class="n">corrected_full_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">monday_mask</span><span class="p">,</span> <span class="s2">&quot;$p_z$&quot;</span><span class="p">]</span><span class="o">*=</span> <span class="mi">1000</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span> 
+  <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Counts&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/36f6782d24598051394b8f35ef4f2b53b21f78d516ccb0567a8fc995057181cd.png" src="../../_images/36f6782d24598051394b8f35ef4f2b53b21f78d516ccb0567a8fc995057181cd.png" />
+</div>
+</div>
+<p>With the problem of the units solved, it seems time to wrap up the EDA and move onto a more thorough analysis. However, you receieve a call from Alice, the technician for Bob’s muon collider. Alice informs you that she was checking the wiring of Bob’s collider and found a faulty connection in the power source to the electromagnets. As a result, some of the charge data that Bob took may not be accurate.</p>
+<p><strong>Activity:</strong> Calculate and print out the number of positive, negative, and neutral charges in the dataset. Sum them up and calculate how many charge measurements are missing from the dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">charges</span> <span class="o">=</span> <span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span>
+
+<span class="n">num_positive</span><span class="p">,</span> <span class="n">num_negative</span><span class="p">,</span> <span class="n">num_neutral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">charges</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">num_positive</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">num_neutral</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">elif</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">num_negative</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">num_missing_entries</span> <span class="o">=</span> <span class="n">corrected_full_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">num_positive</span> <span class="o">-</span> <span class="n">num_negative</span><span class="o">-</span> <span class="n">num_neutral</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The dataset contains </span><span class="si">{</span><span class="n">num_positive</span><span class="si">}</span><span class="s2"> positive, </span><span class="si">{</span><span class="n">num_negative</span><span class="si">}</span><span class="s2"> negative, and </span><span class="si">{</span><span class="n">num_neutral</span><span class="si">}</span><span class="s2"> neutral charges.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The dataset is missing </span><span class="si">{</span><span class="n">num_missing_entries</span><span class="si">}</span><span class="s2"> charge measurements.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The dataset contains 3299 positive, 3293 negative, and 2327 neutral charges.
+The dataset is missing 1081 charge measurements.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Alice tells you that after further investigation, the detector attached to the muon collider is able to observe charged particles, but not neutral ones. She tells you that you can safely assume that all of the particles without a charge measurement were neutral.</p>
+<p><strong>Activity:</strong> Update the dataset to account for this new piece of information. Again calculate and print out the number of positive, negative, and neutral charges in the dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">charges</span> <span class="o">=</span> <span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span>
+
+<span class="n">num_positive</span><span class="p">,</span> <span class="n">num_negative</span><span class="p">,</span> <span class="n">num_neutral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">charges</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">num_positive</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">num_neutral</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">elif</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">num_negative</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">num_missing_entries</span> <span class="o">=</span> <span class="n">corrected_full_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">num_positive</span> <span class="o">-</span> <span class="n">num_negative</span><span class="o">-</span> <span class="n">num_neutral</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The dataset contains </span><span class="si">{</span><span class="n">num_positive</span><span class="si">}</span><span class="s2"> positive, </span><span class="si">{</span><span class="n">num_negative</span><span class="si">}</span><span class="s2"> negative, and </span><span class="si">{</span><span class="n">num_neutral</span><span class="si">}</span><span class="s2"> neutral charges.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The dataset is missing </span><span class="si">{</span><span class="n">num_missing_entries</span><span class="si">}</span><span class="s2"> charge measurements.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The dataset contains 3299 positive, 3293 negative, and 3408 neutral charges.
+The dataset is missing 0 charge measurements.
+</pre></div>
+</div>
+</div>
+</div>
+<p>At this point, you feel fairly satisfied that Bob’s dataset has been sufficiently corrected. However, there are a few more exploratory calculations that you want to do before starting a more rigorous analysis.</p>
+<p>In particle physics, <span class="math notranslate nohighlight">\(p_x, p_y, p_z\)</span>, and <span class="math notranslate nohighlight">\(E\)</span> are generally not the variables of choice. This is because colliders have a preferred orientation corresponding to the <em>beam axis</em> (typically <span class="math notranslate nohighlight">\(p_z\)</span>). As a result, most analyses use the following three variables:</p>
+<div class="math notranslate nohighlight">
+\[p_T = \sqrt{p_x^2 + p_y^2}\]</div>
+<div class="math notranslate nohighlight">
+\[\phi = \arctan{\frac{p_y}{p_x}}\]</div>
+<div class="math notranslate nohighlight">
+\[\eta = \mathrm{arcsinh}{\frac{p_z}{p_T}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(p_T\)</span> is the <em>transverse momentum</em> with respect to the beam axis, <span class="math notranslate nohighlight">\(\phi\)</span> is the <em>azimuthal scattering angle</em> with respect to the beam axis, and <span class="math notranslate nohighlight">\(y\)</span> is the <em>pseudorapidity</em>, which gauges how much momentum a particle has along the beam axis.</p>
+<p>
+<img src="https://drive.google.com/uc?export=view&id=1mRggCD7_0wlae6faFJnNBKdl-dQDeUL5" alt="drawing" width="600"/>
+</a></p>
+<p><strong>Activity:</strong> Add columns to the dataset for <span class="math notranslate nohighlight">\(p_T\)</span>, <span class="math notranslate nohighlight">\(\phi\)</span>, and <span class="math notranslate nohighlight">\(\eta\)</span>. Plot histograms of each variable and make a comment about each one.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;pt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;$p_x$&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;$p_y$&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;$p_y$&quot;</span><span class="p">],</span> <span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;$p_x$&quot;</span><span class="p">])</span>
+<span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;eta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsinh</span><span class="p">(</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;$p_z$&quot;</span><span class="p">]</span><span class="o">/</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;pt&quot;</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;pt&quot;</span><span class="p">],</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$p_T$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Counts&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">],</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$\phi$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Counts&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;eta&quot;</span><span class="p">],</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$\eta$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Counts&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/d359dbabb2804e7f8c633e080ccaade1ceae9ac1736a35b9e5960987a4a53070.png" src="../../_images/d359dbabb2804e7f8c633e080ccaade1ceae9ac1736a35b9e5960987a4a53070.png" />
+<img alt="../../_images/199abe3dbcd12a59b4e7ac35cf8a5cc9ac395227d596077bde5c5772ecf388cb.png" src="../../_images/199abe3dbcd12a59b4e7ac35cf8a5cc9ac395227d596077bde5c5772ecf388cb.png" />
+<img alt="../../_images/e346740dad287a7ce8e5f573b28c0f36d78c6895f5127e692e75f4317dc85152.png" src="../../_images/e346740dad287a7ce8e5f573b28c0f36d78c6895f5127e692e75f4317dc85152.png" />
+</div>
+</div>
+<p><strong>Activity:</strong> Calculate the print out the mean and standard deviaton of <span class="math notranslate nohighlight">\(p_T\)</span>, <span class="math notranslate nohighlight">\(\phi\)</span>, and <span class="math notranslate nohighlight">\(\eta\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pts</span> <span class="o">=</span> <span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;pt&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;For $p_T$: mean = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span><span class="si">}</span><span class="s2">, stand. dev. = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">phis</span> <span class="o">=</span> <span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;For $\phi$: mean = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">phis</span><span class="p">)</span><span class="si">}</span><span class="s2">, stand. dev. = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">phis</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">etas</span> <span class="o">=</span> <span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;eta&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;For $\eta$: mean = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">etas</span><span class="p">)</span><span class="si">}</span><span class="s2">, stand. dev. = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">etas</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>For $p_T$: mean = 511.9768995895396, stand. dev. = 107.57997391012083
+For $\phi$: mean = 1.5702994844438045, stand. dev. = 0.2271542744228354
+For $\eta$: mean = 0.897040363453691, stand. dev. = 0.5665658168403641
+</pre></div>
+</div>
+</div>
+</div>
+<p>You know that the detectors for Bob’s muon collider are less reliable when <span class="math notranslate nohighlight">\(\eta\)</span> is extreme. Specifically, you likely shouldn’t use any data that has <span class="math notranslate nohighlight">\(\eta &lt; 2\)</span>.</p>
+<p><strong>Activity:</strong> Create a new dataset that has <span class="math notranslate nohighlight">\(\eta &lt; 2\)</span>. Histogram the <span class="math notranslate nohighlight">\(\eta\)</span> variable, and print out how many entries survived the cut. Finally, save out the dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset_eta_cut</span> <span class="o">=</span> <span class="n">corrected_full_data</span><span class="p">[</span><span class="n">corrected_full_data</span><span class="p">[</span><span class="s2">&quot;eta&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">dataset_eta_cut</span><span class="p">[</span><span class="s2">&quot;eta&quot;</span><span class="p">],</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$\eta$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Counts&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset_eta_cut</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> entries remaining (</span><span class="si">{</span><span class="n">corrected_full_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">dataset_eta_cut</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> cut)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/96d041cbe60aa108b7e0b0b29450fe198ef961f9d159abbc8674a473c2f33b34.png" src="../../_images/96d041cbe60aa108b7e0b0b29450fe198ef961f9d159abbc8674a473c2f33b34.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9621 entries remaining (379 cut)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset_eta_cut</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;dataset_cleaned_eta_cut.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><em>End of notebook 01</em></p>
+<hr class="docutils" />
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./DSECOP/Exploratory_Data_Analysis"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="README.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Exploratory Data Analysis</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_preprocessing_techniques.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Preprocessing Techniques for Machine Learning</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-exploratory-data-analysis">What is Exploratory Data Analysis?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-eda-useful">Why is EDA useful?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-eda-simulation-cleaning-particle-collider-data">An EDA simulation: Cleaning particle collider data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

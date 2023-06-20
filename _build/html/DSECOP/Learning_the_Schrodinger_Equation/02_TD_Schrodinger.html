@@ -1,0 +1,1680 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Solving the Time Dependent Schrodinger Equation with Physics-Informed Deep Learning &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'DSECOP/Learning_the_Schrodinger_Equation/02_TD_Schrodinger';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Table of Contents
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploratory Data Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/README.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/01_dataset_cleaning.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/02_preprocessing_techniques.html">Preprocessing Techniques for Machine Learning</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDSECOP/Learning_the_Schrodinger_Equation/02_TD_Schrodinger.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/DSECOP/Learning_the_Schrodinger_Equation/02_TD_Schrodinger.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Solving the Time Dependent Schrodinger Equation with Physics-Informed Deep Learning</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-dependent-quantum-harmonic-oscillator">Time Dependent Quantum Harmonic Oscillator</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-case-psi-0-1-x-t">Base case: <span class="math notranslate nohighlight">\(\psi_{0,1}(x,t)\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fully-connected-neural-network">Fully Connected Neural Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#physics-informed-neural-network">Physics-Informed Neural Network</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#training-considerations">Training Considerations</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#collocation-points">Collocation Points</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-energy-states">Higher energy states</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#project-ideas">Project Ideas</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p><a href="https://colab.research.google.com/github/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/02_TD_Schrodinger.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="solving-the-time-dependent-schrodinger-equation-with-physics-informed-deep-learning">
+<h1>Solving the Time Dependent Schrodinger Equation with Physics-Informed Deep Learning<a class="headerlink" href="#solving-the-time-dependent-schrodinger-equation-with-physics-informed-deep-learning" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get res dir and helper files</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">google.colab</span>
+    <span class="n">IN_COLAB</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">IN_COLAB</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">if</span> <span class="n">IN_COLAB</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Colab detected. (Re)Loading helper files&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;rm -rf res&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;rm -f res.tar.gz&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;wget https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res.tar.gz?raw=true&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;mv res.tar.gz?raw=true res.tar.gz&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;tar -xzf res.tar.gz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">img</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span><span class="p">,</span> <span class="n">utils</span>
+
+<span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">interact</span>
+<span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;./res&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ml_helper</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: It seems the ml_helper file is missing. If you are running this in google colab, please run the first cell block again. (Begins with comment: </span><span class="se">\&quot;</span><span class="s2">Get res dir and helper files</span><span class="se">\&#39;</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">10</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">img</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">copy</span>
+<span class="ne">---&gt; </span><span class="mi">10</span> <span class="kn">import</span> <span class="nn">torch</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">set_default_tensor_type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">DoubleTensor</span><span class="p">)</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cuda:0
+</pre></div>
+</div>
+</div>
+</div>
+<section id="time-dependent-quantum-harmonic-oscillator">
+<h2>Time Dependent Quantum Harmonic Oscillator<a class="headerlink" href="#time-dependent-quantum-harmonic-oscillator" title="Permalink to this headline">#</a></h2>
+<p>In this notebook, we want to solve a Quantum Harmonic Oscillator consisting of a superposition of two states.
+Note: We will use atomic units unless specified: <span class="math notranslate nohighlight">\(\hbar=m=e=1\)</span>.</p>
+<p>The governing equation is time-dependent Schrödinger equation
+\begin{equation}
+i \frac{\partial \psi(\mathbf{r}, t)}{\partial t}-\hat{H} \psi(\mathbf{r}, t)=0
+\end{equation}
+for a quantum harmonic oscillator consisting of the superposition of two eigenstates <span class="math notranslate nohighlight">\(m,n\)</span>. In the one-dimensional case, the Hamiltonian is
+\begin{equation}
+\hat{H_x}=-\frac{1}{2}\frac{\partial^{2}}{\partial x^{2}}+\frac{\omega^{2}}{2}x^{2}
+\end{equation}
+The analytical solution <span class="math notranslate nohighlight">\(\psi(x,t) \in \mathbb{C}\)</span> is
+\begin{equation*}
+\phi_0(x) = \sqrt[4]{\frac{\omega}{\pi}}e^{\left(-\frac{\omega x^2}{2}\right)}
+\end{equation*}
+\begin{equation*}
+\phi_1(x) = \phi_0(x) \sqrt{2\omega}x
+\end{equation*}
+For higher states,
+\begin{equation*}
+\phi_n(x) = \phi_0(x) \frac{1}{\sqrt{2^n n!}}Her_n(\sqrt{\omega}x)\exp\left(-i E_n t\right)
+\end{equation*}
+where <span class="math notranslate nohighlight">\(Her_n(\sqrt{\omega}x)\)</span> is the <span class="math notranslate nohighlight">\(n\)</span>th Hermite polynomial,
+and phase <span class="math notranslate nohighlight">\(\exp\left(-i E_n t\right)\)</span> where <span class="math notranslate nohighlight">\(E_n = (n+\frac{1}{2})\omega\)</span></p>
+<p>The superposition is defined as
+\begin{equation}
+\psi_{m,n}(x,t) = \frac{1}{\sqrt{2}}\left( e^{\left(-i E_m t\right)}\phi_m(x) + e^{\left(-i E_n t\right)}\phi_n(x)\right)
+\end{equation}</p>
+</section>
+<section id="base-case-psi-0-1-x-t">
+<h2>Base case: <span class="math notranslate nohighlight">\(\psi_{0,1}(x,t)\)</span><a class="headerlink" href="#base-case-psi-0-1-x-t" title="Permalink to this headline">#</a></h2>
+<p>Let’s derive the analytical solution for <span class="math notranslate nohighlight">\(\psi_{0,1}(x,t)\)</span>.</p>
+<p>\begin{equation}
+\psi_{0,1}(x,t) = \frac{1}{\sqrt{2}}\left( e^{\left(-i E_0 t\right)}\phi_m(x) + e^{\left(-i E_1 t\right)}\phi_n(x)\right)
+\end{equation}</p>
+<p>The <span class="math notranslate nohighlight">\(nth\)</span> Physicist’s Hermite Polynomial is defined as:
+$<span class="math notranslate nohighlight">\(H_{n}(y)=(-1)^{n} e^{y^{2}} \frac{d^{n}}{d y^{n}} e^{-y^{2}}\)</span>$</p>
+<hr class="docutils" />
+<p>Exercise:</p>
+<p>a) Derive the first Hermite Polynomial (<span class="math notranslate nohighlight">\(H_{1}(y)\)</span>) in terms of <span class="math notranslate nohighlight">\(x\)</span> for <span class="math notranslate nohighlight">\(y=\sqrt{\omega}x\)</span>:</p>
+<p>Derivation here
+<span class="math notranslate nohighlight">\(H_{1}(\sqrt{\omega}x) = \)</span></p>
+<p>b) Write down the ground state and first excited state energies for QHO:</p>
+<p><span class="math notranslate nohighlight">\(E_0 =\)</span>,
+<span class="math notranslate nohighlight">\(E_1=\)</span></p>
+<p>c) Use your results from <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> to write down <span class="math notranslate nohighlight">\(\psi_{0,1}(x,t)\)</span>, and simplify it:</p>
+<p><span class="math notranslate nohighlight">\(\psi_{0,1}(x,t) = \)</span></p>
+<hr class="docutils" />
+<p>Now that we have our analytical solution, let’s write some code to compute it for arbitrary values of <span class="math notranslate nohighlight">\(x,t,\omega\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_analytical_solution_base</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">omega</span><span class="p">):</span>
+    <span class="c1"># Analytical solution for first two states. X,T are numpy arrays, omega is a float.</span>
+    <span class="c1"># Hint: Avoid using for loops, use numpy functions to calculate the wavefunction.</span>
+    
+    <span class="c1">#Solution:</span>
+    <span class="n">phi_0</span> <span class="o">=</span> <span class="p">(</span><span class="n">omega</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mf">4.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">X</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">*</span> <span class="n">X</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">phi_1</span> <span class="o">=</span> <span class="n">phi_0</span> <span class="o">*</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">omega</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">X</span>
+    <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">omega</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">phi_0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span> <span class="mi">3</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">phi_1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">psi</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s define the domain for our problem:</p>
+<p>We will restrict our domain to <span class="math notranslate nohighlight">\(\mathbf{x} \in [-\pi,\pi], t \in [0,T]\)</span>, with fixed boundary conditions <span class="math notranslate nohighlight">\(x_0, x_b = 0\)</span> in this notebook.</p>
+<p>After you go through the notebook, feel free to play with the code for other domains. Let’s create some data using the function you just wrote.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_data_set</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">analytical_solution_fun</span><span class="p">):</span>
+    <span class="c1"># Helper function to generate datasets from analytical solutions.</span>
+    
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_X</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_T</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">psi_val</span> <span class="o">=</span> <span class="n">analytical_solution_fun</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">omega</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">psi_val</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">psi_val</span><span class="p">)</span>
+
+    <span class="n">train_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X</span><span class="p">,</span><span class="n">T</span><span class="p">))</span>
+    <span class="n">train_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">))</span>
+
+    <span class="n">train_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">train_input</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">train_y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">train_output</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define domain in code</span>
+
+<span class="n">L</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">x_dom</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">]</span>
+<span class="n">t_dom</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="p">]</span>
+<span class="n">analytical_solution_function</span> <span class="o">=</span> <span class="n">get_analytical_solution_base</span>
+
+<span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">get_data_set</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">analytical_solution_function</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">delta_T</span></code> and <code class="docutils literal notranslate"><span class="pre">delta_X</span></code> are the grid spacing in our domain. Data will be generated on this grid. You cna move the slider to see how the probabilty density of the QHO evolves in time. Our system looks like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@interact</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">62</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">interactive_viz_colour</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="n">tstr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;res/plots/waveform/psi_0_1/t_</span><span class="si">{</span><span class="n">tstr</span><span class="si">}</span><span class="s2">.png&quot;</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "38b49e8681604759ba01ffb300782bac"}</script></div>
+</div>
+<p>Now that we have the analytical solution, let’s build a neural network to solve it.</p>
+<p>We will be using Mean Squared Error to quantify the difference between the true value and predicted values.
+It is defined as
+$<span class="math notranslate nohighlight">\( \mathrm{MSE}=\frac{1}{n} \sum_{i=1}^{n}\left(Y_{i}-\hat{Y}_{i}\right)^{2}\)</span><span class="math notranslate nohighlight">\(
+where \)</span>Y_i<span class="math notranslate nohighlight">\( and \)</span>\hat{Y_i}<span class="math notranslate nohighlight">\( are the \)</span>i$th predicted and true values respectively. Implement this in code below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exercise: Implement mse function here</span>
+<span class="k">def</span> <span class="nf">get_mse</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    
+    <span class="c1"># Solution:</span>
+    <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mse</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="fully-connected-neural-network">
+<h3>Fully Connected Neural Network<a class="headerlink" href="#fully-connected-neural-network" title="Permalink to this headline">#</a></h3>
+<p>A neural network consists of chained linear regression nodes (perceptrons) and activation functions. The first layer is called the input layer, the layers in the middele are called output layers and the final layer is called the output layer. A neural network surves as a function approximator between the input and the ouput.</p>
+<p><img alt="Domains" src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/nn_architecture.png?raw=1" /></p>
+<p>Since neural networks are constrained to <span class="math notranslate nohighlight">\(\mathbb{R}\)</span>, the complex valued solution can be represented as
+\begin{equation}
+\psi(x,t) = u + iv<br />
+\end{equation} where <span class="math notranslate nohighlight">\(u = \operatorname{Re}(\psi)\)</span> and <span class="math notranslate nohighlight">\(v=\operatorname{Im}(\psi)\)</span></p>
+<hr class="docutils" />
+<p>Exercise: What our input and output variable for this neural network?</p>
+<p>Solution: Inputs: <span class="math notranslate nohighlight">\(x,t\)</span>, Outputs: <span class="math notranslate nohighlight">\(u,v\)</span></p>
+<hr class="docutils" />
+<p>Exercise: Write the Schrodinger equation in terms of <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(v\)</span></p>
+<p>Solution:
+The time-dependent Schrödinger equation can be written as
+\begin{equation}
+\left(-\frac{\partial v}{\partial t}+\frac{1}{2}\frac{\partial^{2} u}{\partial x^{2}}-\frac{\omega^{2}}{2}x^{2}\right)\psi + i \left(\frac{\partial u}{\partial t}+\frac{1}{2}\frac{\partial^{2} v}{\partial x^{2}}-\frac{\omega^{2}}{2}x^{2}\right)\psi = 0
+\end{equation}</p>
+<hr class="docutils" />
+<p>In the first case, the training data is generated on a high resolution grid from the analytical solution described above.
+The neural network <span class="math notranslate nohighlight">\(\psi_{net}: \mathbb{R}^{1+1}\mapsto \mathbb{R}^{2}\)</span> is constructed, with inputs <span class="math notranslate nohighlight">\((x,t)\)</span> and outputs <span class="math notranslate nohighlight">\((u,v)\)</span>.</p>
+<p>Let’s look at the pipeline for creating, training and testing Neural Networks. Generate training and test data:</p>
+<p>Note: In this case, we are using the entire dataset in training for demonstrating the workflow. This is not done in practice and leads to overfitting.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Grid spacing</span>
+<span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="c1"># Domains</span>
+<span class="n">x_dom</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">]</span>
+<span class="n">t_dom</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="p">]</span>
+
+<span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">get_data_set</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">get_analytical_solution_base</span><span class="p">)</span>
+<span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">get_data_set</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">get_analytical_solution_base</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Create the architecture of Neural Network. This is a fully connected neural network (FCN):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_in</span><span class="p">,</span> <span class="n">n_out</span><span class="p">,</span> <span class="n">n_h</span><span class="p">,</span> <span class="n">n_l</span><span class="p">,</span> <span class="n">activation</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_in</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_in</span><span class="p">,</span> <span class="n">n_h</span><span class="p">)</span>
+        
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_l</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_h</span><span class="p">,</span> <span class="n">n_h</span><span class="p">))</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">activation</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">layers</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_h</span><span class="p">,</span> <span class="n">n_out</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_in</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_h</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_out</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Create a function to train the network:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_nn</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">):</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+
+    <span class="n">loss_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch </span><span class="se">\t</span><span class="s2"> Loss&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">pred_y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">train_y</span><span class="o">-</span><span class="n">pred_y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="n">loss_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">500</span> <span class="o">==</span> <span class="mi">499</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">loss_list</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Create a function to quantify the loss and errors</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model_error</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+
+        <span class="n">pred_y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
+        
+        <span class="n">pred_u</span><span class="p">,</span> <span class="n">pred_v</span><span class="p">,</span> <span class="n">pred_dens</span> <span class="o">=</span> <span class="n">get_density</span><span class="p">(</span><span class="n">pred_y</span><span class="p">)</span>
+        <span class="n">test_u</span><span class="p">,</span> <span class="n">test_v</span><span class="p">,</span> <span class="n">test_dens</span> <span class="o">=</span> <span class="n">get_density</span><span class="p">(</span><span class="n">test_y</span><span class="p">)</span>
+        
+        <span class="n">loss_u</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred_u</span> <span class="o">-</span> <span class="n">test_u</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">loss_v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred_v</span> <span class="o">-</span> <span class="n">test_v</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">loss_dens</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred_dens</span> <span class="o">-</span> <span class="n">test_dens</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model loss: </span><span class="se">\n</span><span class="s2"> loss_u = </span><span class="si">{</span><span class="n">loss_u</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> loss_v = </span><span class="si">{</span><span class="n">loss_v</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> loss_dens = </span><span class="si">{</span><span class="n">loss_dens</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">pred_y</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Function for inference and plotting</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">inference</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span><span class="n">plot_name</span><span class="o">=</span><span class="s2">&quot;plot&quot;</span><span class="p">):</span>
+    
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+
+        <span class="n">pred_y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
+        
+        <span class="n">pred_u</span><span class="p">,</span> <span class="n">pred_v</span><span class="p">,</span> <span class="n">pred_dens</span> <span class="o">=</span> <span class="n">get_density</span><span class="p">(</span><span class="n">pred_y</span><span class="p">)</span>
+        <span class="n">test_u</span><span class="p">,</span> <span class="n">test_v</span><span class="p">,</span> <span class="n">test_dens</span> <span class="o">=</span> <span class="n">get_density</span><span class="p">(</span><span class="n">test_y</span><span class="p">)</span>
+
+        <span class="n">loss_u</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred_u</span> <span class="o">-</span> <span class="n">test_u</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">loss_v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred_v</span> <span class="o">-</span> <span class="n">test_v</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">loss_dens</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred_dens</span> <span class="o">-</span> <span class="n">test_dens</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+         
+        <span class="c1"># print(loss_u)</span>
+        <span class="c1"># print(loss_v)</span>
+            
+        <span class="n">get_plots_norm_colorbar</span><span class="p">(</span><span class="n">test_y</span><span class="p">,</span><span class="n">pred_y</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">plot_name</span><span class="p">)</span>
+        <span class="c1"># return pred_y</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now that we have all the pieces in place, we can use this code to train a neural network on our domain.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">314</span><span class="p">)</span>
+<span class="n">activation</span> <span class="o">=</span>  <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()</span>
+
+<span class="n">model_nn</span> <span class="o">=</span> <span class="n">NN</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">activation</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">10000</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">model_nn</span><span class="p">,</span> <span class="n">loss_list</span> <span class="o">=</span> <span class="n">train_nn</span><span class="p">(</span><span class="n">model_nn</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 	 Loss
+499 0.021311576302682496
+999 0.00641698933325136
+1499 0.0025982733791653258
+1999 0.0014621462522982237
+2499 0.0009727847859955966
+2999 0.0006780892687461414
+3499 0.0005113016640996302
+3999 0.0004040543623947351
+4499 0.00035690398042456027
+4999 0.00029729873331824726
+5499 0.00026109341210562193
+5999 0.0006112440024465299
+6499 0.00024200625402641504
+6999 0.00018357260793292255
+7499 0.00016884823876145717
+7999 0.00014845511786811642
+8499 0.00013520463713060694
+8999 0.00012429180799436947
+9499 0.00011515804303286592
+9999 0.00010753533883776849
+CPU times: user 21 s, sys: 789 ms, total: 21.8 s
+Wall time: 23.5 s
+</pre></div>
+</div>
+</div>
+</div>
+<p>The losses for different terms are:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_y</span> <span class="o">=</span> <span class="n">get_model_error</span><span class="p">(</span><span class="n">model_nn</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model loss: 
+ loss_u = 0.0001533102752182572 
+ loss_v = 0.0002760303416421271 
+ loss_dens = 0.00019931981424735714
+</pre></div>
+</div>
+</div>
+</div>
+<p>And we can plot our reults with the inference function</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.1</span>
+    
+<span class="n">n_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">n_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_T</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">inference</span><span class="p">(</span><span class="n">model_nn</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="s1">&#39;nn&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 finished
+1 finished
+2 finished
+</pre></div>
+</div>
+<img alt="../../_images/c2fe78cfc17f7df42cf6c93803d34a136cdd621047ab32a8b8b5f0e67e48b3d5.png" src="../../_images/c2fe78cfc17f7df42cf6c93803d34a136cdd621047ab32a8b8b5f0e67e48b3d5.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mse: u: 0.0001533102752182572, v:0.0002760303416421271
+</pre></div>
+</div>
+</div>
+</div>
+<p>Reading these snapshot plots:
+The first column consists of plots of neural network predictions The second column consists of true values and the last column is the Absolute Error between ground truth and predictions.</p>
+<p>The rows are real(<span class="math notranslate nohighlight">\(\psi\)</span>), imaginary(<span class="math notranslate nohighlight">\(\psi\)</span>) and density <span class="math notranslate nohighlight">\(|\psi|^2\)</span> .</p>
+<p>In this case, since we used all the data over the domain for training, we get great results, where the NN approximates <span class="math notranslate nohighlight">\(\psi\)</span> very well.</p>
+<p>Now for a more realistic case. We might not have a lot of experimental data covering the entire domain of a system. To approximate that, let’s train a neural network on a low resolution grid in a reduced domain <span class="math notranslate nohighlight">\(x \in [-\pi/4,\pi/4]\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate reduced training set</span>
+<span class="n">L</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">x_dom</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="n">L</span><span class="o">/</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">t_dom</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="p">]</span>
+
+<span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">get_data_set</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">get_analytical_solution_base</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will test it’s performance on a high resolution grid across the entire domain</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">x_dom</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">]</span>
+<span class="n">t_dom</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="p">]</span>
+
+<span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">get_data_set</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">get_analytical_solution_base</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">314</span><span class="p">)</span>
+<span class="n">activation</span> <span class="o">=</span>  <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()</span>
+
+<span class="n">model_nn</span> <span class="o">=</span> <span class="n">NN</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">activation</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">10000</span>
+
+    
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">model_nn</span><span class="p">,</span> <span class="n">loss_list</span> <span class="o">=</span> <span class="n">train_nn</span><span class="p">(</span><span class="n">model_nn</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 	 Loss
+499 0.028049596849681703
+999 0.00969658553606968
+1499 0.0021053834487003054
+1999 0.001055839372717725
+2499 0.0008106191607067291
+2999 0.0004376394528309043
+3499 0.00033768929047119155
+3999 0.00027329513100126285
+4499 0.00022438704188235275
+4999 0.00018539325768553077
+5499 0.0001540818975076901
+5999 0.00012854114125843233
+6499 0.00011326572714504884
+6999 9.0906639097808e-05
+7499 7.857345854927793e-05
+7999 6.878034806087228e-05
+8499 6.220453985269823e-05
+8999 5.495307812744665e-05
+9499 5.0806537991602325e-05
+9999 4.5918323532968757e-05
+CPU times: user 19 s, sys: 456 ms, total: 19.5 s
+Wall time: 19.9 s
+</pre></div>
+</div>
+</div>
+</div>
+<p>So far so good, the training loss is small. But across the entire domain, the loss is:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">get_model_error</span><span class="p">(</span><span class="n">model_nn</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model loss: 
+ loss_u = 0.27958339517502423 
+ loss_v = 0.47460727921635004 
+ loss_dens = 3.6860177490150123
+</pre></div>
+</div>
+</div>
+</div>
+<p>The error is orders of magnitude higher than our data point values! Let’s look at the plots:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.01</span>
+    
+<span class="n">n_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">n_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_T</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">inference</span><span class="p">(</span><span class="n">model_nn</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="s1">&#39;nn_reduced&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 finished
+1 finished
+2 finished
+</pre></div>
+</div>
+<img alt="../../_images/2458bfcba3ae8253b4caeea683f90d51e756279c4411e5bf2dce03fc618aab6c.png" src="../../_images/2458bfcba3ae8253b4caeea683f90d51e756279c4411e5bf2dce03fc618aab6c.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mse: u: 0.2795833951750243, v:0.47460727921634993
+</pre></div>
+</div>
+</div>
+</div>
+<p>The values are similar in the domain that we trained on <span class="math notranslate nohighlight">\(x \in [-0.78,0.78]\)</span> but diverge considerably near the boundaries.</p>
+<p>To tackle this problem, we will add some information about the governing equation in the neural network.</p>
+</section>
+<section id="physics-informed-neural-network">
+<h3>Physics-Informed Neural Network<a class="headerlink" href="#physics-informed-neural-network" title="Permalink to this headline">#</a></h3>
+<p>Physics Informed Neural Networks are constructed by encoding the constraints posed by a given differential equation and its boundary conditions into the loss function of a Fully Connected Network. This constraint guides the network to approximate the solution of the differential equation.</p>
+<p>For a system <span class="math notranslate nohighlight">\( f \)</span>, with solution <span class="math notranslate nohighlight">\( u(\mathbf{x},t) \)</span>, governed by the following equation</p>
+<p>\begin{align}\label{eq:pde}
+f(u) &amp;:=u_{t}+\mathcal{N}[u;\lambda], \mathbf{x} \in \Omega, t \in [0,T] \
+f(u) &amp;= 0
+\end{align}
+where <span class="math notranslate nohighlight">\(\mathcal{N}[u;\lambda]\)</span> is a differential operator parameterised by <span class="math notranslate nohighlight">\( \lambda \)</span>, <span class="math notranslate nohighlight">\( \Omega \in \mathbb{R^D} \)</span>, <span class="math notranslate nohighlight">\( \mathbf{x} = (x_1,x_2,...,x_d) \)</span> with boundary conditions
+\begin{equation}
+\mathcal{B}(u, \mathbf{x},t)=0 \quad \text { on } \quad \partial \Omega
+\end{equation}
+and initial conditions
+\begin{equation}
+\mathcal{T}(u, \mathbf{x},t)=0 \quad \text { at } \quad t = 0
+\end{equation}</p>
+<p><img alt="PINN architecture" src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/PINN_diagrams.png?raw=1" /></p>
+<p>A neural network <span class="math notranslate nohighlight">\(u_{net}: \mathbb{R}^{D+1}\mapsto \mathbb{R}^{1}\)</span> is constructed as a surrogate model for the true solution <span class="math notranslate nohighlight">\(u\)</span>,
+\begin{equation}
+f_{net}=f(u_{net})
+\end{equation}
+The constraints imposed by the system are encoded in the loss term <span class="math notranslate nohighlight">\(L\)</span> for neural network optimisation
+\begin{equation}
+L={\color{green} L_{f}}+{\color{red} L_{BC}}+{\color{blue} L_{IC}}
+\label{eq:pinn_loss}
+\end{equation}
+where <span class="math notranslate nohighlight">\(L_{f}\)</span> denotes the error in the solution within the interior points of the system, enforcing the PDE. This error is calculated for <span class="math notranslate nohighlight">\(N_f\)</span> collocation points.
+\begin{equation}
+\color{green}
+L_{f}=\frac{1}{N_{f}} \sum_{i=1}^{N_{f}}\left|f_{net}\left(\mathbf{x}<em>{f}^{i}, t</em>{f}^{i}\right)\right|^{2}
+\end{equation}
+\begin{equation}
+\color{red}
+L_{BC}=\frac{1}{N_{BC}} \sum_{i=1}^{N_{BC}}\left|u\left(\mathbf{x}<em>{BC}^{i}, t</em>{BC}^{i}\right)-u^{i}\right|^{2}
+\end{equation}
+\begin{equation}
+\color{blue}
+L_{IC}=\frac{1}{N_{IC}} \sum_{i=1}^{N_{IC}}\left|u\left(\mathbf{x}<em>{IC}^{i}, t</em>{IC}^{i}\right)-u^{i}\right|^{2}
+\end{equation}
+<span class="math notranslate nohighlight">\(L_{BC}\)</span> and <span class="math notranslate nohighlight">\(L_{IC}\)</span> represent the constraints imposed by the boundary and initial conditions, calculated on a set of <span class="math notranslate nohighlight">\(N_{BC}\)</span> boundary points and <span class="math notranslate nohighlight">\(N_{IC}\)</span> initial points respectively, with <span class="math notranslate nohighlight">\(u_i\)</span> being the ground truth.</p>
+<img src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/colloc_points.png?raw=1" alt="Domain" width="400"/>
+<p>Once sufficiently trained, the network can be used as a solver for the PDE, potentially for a range of parameters <span class="math notranslate nohighlight">\( \lambda \)</span>.</p>
+<p>Since PINNs can be used to solve systems of arbitrary resolutions once they are trained and generalise well over different parameter spaces, they might be used to accelerate the solution of PDEs.</p>
+<p>The following function creates the collocation points for the equation, boundary and initial conditions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_physics_colloc_points</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span><span class="n">analytical_solution_function</span><span class="p">):</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_X</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_T</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    
+    <span class="n">x_physics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">t_physics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">x_physics</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x_physics</span><span class="p">)</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">t_physics</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">t_physics</span><span class="p">)</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">f_colloc</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x_physics</span><span class="p">,</span> <span class="n">t_physics</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    
+    <span class="n">t_ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">X_ic</span><span class="p">,</span> <span class="n">T_ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t_ic</span><span class="p">)</span>
+    
+    <span class="n">x_ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">X_ic</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">t_ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">T_ic</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">ic_sol</span> <span class="o">=</span> <span class="n">analytical_solution_function</span><span class="p">(</span><span class="n">x_ic</span><span class="p">,</span><span class="n">t_ic</span><span class="p">,</span> <span class="n">omega</span><span class="p">)</span>
+    <span class="n">ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">ic_sol</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">ic_sol</span><span class="p">)))</span>
+    
+    <span class="n">ic</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    
+    <span class="n">x_ic</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x_ic</span><span class="p">)</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">t_ic</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">t_ic</span><span class="p">)</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">ic_colloc</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x_ic</span><span class="p">,</span> <span class="n">t_ic</span><span class="p">))</span>
+    
+    <span class="n">x_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_dom</span><span class="p">)</span>
+    <span class="n">X_b</span><span class="p">,</span> <span class="n">T_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x_b</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">x_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">X_b</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">t_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">T_b</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">x_b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x_b</span><span class="p">)</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">t_b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">t_b</span><span class="p">)</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">b_colloc</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x_b</span><span class="p">,</span> <span class="n">t_b</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">x_physics</span><span class="p">,</span> <span class="n">t_physics</span><span class="p">,</span><span class="n">f_colloc</span><span class="p">,</span> <span class="n">b_colloc</span><span class="p">,</span> <span class="n">ic_colloc</span><span class="p">,</span> <span class="n">ic</span>
+
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">x_dom</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">]</span>
+<span class="n">t_dom</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="p">]</span>
+<span class="n">delta_x</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">delta_t</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">analytical_solution_function</span> <span class="o">=</span> <span class="n">get_analytical_solution_base</span>
+<span class="n">x_physics</span><span class="p">,</span> <span class="n">t_physics</span><span class="p">,</span> <span class="n">f_colloc</span><span class="p">,</span> <span class="n">b_colloc</span><span class="p">,</span> <span class="n">ic_colloc</span><span class="p">,</span> <span class="n">ic</span> <span class="o">=</span> <span class="n">get_physics_colloc_points</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_x</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">,</span> <span class="n">analytical_solution_function</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p>Exercise: What will the loss terms look like in this case? Hint: Split the Schrodinger equation in real and imaginary parts to calculate the equation loss.</p>
+<p>Solution: The time-dependent Schrödinger equation can be written as
+\begin{equation}
+\left(-\frac{\partial v}{\partial t}+\frac{1}{2}\frac{\partial^{2} u}{\partial x^{2}}-\frac{\omega^{2}}{2}x^{2}\right) + i \left(\frac{\partial u}{\partial t}+\frac{1}{2}\frac{\partial^{2} v}{\partial x^{2}}-\frac{\omega^{2}}{2}x^{2}\right) = 0
+\end{equation}</p>
+<p>The loss function <span class="math notranslate nohighlight">\(L\)</span> is given by
+\begin{equation}
+L=L_{f}+L_{BC}+L_{IC}
+\end{equation}</p>
+<p>\begin{equation*}
+L_{BC}=\frac{1}{N_{BC}} \sum_{i=1}^{N_{BC}}\left(\left|u\left(\mathbf{r}<em>{BC}^{i}, t</em>{BC}^{i}\right)-u^{i}\right|^{2}+\left|v\left(\mathbf{r}<em>{BC}^{i}, t</em>{BC}^{i}\right)-v^{i}\right|^{2}\right)
+\end{equation*}
+\begin{equation*}
+L_{IC}=\frac{1}{N_{IC}} \sum_{i=1}^{N_{IC}}\left(\left|v\left(\mathbf{r}<em>{IC}^{i}, t</em>{IC}^{i}\right)-u^{i}\right|^{2}+\left|v\left(\mathbf{r}<em>{IC}^{i}, t</em>{IC}^{i}\right)-v^{i}\right|^{2}\right)
+\end{equation*}
+\begin{equation*}
+L_{f}=\frac{1}{N_{f}} \sum_{i=1}^{N_{f}}\left|f_{net}\left(\mathbf{r}<em>{f}^{i}, t</em>{f}^{i}\right)\right|^{2}
+\end{equation*}
+At each training step, the loss function is calculated on <span class="math notranslate nohighlight">\(N_f\)</span> collocation points, sampled randomly from the grid.</p>
+<hr class="docutils" />
+<p>We need to modify the training loop to calculate the new physics informed loss function:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_pinn</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">x_physics</span><span class="p">,</span> <span class="n">t_physics</span><span class="p">,</span> <span class="n">f_colloc</span><span class="p">,</span> <span class="n">b_colloc</span><span class="p">,</span> <span class="n">ic_colloc</span><span class="p">,</span> <span class="n">ic</span><span class="p">):</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+    <span class="n">loss_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch </span><span class="se">\t</span><span class="s2"> Loss </span><span class="se">\t</span><span class="s2"> PDE Loss&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+
+        <span class="n">loss1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_pred</span><span class="o">-</span><span class="n">train_y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># calculate loss on colloc points</span>
+
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">f_colloc</span><span class="p">)</span>
+
+        <span class="n">u</span> <span class="o">=</span> <span class="n">y_pred</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">y_pred</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">du_dx</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">x_physics</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">du_dxx</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">du_dx</span><span class="p">,</span> <span class="n">x_physics</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">du_dx</span><span class="p">),</span> <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">du_dt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">u</span><span class="p">,</span>  <span class="n">t_physics</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_pred</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]),</span>  <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;flag_2&quot;</span><span class="p">)</span>
+        <span class="n">dv_dx</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">x_physics</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dv_dxx</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">dv_dx</span><span class="p">,</span> <span class="n">x_physics</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">dv_dx</span><span class="p">),</span> <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dv_dt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">v</span><span class="p">,</span>  <span class="n">t_physics</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">v</span><span class="p">),</span>  <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;flag_3&quot;</span><span class="p">)</span>
+        <span class="n">loss_u</span> <span class="o">=</span> <span class="o">-</span><span class="n">du_dt</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">dv_dxx</span> <span class="o">+</span> <span class="n">omega</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x_physics</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">loss_v</span> <span class="o">=</span> <span class="o">-</span><span class="n">dv_dt</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">du_dxx</span> <span class="o">+</span> <span class="n">omega</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x_physics</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">loss_physics</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">loss_u</span><span class="p">,</span> <span class="n">loss_v</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;flag_4&quot;</span><span class="p">)</span>
+        <span class="n">y_pred_b</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">b_colloc</span><span class="p">)</span>
+        <span class="n">y_pred_ic</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">ic_colloc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;flag_5&quot;</span><span class="p">)</span>
+        <span class="n">loss_b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_pred_b</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">loss_ic</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_pred_ic</span> <span class="o">-</span> <span class="n">ic</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">loss2</span> <span class="o">=</span>  <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">loss_physics</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">loss_b</span> <span class="o">+</span> <span class="n">loss_ic</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;flag_6&quot;</span><span class="p">)</span>
+        
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss1</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1e-4</span><span class="p">)</span> <span class="o">*</span> <span class="n">loss2</span><span class="c1"># add two loss terms together</span>
+        <span class="n">loss_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;flag_7&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">500</span> <span class="o">==</span> <span class="mi">499</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">loss2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">loss_list</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will now train the PINN on the same reduced domain</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">activation</span> <span class="o">=</span>  <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()</span>
+
+<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">model_pinn</span> <span class="o">=</span> <span class="n">NN</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">activation</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">model_pinn</span><span class="p">,</span> <span class="n">loss_pinn</span> <span class="o">=</span> <span class="n">train_pinn</span><span class="p">(</span><span class="n">model_pinn</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">x_physics</span><span class="p">,</span> <span class="n">t_physics</span><span class="p">,</span> <span class="n">f_colloc</span><span class="p">,</span> <span class="n">b_colloc</span><span class="p">,</span> <span class="n">ic_colloc</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 	 Loss 	 PDE Loss
+499 0.014588414251169447 0.5443244929559579
+999 0.002058554369728116 0.4799960929863507
+1499 0.0007540043018148458 0.3216319123135969
+1999 0.00038931387695623367 0.27484341115965116
+2499 0.00023595447359745278 0.2569572409307202
+2999 0.000158257000758754 0.24769969410456613
+3499 0.0001154300560640647 0.24294978788062438
+3999 9.19369914219916e-05 0.23661802417478667
+4499 9.809261187690034e-05 0.22849242834697905
+4999 0.00014050033534194838 0.22218900422583202
+5499 0.00016207204596536265 0.21412103781745903
+5999 5.723170283460189e-05 0.2091539435592804
+6499 4.986156832939039e-05 0.20496283282055766
+6999 4.6562454829249695e-05 0.2007685527469722
+7499 4.3908198663182856e-05 0.19788276856428746
+7999 4.16502262907032e-05 0.19478325506040106
+8499 3.946883346233006e-05 0.19255379059388705
+8999 0.0003063508404629575 0.19424935502353655
+9499 3.572160875857124e-05 0.18852057031774608
+9999 3.425490368570865e-05 0.18672311737939432
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">get_model_error</span><span class="p">(</span><span class="n">model_pinn</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model loss: 
+ loss_u = 0.00516848161584791 
+ loss_v = 0.004252249186625069 
+ loss_dens = 0.0010684554679226545
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.01</span>
+    
+<span class="n">n_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">n_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_T</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">inference</span><span class="p">(</span><span class="n">model_pinn</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="s1">&#39;pinn_reduced&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 finished
+1 finished
+2 finished
+</pre></div>
+</div>
+<img alt="../../_images/cccc84c21d19e22e884cd6b5d6f78900350bfeb8613f4e6bdc7e3761d276f93b.png" src="../../_images/cccc84c21d19e22e884cd6b5d6f78900350bfeb8613f4e6bdc7e3761d276f93b.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mse: u: 0.005168481615847908, v:0.00425224918662507
+</pre></div>
+</div>
+</div>
+</div>
+<p>The PINN model matches the system well, even when trained on reduced data.</p>
+<section id="training-considerations">
+<h4>Training Considerations<a class="headerlink" href="#training-considerations" title="Permalink to this headline">#</a></h4>
+<section id="architecture">
+<h5>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">#</a></h5>
+<p>The architecture and associated hyperparameters have significant impact on the performance of the PINN. The learning model architecture can be customized depending on the nature of the domain. For example, CNNs, RNNs and GNNs can be used for spatial, temporal and interacting problems respectively. For the one-dimensional quantum harmonic oscillator workflow, we use a FCN with 3 layers of 20 neurons each.</p>
+<p>Optimizer selection is important for convergence of the learner and to avoid solutions at local minima. It has been shown that a combination of Adam  at early training and L-BFGS for later stages has been effective for solving a variety of PDEs through PINNs. We use the Adam optimizer only given the relatively simple nature of this problem.</p>
+<hr class="docutils" />
+<p>Exercise: Try running the PINN with ReLU activation function. What are your observations? Why would this activation function not work?</p>
+<p>Solution: As we saw in calculating the residual, the choice of activation functions is constrained by the fact that they have to be <span class="math notranslate nohighlight">\((n+1)\)</span>-differentiable for <span class="math notranslate nohighlight">\(n\)</span>-order PDEs. For the one-dimensional quantum harmonic oscillator problem we use <span class="math notranslate nohighlight">\(\tanh\)</span> activation functions because they are 3-differentiable.</p>
+</section>
+<hr class="docutils" />
+<section id="collocation-points">
+<h5>Collocation Points<a class="headerlink" href="#collocation-points" title="Permalink to this headline">#</a></h5>
+<p>The accuracy of the NN increases with increase in density of collocation points. However, the computational resources required also increases exponentially with the increase in density of points. This can lead to training bottlenecks, especially for high dimensional systems. A trade-off has to be made between the desired accuracy and number of collocation points because training the NN on a large number of points may lead to overfitting and adversely affect generalisability. The distribution of points can also be customised according to the problem domain. Density could be increased around areas of sharp discontinuities to capture more information about the domain.</p>
+<hr class="docutils" />
+<p>Exercise: What is the effect of changing collocation points on the training time and accuracy of the Neural Network? You can run it multiple times with different grids of collocation point to observe this.</p>
+<p>Solution</p>
+<p>Training time and accuracy both increase exponentially with collocation grid size.</p>
+<img src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/pinn_colloc_time.png?raw=1" alt="Domain" width="300"/>
+<img src="https://github.com/GDS-Education-Community-of-Practice/DSECOP/blob/main/Learning_the_Schrodinger_Equation/res/fig/pinn_colloc_performance.png?raw=1" alt="Domain" width="300"/>
+</section>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="higher-energy-states">
+<h2>Higher energy states<a class="headerlink" href="#higher-energy-states" title="Permalink to this headline">#</a></h2>
+<p>We will now check the performance of NNs on systems with higher energy states. For demonstration, the system used is <span class="math notranslate nohighlight">\(\psi_{1,3}(x,t)\)</span>.  Let’s derive the analytical equation first.</p>
+<hr class="docutils" />
+<p>Exercise:</p>
+<p>a) Derive the first Hermite Polynomial (<span class="math notranslate nohighlight">\(H_{3}(y)\)</span>) in terms of <span class="math notranslate nohighlight">\(x\)</span> for <span class="math notranslate nohighlight">\(y=\sqrt{\omega}x\)</span>:</p>
+<p>Derivation here
+<span class="math notranslate nohighlight">\(H_{3}(\sqrt{\omega}x) = \)</span></p>
+<p>b) Write down the ground state and first excited state energies for QHO:</p>
+<p><span class="math notranslate nohighlight">\(E_1 =\)</span>,
+<span class="math notranslate nohighlight">\(E_3=\)</span></p>
+<p>c) Use your results from <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> to write down <span class="math notranslate nohighlight">\(\psi_{0,1}(x,t)\)</span>, and simplify it:</p>
+<p><span class="math notranslate nohighlight">\(\psi_{1,3}(x,t) = \)</span></p>
+<hr class="docutils" />
+<p>Now that we have our analytical solution, let’s write some code to compute it for arbitrary values of <span class="math notranslate nohighlight">\(x,t,\omega\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_analytical_solution_1_3</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">T</span><span class="p">,</span> <span class="n">omega</span><span class="p">):</span>
+    <span class="c1">#Solution:</span>
+    <span class="n">phi_0</span> <span class="o">=</span><span class="p">(</span><span class="n">omega</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mf">4.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">X</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">*</span> <span class="n">X</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">phi_1</span> <span class="o">=</span> <span class="n">phi_0</span> <span class="o">*</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">omega</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">X</span>
+    <span class="n">phi_3</span> <span class="o">=</span> <span class="n">phi_0</span> <span class="o">*</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">48</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">8.</span> <span class="o">*</span> <span class="n">omega</span><span class="o">**</span><span class="p">(</span><span class="mf">3.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="o">**</span><span class="mf">3.</span> <span class="o">-</span> <span class="mf">12.</span> <span class="o">*</span> <span class="n">omega</span><span class="o">**</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+    <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mf">3.</span><span class="o">/</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">phi_1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mf">7.</span><span class="o">/</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">phi_3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">psi</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can explore the system here:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@interact</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">62</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">interactive_viz_colour</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="n">tstr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;res/plots/waveform/psi_1_3/t_</span><span class="si">{</span><span class="n">tstr</span><span class="si">}</span><span class="s2">.png&quot;</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6fd5b7fa0aae4678b7ab3781089d58c2", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p>Using a reduced grid with Fully Connected Network, we have</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">x_dom</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="n">L</span><span class="o">/</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">t_dom</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="p">]</span>
+
+<span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">get_data_set</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">get_analytical_solution_1_3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">x_dom</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">]</span>
+<span class="n">t_dom</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="p">]</span>
+
+<span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">get_data_set</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">get_analytical_solution_1_3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">314</span><span class="p">)</span>
+<span class="n">activation</span> <span class="o">=</span>  <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()</span>
+
+<span class="n">model_nn_he</span> <span class="o">=</span> <span class="n">NN</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">activation</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model_nn_he</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+
+<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">10000</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">model_nn_he</span><span class="p">,</span> <span class="n">loss_list</span> <span class="o">=</span> <span class="n">train_nn</span><span class="p">(</span><span class="n">model_nn_he</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 	 Loss
+499 0.034809453102885676
+999 0.030786555204334227
+1499 0.02907982634276107
+1999 0.033683469878052846
+2499 0.024811452346783513
+2999 0.026859324872237224
+3499 0.01611370504438341
+3999 0.01373734165642021
+4499 0.009157062019268105
+4999 0.00441642006104217
+5499 0.0029738992478210977
+5999 0.002269330596084852
+6499 0.001672780221128712
+6999 0.0013077238485355175
+7499 0.0010435229522720328
+7999 0.000857197756316792
+8499 0.0007343709393509518
+8999 0.0006472263983559566
+9499 0.0005769506298125256
+9999 0.0005220533191790342
+CPU times: user 19.2 s, sys: 443 ms, total: 19.6 s
+Wall time: 19.6 s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">get_model_error</span><span class="p">(</span><span class="n">model_nn_he</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model loss: 
+ loss_u = 0.2113315194458714 
+ loss_v = 0.3353877582002243 
+ loss_dens = 1.1275057879748
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.01</span>
+    
+<span class="n">n_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">n_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_T</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">inference</span><span class="p">(</span><span class="n">model_nn_he</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="s1">&#39;high_nn&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 finished
+1 finished
+2 finished
+</pre></div>
+</div>
+<img alt="../../_images/f9c3071fc5d41fbd77e852400d1b5a4d59005ba27d466e9f62301861310909bc.png" src="../../_images/f9c3071fc5d41fbd77e852400d1b5a4d59005ba27d466e9f62301861310909bc.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mse: u: 0.21133151944587134, v:0.3353877582002243
+</pre></div>
+</div>
+</div>
+</div>
+<p>This does not capture any detail beyond the domain, as seen in Abs Err plots. Now for PINNs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">x_dom</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">]</span>
+<span class="n">t_dom</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="p">]</span>
+<span class="n">delta_x</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">delta_t</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">analytical_solution_function</span> <span class="o">=</span> <span class="n">get_analytical_solution_1_3</span>
+<span class="n">x_physics</span><span class="p">,</span> <span class="n">t_physics</span><span class="p">,</span> <span class="n">f_colloc</span><span class="p">,</span> <span class="n">b_colloc</span><span class="p">,</span> <span class="n">ic_colloc</span><span class="p">,</span> <span class="n">ic</span> <span class="o">=</span> <span class="n">get_physics_colloc_points</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_x</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">,</span> <span class="n">analytical_solution_function</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">314</span><span class="p">)</span>
+<span class="n">activation</span> <span class="o">=</span>  <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()</span>
+
+<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">model_pinn_he</span> <span class="o">=</span> <span class="n">NN</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">activation</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_pinn_he</span><span class="p">,</span> <span class="n">loss_pinn</span> <span class="o">=</span> <span class="n">train_pinn</span><span class="p">(</span><span class="n">model_pinn_he</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">x_physics</span><span class="p">,</span> <span class="n">t_physics</span><span class="p">,</span> <span class="n">f_colloc</span><span class="p">,</span> <span class="n">b_colloc</span><span class="p">,</span> <span class="n">ic_colloc</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 	 Loss 	 PDE Loss
+499 0.034803117992665465 1.1667212556950206
+999 0.03080661748468727 0.9102277347125427
+1499 0.029011485030139332 0.8099567745655031
+1999 0.027366627375488218 0.6969416412395543
+2499 0.023667374934388502 0.6343179719309765
+2999 0.018697094181439174 0.7179467758557815
+3499 0.014774993096889975 0.8688947931147813
+3999 0.01121611436901174 1.0013782984546737
+4499 0.005256826175077747 1.1044659624741808
+4999 0.004745468996227827 1.1670928199706354
+5499 0.0023380698994579755 1.1925015458188803
+5999 0.0018022641678938646 1.0680970899961457
+6499 0.0014308055296009437 0.9238753106875812
+6999 0.0011654367116035905 0.806654010949012
+7499 0.0009624189663925361 0.7412493637868978
+7999 0.0008024517683698533 0.6961971114952735
+8499 0.000684684177448262 0.632948814883765
+8999 0.0006008142358437354 0.589142637624267
+9499 0.0005373119181883912 0.5558214217509265
+9999 0.00048418140148084643 0.5240594055872836
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">get_model_error</span><span class="p">(</span><span class="n">model_pinn_he</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model loss: 
+ loss_u = 0.07000495299861727 
+ loss_v = 0.04059630999458069 
+ loss_dens = 0.012610235045540943
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">delta_T</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">delta_X</span> <span class="o">=</span> <span class="mf">0.01</span>
+    
+<span class="n">n_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">n_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t_dom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t_dom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">delta_T</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">get_data_set</span><span class="p">(</span><span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">delta_X</span><span class="p">,</span> <span class="n">delta_T</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">get_analytical_solution_1_3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inference</span><span class="p">(</span><span class="n">model_pinn_he</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">x_dom</span><span class="p">,</span> <span class="n">t_dom</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="s1">&#39;high_pinn&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 finished
+1 finished
+2 finished
+</pre></div>
+</div>
+<img alt="../../_images/cd721ee1bc33b752286c7cc03f0c4ca6e61d46418b1972a34d4fb87dc4f1918d.png" src="../../_images/cd721ee1bc33b752286c7cc03f0c4ca6e61d46418b1972a34d4fb87dc4f1918d.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mse: u: 0.07000495299861725, v:0.04059630999458068
+</pre></div>
+</div>
+</div>
+</div>
+<p>For higher energy states, it is difficult to capture the details with fully connected layers. PINNs can be extended with Recurrent Neural Networks to tackle this.</p>
+</section>
+<section id="project-ideas">
+<h2>Project Ideas<a class="headerlink" href="#project-ideas" title="Permalink to this headline">#</a></h2>
+<ol class="arabic simple">
+<li><p>Experiment with different layer types for the higher energy states. One particular layer that might be useful would be gru layer (<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.GRU.html">https://pytorch.org/docs/stable/generated/torch.nn.GRU.html</a>). These layers are used for time series forecasting in Recurrent Neural Networks, which might be helpful for our time dependent system.</p></li>
+<li><p>You can also use causal training loss for the higer energy states. The loss we have been using so far does not take causality into account. For a causal loss function, we divide the domain into consecutive time chunks and use a weighted sum of losses that enforces order in time. You can read more about it here:</p></li>
+<li><p>Modify the PINNs to work with 2D QHO system
+Hint: Since this is a separable system, we can extend it to 2D as follow:
+\begin{equation*}
+\phi_n = \phi_n(x)\phi_n(y)
+\end{equation*}
+\begin{equation*}
+\hat{H} =\hat{H_x}+\hat{H_y}
+\end{equation*}</p></li>
+<li><p>Can the neural network generalize over other parameters as well? Add <span class="math notranslate nohighlight">\(\omega\)</span> as an input to the neural network and train it to work with a range of <span class="math notranslate nohighlight">\(\omega\)</span> values.</p></li>
+<li><p>Implement this network for other systems such as infinite square well.</p></li>
+</ol>
+<!-- Solutions: --></section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./DSECOP/Learning_the_Schrodinger_Equation"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-dependent-quantum-harmonic-oscillator">Time Dependent Quantum Harmonic Oscillator</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-case-psi-0-1-x-t">Base case: <span class="math notranslate nohighlight">\(\psi_{0,1}(x,t)\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fully-connected-neural-network">Fully Connected Neural Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#physics-informed-neural-network">Physics-Informed Neural Network</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#training-considerations">Training Considerations</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#collocation-points">Collocation Points</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#higher-energy-states">Higher energy states</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#project-ideas">Project Ideas</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

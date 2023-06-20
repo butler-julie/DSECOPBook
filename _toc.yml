@@ -1,0 +1,12 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption: Exploratory Data Analysis
+    chapters:
+    - file: DSECOP/Exploratory_Data_Analysis/README.md
+    - file: DSECOP/Exploratory_Data_Analysis/01_dataset_cleaning.ipynb
+    - file: DSECOP/Exploratory_Data_Analysis/02_preprocessing_techniques.ipynb
+

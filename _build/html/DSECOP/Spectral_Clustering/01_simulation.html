@@ -1,0 +1,737 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Part 1: Coupled Spring System Simulation &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'DSECOP/Spectral_Clustering/01_simulation';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Table of Contents
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploratory Data Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/README.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/01_dataset_cleaning.html">Exploratory Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Exploratory_Data_Analysis/02_preprocessing_techniques.html">Preprocessing Techniques for Machine Learning</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FDSECOP/Spectral_Clustering/01_simulation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/DSECOP/Spectral_Clustering/01_simulation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Part 1:  Coupled Spring System Simulation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-setup">The Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equation-of-motion">Equation of Motion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrate-the-equation-of-motion">Integrate the Equation of Motion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quizs">Quizs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quiz-1">Quiz 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homework">Homework</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1">Problem 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2">Problem 2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Solution:</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p><a href="https://colab.research.google.com/github/GDS-Education-Community-of-Practice/DSECOP/blob/main/Spectral_Clustering/01_simulation.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="part-1-coupled-spring-system-simulation">
+<h1>Part 1:  Coupled Spring System Simulation<a class="headerlink" href="#part-1-coupled-spring-system-simulation" title="Permalink to this headline">#</a></h1>
+<section id="the-setup">
+<h2>The Setup<a class="headerlink" href="#the-setup" title="Permalink to this headline">#</a></h2>
+<p>Consider we have system with <span class="math notranslate nohighlight">\(3\)</span> particles and they are connected with springs pariwisely. The spring that connects particle <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> has spring constant <span class="math notranslate nohighlight">\(k_{ij}\)</span>. Specifically, the spring that connects particle <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(2\)</span> has spring constant <span class="math notranslate nohighlight">\(k_{12}\)</span> and the spring that connects particle <span class="math notranslate nohighlight">\(2\)</span> and <span class="math notranslate nohighlight">\(3\)</span> has spring constant <span class="math notranslate nohighlight">\(k_{23}\)</span> and there is a spring that connects particle <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(3\)</span> which has spring constant <span class="math notranslate nohighlight">\(k_{13}\)</span>. Also, notice <span class="math notranslate nohighlight">\(k_{12} = k_{21}\)</span> since the spring that connects particle <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(2\)</span> is the same as the one connecting <span class="math notranslate nohighlight">\(2\)</span> and <span class="math notranslate nohighlight">\(1\)</span>. For any <span class="math notranslate nohighlight">\(i,j\)</span>, we have <span class="math notranslate nohighlight">\(k_{ij} = k_{ji}\)</span>. The setup is shown below.</p>
+<p>As a physicist, we would like to study the motion of the sytem for a given initial condition. To simplify the notation, we will use <span class="math notranslate nohighlight">\(x_i\)</span> to denote the displacement of particle <span class="math notranslate nohighlight">\(i\)</span> from its equilibrium position.
+The coordinate definition is shown below:
+<img alt="figs/spring_setup.png" src="DSECOP/Spectral_Clustering/attachment:spring_setup-2.png" /></p>
+</section>
+<section id="equation-of-motion">
+<h2>Equation of Motion<a class="headerlink" href="#equation-of-motion" title="Permalink to this headline">#</a></h2>
+<p>In order to study the motion of the system, we first need to setup the equation of motion from the Newton’s second law. For particle <span class="math notranslate nohighlight">\(1\)</span>, we have the force from spring <span class="math notranslate nohighlight">\(k_{12}\)</span> and spring <span class="math notranslate nohighlight">\(k_{13}\)</span> and thus, we have</p>
+<div class="math notranslate nohighlight">
+\[
+m\frac{d^2 x_1}{dt^2} = k_{12}(x_2-x_1) + k_{13}(x_3-x_1)
+\]</div>
+<p>For particle <span class="math notranslate nohighlight">\(2\)</span>, we have spring <span class="math notranslate nohighlight">\(k_{21}\)</span> with displacement <span class="math notranslate nohighlight">\(x_2-x_1\)</span> pulling to the left and <span class="math notranslate nohighlight">\(k_{23}\)</span> with displacement <span class="math notranslate nohighlight">\(x_3- x_2\)</span> pulling to the right and thus</p>
+<div class="math notranslate nohighlight">
+\[
+m\frac{d^2 x_2}{dt^2} = -k_{21}(x_2-x_1) + k_{23}(x_3-x_2)
+\]</div>
+<p>For particle <span class="math notranslate nohighlight">\(3\)</span>, the spring <span class="math notranslate nohighlight">\(k_{31}\)</span> and <span class="math notranslate nohighlight">\(k_{32}\)</span> with displacements <span class="math notranslate nohighlight">\((x_3-x_1)\)</span> and <span class="math notranslate nohighlight">\((x_3-x_2)\)</span> respectively to the left and thus</p>
+<div class="math notranslate nohighlight">
+\[
+m\frac{d^2 x_3}{dt^2} = -k_{31}(x_3-x_1) - k_{32}(x_3-x_2)
+\]</div>
+<p>We can rearrange the right hand side of the equations and put them together to get</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp;m\frac{d^2 x_1}{dt^2} = - (k_{12} + k_{13})x_1 + k_{12} x_2 + k_{13} x_3 \\
+&amp;m\frac{d^2 x_2}{dt^2} = - (k_{21} + k_{23})x_2 + k_{21} x_1 + k_{23} x_3 \\
+&amp;m\frac{d^2 x_3}{dt^2} = - (k_{31} + k_{32})x_3 + k_{31} x_1 + k_{32} x_2\\
+\end{aligned}
+\end{split}\]</div>
+</section>
+<section id="integrate-the-equation-of-motion">
+<h2>Integrate the Equation of Motion<a class="headerlink" href="#integrate-the-equation-of-motion" title="Permalink to this headline">#</a></h2>
+<p>We could solve the equation of motion analytically but to focus on the results, we skip this part and try to solve it numerically. Here we use the <code class="docutils literal notranslate"><span class="pre">scipy.integrate.solve_ivp</span></code> to perform Runge-Kutta integration which is a numerical integration method that has the fourth order error scaling. This numerical method simulates the force and displacements <span class="math notranslate nohighlight">\(x\)</span> step by step with time stepsize <span class="math notranslate nohighlight">\(\Delta t\)</span>.
+The method can guarantee that <span class="math notranslate nohighlight">\(x'(t)\)</span> and the true <span class="math notranslate nohighlight">\(x(t)\)</span> have error <span class="math notranslate nohighlight">\(|x'(t)-x(t)|\sim (\Delta t)^4\)</span>.</p>
+<p>In order to use this RK5 integration method, we should rewrite our equation of motion in terms of displacements <span class="math notranslate nohighlight">\(x_i\)</span> and <span class="math notranslate nohighlight">\(v_i\)</span> where <span class="math notranslate nohighlight">\(v_i = \dot{x}_i\)</span>. The equation then becomes trivially as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp;\frac{dx_1}{dt} = v_1 dt\\
+&amp;\frac{dx_2}{dt} = v_2 dt\\
+&amp;\frac{dx_3}{dt} = v_3 dt\\
+&amp;m\frac{d v_1}{dt} = - (k_{12} + k_{13})x_1 + k_{12} x_2 + k_{13} x_3 \\
+&amp;m\frac{d v_2}{dt} = - (k_{21} + k_{23})x_2 + k_{21} x_1 + k_{23} x_3 \\
+&amp;m\frac{d v_3}{dt} = - (k_{31} + k_{32})x_3 + k_{31} x_1 + k_{32} x_2\\
+\end{aligned}
+\end{split}\]</div>
+<p>The second step is to tell the computer this equation. In order to do that, we should tell the computer what the parameters <span class="math notranslate nohighlight">\(k_{ij}\)</span> are. The <span class="math notranslate nohighlight">\(k_{ij}\)</span> will be kept in an <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> with the <span class="math notranslate nohighlight">\((i,j)\)</span> term as <span class="math notranslate nohighlight">\(k_{ij}\)</span>. Let’s assume we already have this parameter and we are ready to write above equations into code!</p>
+<p>The functions we want to get from the numerical integrator is <span class="math notranslate nohighlight">\(x_1(t), x_2(t), x_3(t), v_1(t), v_2(t), v_3(t)\)</span>. We can keep them into an <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> called <code class="docutils literal notranslate"><span class="pre">xv</span></code> and we should prodce the derivative for them. First the derivative for <span class="math notranslate nohighlight">\(x_t\)</span> should be given as the function <code class="docutils literal notranslate"><span class="pre">dx_dt</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dx_dt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">xv</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">xv</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here the function takes an argument of time <span class="math notranslate nohighlight">\(t\)</span> is because the derivative in general could depend on <span class="math notranslate nohighlight">\(t\)</span> and thus this is required in <code class="docutils literal notranslate"><span class="pre">scipy.integrate.solve_ivp</span></code>. However, in our problem we do not need <code class="docutils literal notranslate"><span class="pre">t</span></code> and thus it only passed in but does not play a role in the computation.</p>
+<p>The equation derivative of <span class="math notranslate nohighlight">\(v_i\)</span> not only depends <span class="math notranslate nohighlight">\(x_t\)</span> but also on <span class="math notranslate nohighlight">\(k_{ij}\)</span>, we thus need a function that gives us a function <code class="docutils literal notranslate"><span class="pre">dv_dt</span></code> which already taken the information from <span class="math notranslate nohighlight">\(k\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">produce_dv_dt</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">dv_dt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">xv</span><span class="p">):</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span> <span class="o">=</span> <span class="n">xv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="n">dv1</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="n">x1</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span><span class="n">x2</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x3</span>
+        <span class="n">dv2</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="n">x2</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span><span class="n">x1</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x3</span>
+        <span class="n">dv3</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">x3</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span><span class="n">x1</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x2</span>
+        
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">dv3</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">dv_dt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We then could produce the integrate function which takes initial condition and the parameters <span class="math notranslate nohighlight">\(k_{ij}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.integrate</span> 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="n">xv_initial</span><span class="p">,</span> <span class="n">ti</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="n">dv_dt</span> <span class="o">=</span> <span class="n">produce_dv_dt</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">dxv_dt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">xv</span><span class="p">):</span>
+        <span class="n">dxdt</span> <span class="o">=</span> <span class="n">dx_dt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">xv</span><span class="p">)</span>
+        <span class="n">dvdt</span> <span class="o">=</span> <span class="n">dv_dt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">xv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">dxdt</span><span class="p">,</span> <span class="n">dvdt</span><span class="p">])</span>
+    <span class="n">t_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ti</span><span class="p">,</span><span class="n">tf</span><span class="p">,</span><span class="n">steps</span><span class="p">)</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">solve_ivp</span><span class="p">(</span><span class="n">dxv_dt</span><span class="p">,</span> <span class="p">(</span><span class="n">ti</span><span class="p">,</span> <span class="n">tf</span><span class="p">),</span> <span class="n">xv_initial</span><span class="p">,</span> <span class="n">t_eval</span> <span class="o">=</span> <span class="n">t_eval</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">t</span>
+    <span class="n">xv</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">y</span>
+    <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">xv</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:],</span> <span class="n">xv</span><span class="p">[</span><span class="mi">3</span><span class="p">:,:]</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<p>We could then perform the calculation for 10 seconds with initial condition that <span class="math notranslate nohighlight">\(v = 0\)</span>, <span class="math notranslate nohighlight">\(x_1 =1.0, x_2 = 0.5\)</span> and <span class="math notranslate nohighlight">\(x_3 = -1\)</span>. The spring setup is <span class="math notranslate nohighlight">\(k_{12} = 10\)</span> while <span class="math notranslate nohighlight">\(k_{13} = 1\)</span> and <span class="math notranslate nohighlight">\(k_{23} = 1\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_X</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;x2&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">,:],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;x3&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">xv_initial_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">ti</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">k1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">k1</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># k12</span>
+<span class="n">k1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k1</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># k23</span>
+<span class="n">k1</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k1</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># k13</span>
+
+
+<span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">integrate</span><span class="p">(</span><span class="n">xv_initial_1</span><span class="p">,</span> <span class="n">ti</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">k1</span> <span class="p">)</span>
+
+<span class="n">plot_X</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/44b98ce29b02e0c089d73bf9019b55cd76e4c0a32325ccef8c3c54f44078ccbe.png" src="../../_images/44b98ce29b02e0c089d73bf9019b55cd76e4c0a32325ccef8c3c54f44078ccbe.png" />
+</div>
+</div>
+<p>From the plot we could see that the particle <span class="math notranslate nohighlight">\(1\)</span> and particle <span class="math notranslate nohighlight">\(2\)</span> has same oscillation frequency and similar magnitude. We thus naturally will infer that <strong>particles with stronger pairwise coupling constant (the spring constant) tend to oscillate together</strong>. We could verify our guess by changing the spring constant <span class="math notranslate nohighlight">\(k_{13}\)</span> to <span class="math notranslate nohighlight">\(10\)</span> and <span class="math notranslate nohighlight">\(k_{12}\)</span>, <span class="math notranslate nohighlight">\(k_{23}\)</span> to <span class="math notranslate nohighlight">\(1\)</span>. Thus, we would expect the particle <span class="math notranslate nohighlight">\(1\)</span> and particle <span class="math notranslate nohighlight">\(3\)</span> to oscillate together.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xv_initial_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">ti</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">k2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">k2</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k2</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># k12</span>
+<span class="n">k2</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># k23</span>
+<span class="n">k2</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># k13</span>
+
+
+<span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">integrate</span><span class="p">(</span><span class="n">xv_initial_2</span><span class="p">,</span> <span class="n">ti</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">k2</span> <span class="p">)</span>
+
+<span class="n">plot_X</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/7c59804df4672f9390e290b4295267bd5310cd45f61272c7affcf8b8dc5d9ac8.png" src="../../_images/7c59804df4672f9390e290b4295267bd5310cd45f61272c7affcf8b8dc5d9ac8.png" />
+</div>
+</div>
+<p>From the above plot, we could see that indeed, particle <span class="math notranslate nohighlight">\(1\)</span> and particle <span class="math notranslate nohighlight">\(3\)</span> oscillate in the similar phase and the distance between them is shorter than that between each of them with particle <span class="math notranslate nohighlight">\(2\)</span>.</p>
+<p>Note that we changed the initial coordinates of the particles. This is because we want to keep the system to have similar energies and do not want to just permute the labeling equivalently. We want to have similar energies because high energies could break the bonding between strong bonding pairs. We could verify that the two systems have similar energy by the following function:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_E</span><span class="p">(</span><span class="n">xv_initial</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span> <span class="o">=</span> <span class="n">xv_initial</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span> <span class="o">=</span> <span class="n">xv_initial</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+    <span class="n">potentials</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">x3</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">x3</span><span class="o">-</span><span class="n">x1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">kinetics</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">v1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">v2</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">v3</span><span class="o">**</span><span class="mi">2</span>
+    
+    <span class="k">return</span> <span class="n">potentials</span> <span class="o">+</span> <span class="n">kinetics</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;system 1 energy: </span><span class="si">%.3f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">get_E</span><span class="p">(</span><span class="n">xv_initial_1</span><span class="p">,</span> <span class="n">k1</span><span class="p">))</span> <span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;system 2 energy: </span><span class="si">%.3f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">get_E</span><span class="p">(</span><span class="n">xv_initial_2</span><span class="p">,</span> <span class="n">k2</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>system 1 energy: 4.375
+system 2 energy: 2.875
+</pre></div>
+</div>
+</div>
+</div>
+<p>From the above two examples, we could see that if spring constant is strong between two particles, they tend to oscillate together. If the partciles are not physical particles but abstract data points and the spring constant <span class="math notranslate nohighlight">\(k_{ij}\)</span> describes the similarity measure between data points, we could use the oscillating coordinates to group the data points. This is because, if two data points have large similarity measure (strong spring constants), they tend to oscillate together. As a result, the “oscillating” coordinates of the data points tend to help us to do clustering on the data pionts.</p>
+<p>In next part, we will precisely solve the oscillating system and see how we could use “normal modes” to cluster the “particles”.</p>
+</section>
+<section id="quizs">
+<h2>Quizs<a class="headerlink" href="#quizs" title="Permalink to this headline">#</a></h2>
+<section id="quiz-1">
+<h3>Quiz 1<a class="headerlink" href="#quiz-1" title="Permalink to this headline">#</a></h3>
+<p>In the second example, we set up <span class="math notranslate nohighlight">\(k_{12} = 1\)</span>, <span class="math notranslate nohighlight">\(k_{13} = 10\)</span> and <span class="math notranslate nohighlight">\(k_{23} = 1\)</span> and we set the initial condition as
+<span class="math notranslate nohighlight">\( x_1 = 1\)</span>, <span class="math notranslate nohighlight">\(x_2 = -0.5\)</span> and <span class="math notranslate nohighlight">\(x_3= 0.5\)</span>. What if we set <span class="math notranslate nohighlight">\(x_1 =1\)</span>, <span class="math notranslate nohighlight">\(x_2 = -1\)</span>, <span class="math notranslate nohighlight">\(x_3= 0.5\)</span>? What do you expect to happen?</p>
+</section>
+<section id="solution">
+<h3>Solution:<a class="headerlink" href="#solution" title="Permalink to this headline">#</a></h3>
+<p>This is equivalent to the first setup since it is a permutation of labeling as <span class="math notranslate nohighlight">\(2\rightarrow 3\)</span> and <span class="math notranslate nohighlight">\(3\rightarrow 2\)</span>.</p>
+</section>
+</section>
+<section id="homework">
+<h2>Homework<a class="headerlink" href="#homework" title="Permalink to this headline">#</a></h2>
+<section id="problem-1">
+<h3>Problem 1<a class="headerlink" href="#problem-1" title="Permalink to this headline">#</a></h3>
+<p>We could define the coordinates of the particle system into a vector. For example, in the three body system, <span class="math notranslate nohighlight">\(\mathbf{x} = (x_1,x_2,x_3)\)</span>.</p>
+<p>Now given the equations of motion of the three particle system:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp;m\frac{d^2 x_1}{dt^2} = - (k_{12} + k_{13})x_1 + k_{12} x_2 + k_{13} x_3 \\
+&amp;m\frac{d^2 x_2}{dt^2} = - (k_{21} + k_{23})x_2 + k_{21} x_1 + k_{23} x_3 \\
+&amp;m\frac{d^2 x_3}{dt^2} = - (k_{31} + k_{32})x_3 + k_{31} x_1 + k_{32} x_2\\
+\end{aligned}
+\end{split}\]</div>
+<p>Can you write down the equation in matrix form?</p>
+</section>
+<section id="problem-2">
+<h3>Problem 2<a class="headerlink" href="#problem-2" title="Permalink to this headline">#</a></h3>
+<p>Could you give initial conditions with higher energies in the <code class="docutils literal notranslate"><span class="pre">k2</span></code> system and simulate? Do you still observe that pairs with strong bonding have similar coordinates? What about oscillation frequencies?</p>
+</section>
+<section id="id1">
+<h3>Solution:<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<p>The high energy initial condition will break the bonds between strong bonding particles. However the pairs with strong bonding will oscillate in similar frequencies.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xv_initial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">ti</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">integrate</span><span class="p">(</span><span class="n">xv_initial</span><span class="p">,</span> <span class="n">ti</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">k2</span> <span class="p">)</span>
+
+<span class="n">plot_X</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;system 2 energy: </span><span class="si">%.3f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">get_E</span><span class="p">(</span><span class="n">xv_initial</span><span class="p">,</span> <span class="n">k2</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/01fc2e59704edec45fdf2c763cbbae52d2a9bd5f5063eb0fda6d012b321f0e0f.png" src="../../_images/01fc2e59704edec45fdf2c763cbbae52d2a9bd5f5063eb0fda6d012b321f0e0f.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>system 2 energy: 21.250
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./DSECOP/Spectral_Clustering"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-setup">The Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equation-of-motion">Equation of Motion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integrate-the-equation-of-motion">Integrate the Equation of Motion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quizs">Quizs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quiz-1">Quiz 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homework">Homework</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1">Problem 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2">Problem 2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Solution:</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
